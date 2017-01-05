@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>AndyHeilveilCV4FedFIs</title>
+    <meta content="Andy Heilveil" name="author">
+  </head>
+  <body>
+    <li>Hello Jeff. <br>
+      <br>
+      I am going to give you some extended answers to your questions as much to give you an idea of me as of my skills.<br>
+      <br>
+      IT Recruiting Questions:
+      <h4>How could you see yourself best utilized to help out FedFis? &nbsp;What are your non-executive IT skill sets?</h4>
+      <ol>
+        <li>Taking pressure off the lead designer so that he can design more and code less.&nbsp;</li>
+        <li>I prefer making libraries to simplify writing an application over coding the application itself. IE I like to simplify the job of the application coder so
+          they can focus on functionality while I take care of making the system run well.</li>
+        <li>I don't need a steady income so if you have to go fight a fire for a while I can chill for free while waiting for instructions on the next task to do.</li>
+        <li>I have experience directly interacting with customers. I am good enough at that to have been invited to the customer's home for dinner.</li>
+      </ol>
+      <h4>What languages do you code? Rate your ability on a scale from 1 to 10 for&nbsp;each language. &nbsp;if Java, up to what version? <br>
+        (We use PHP, Java, some C-sharp) </h4>
+      For java my last significant work experience was with 1.5. In footnotes I discuss an ORM I wrote in Java. <br>
+      <br>
+      I haven't worked with enough Java coders to have a basis for ranking myself, but generally produce far less lines of code to get a job done than do others. <br>
+      E.G. When I took over from a contractor that was billing for a "moderately experienced Java programmer" I produced code that actually worked and was 1/17th the
+      size of what the contractor had done. That was my first Java program and I did in 70 hours what the moderately experienced person could not get done in 500. I
+      suspect that was as much invalid billing than superior skills on my part, the coder was forced to do some stupid things by his manager.<br>
+      <br>
+      My C++ skill is fairly extensive, although perhaps not expert. I can point you to a github repo where I've been repackaging code I did for my last employer into a
+      publicly sharable library. I've done things like an l10n system that doesn't require wrapping each item to translate in a macro call, I used varargs templating to
+      use type info to identify items to translate during the equivalent of Java's Message.format() function. I once took over code from a PhD former college professor
+      which had things in it like&nbsp; an INI file reader which opened and closed the file for each item read from it. It took minutes to load data. I replaced that
+      with a module that read the file in one gulp and parsed it into a data structure that could then be scanned in what took a fraction of a second. The STL is a
+      minefield of IMHO gratuitous exceptions. I wrap its use with classes that deal with pointless exceptions, and simplify syntax. <br>
+      <br>
+    </li>
+    <li>My experience in assembly coding microcontrollers and microcoding CPU's is not likely to be relevant, but does give me better instincts on what is actually
+      executing on the hardware for the code that is being written at high level.</li>
+    <li><br>
+    </li>
+    <li>It is rare that I have let a bug get out into the field. In 4 years of one product we had less than one patch release per year, with about 3 feature releases. I
+      did not have the resources to do any unit or regression testing, the only testing was to have the customer support personnel bang away at systems. My main tool to
+      achieve low defect rates is to highly factor code and highly reuse it, very few lines of code were hidden in rarely accessed corners.<br>
+      <br>
+      I did development on one C# program, for a WinCE 3.0 system. I was tasked with writing a nominal device driver in C++ then writing code to deal with the data
+      coming from that device driver. The primary authors of the C#&nbsp; <br>
+      <br>
+      <br>
+      I am learning a new JVM language named Kotlin. Amongst its more interesting features is that it can be compiled into any of JVM bytecode, Java source, javascript
+      source. The latter is still somewhat experimental. Kotlin is open source and comes from the developers of the current Android Studio. It has the more interesting
+      features of C# (delegates, properties), it calls and can be called from Java without veneers or other tomfoolery, it has lambda's even though it only uses Java
+      1.6 byte codes, and it has a diabetes-generating amount of syntactic sugar to coat the more verbose aspects of Java (hopefully neither you nor a loved one is
+      diabetic). It has what it calls 'string interpolation' which is similar to PHP (the company produces a product <a href="https://www.jetbrains.com/phpstorm/">PHP
+        Storm</a>).<br>
+      <h4>What is your skill level writing&nbsp;SQL? Stored procedures? &nbsp;Have you ever done DBA work? What RDBMS? ( We use MySQL ).</h4>
+      <br>
+      I only directly wrote SQL at one job. Much of what I was tasked with was replacing queries that were very slow with ones that were fast. The DB engine was Oracle
+      9, which had a mechanism for overriding the query planner, I had to twist its arm pretty hard on some of the queries. <br>
+      Oftentimes I was replacing queries written via an ORM system with handwritten SQL in order to achieve the speedups.<br>
+      A few times I did the reverse transforming some amazingly gnarly SQL into Java code using the ORM to do the queries. I found bugs in the SQL despite barely
+      understanding it.<br>
+      I try to avoid writing SQL "by hand". I've used two variations on ORM mappers, and when one wasn't available I used an SQLStringBuilder class I wrote to ensure
+      all punctuation was correct.<br>
+      I do know the difference between inner joins and outer joins and know what a correlated sub-query is. <br>
+      The few stored procedures I wrote fall into two categories: <br>
+      triggers to maintain backward compatability for old queries after a schema change and code to generate a database for regression testing applications. The latter
+      one gave me a greater appreciation for properly normalized schemas, and for the consequences of things like having two tables with foreign key constraints into
+      each other.<br>
+      <br>
+      I haven't done DBA work as a job duty. I have operated a keyboard while the real DBA told me what to do over the phone from some vacation paradise. That database
+      was Postgres. <br>
+      Instead I have written code to perform most of the DBA functions our product needed, no humans involved.&nbsp; The database involved was HSQLDB (aka Hypersonic),
+      which I used embedded rather than client-server.</li>
+    <h4>Thoughts / experience w/ NoSQL? if any experience, which platforms? </h4>
+    No experience, but a handful of thoughts:
+    <ul>
+      <li>Some NoSQL systems use an RDBMS to store the data, I'm guessing the query mechanism of NoSQL has handy features but built-for-the-purpose storage engines
+        aren't mature.</li>
+      <li>If you don't need referential integrity then your data is pretty simple, or dangerously redundant.</li>
+      <li>When an RDBMS becomes part of an application it seems that the app implementation becomes a slave to the DBMS, I wonder if NoSQL systems also have a tendency
+        to kick back hard into the application coding.</li>
+    </ul>
+    <h4>Have you ever setup PCS (installed Windows 7 or newer), and or installed/administered virtual machines? Any experience with VMware vSphere?</h4>
+    <ol>
+      <li>I've used VM's but not maintained any for production use.</li>
+      <li>I once managed to get a VM to use a pre-existing hard drive in place, haven't managed to pull that trick off for a few years now.</li>
+      <li>The last Windows I installed on a regular basis was windows XP, which I did on a very regular basis (that's a dig at Microsoft). <br>
+        I am a linux user, for home as well as work. The short stint I did with a Vista system was painful, as soon as I could I installed linux with Windows in a VM
+        for the only application I used that required it.</li>
+    </ol>
+    <h4>Any Dev-ops / AWS experience? </h4>
+    Nope.
+    <h4>Any Wordpress development experience? </h4>
+    Nope
+    <h4>Any Full stack development experience? If no, then any Front end or backend? &nbsp;what technologies? (Swing, Angular, NodeJS, etc) </h4>
+    Probably not any you would find relevant, the last was in 2005. At one company I was responsible primarily for the network of client computers (headless linux boxes
+    spread across the US). The server shared code with the client (perhaps 30% by l.o.c.) and so as time went on I did server work as well (had to test how my changes
+    affected the server). Since we had a very focussed system we used a platform called Jetty to do the http stuff, instead of something like apache or any other web
+    service framework. I did do some development at a place that used Tomcat, I did not find it well documented. <br>
+    The system I mention here and elsewhere was a credit card acquisition system. I did the terminal programming, and helped the guy doing server programming. He would
+    write straight-line code to handle a new task, I would factor the code and add edge case detection. He would write handlers for the edge cases and we both worked on
+    automating regression testing.<br>
+    <hr>Footnotes<br>
+    <p>ORM: For an analytical instrument I wrote an ORM that mated the Java data to a revisioning (as in change tracking) database, there was a requirement to not alter
+      records, to change a value you create a new record with the altered data that includes a reference to the record it nominally replaces. <br>
+      The ORM also automated DBA activities: upon program startup the database schema was read to create an object representation of the database, another instance of a
+      schema representation was made from the program logic. The two schema representations were compared and appropriate ALTER TABLE commands issued. I was a bit of a
+      chicken and deletes only removed referential integrity, the columns were left in place, which was handy when rolling back a program update. <br>
+      The SQL to store and retrieve objects was generated by the ORM, no manually written SQL appeared anywhere in the system. There was never a need for ad-hoc queries
+      in the product, and since the application and the database engine ran on the same processor there was nothing to be gained by doing joins on the database side of
+      the connection. <br>
+      Part of my ORM implementation was providing for change detection, each object had a backing store of the values last read from the database, at various opportune
+      moments objects were inspected for changes and the database updated with new values. <br>
+      <br>
+      Java<br>
+      <br>
+      <br>
+      Event driven programming<br>
+      My last big project was done in C++ on an embedded linux system, using GTK as the GUI interface. A significant part of the application was in effect a dedicated
+      spread-sheet: the user configured measurement of a set of chemical elements, entered calibration data and configured reports (within a narrow set of options). Any
+      change to the calibration data or data acquisition required a recalculation of some derived data and redrawing of any screens inspecting that data. The data was
+      implemented by a class hierarchy of template wrappers around a document-object representation. The data objects could be read and written to JSON files, written
+      to csv files, and the GUI was mostly built via code given the data storage keys and a root node of the stored data. In order to update dependent data and GUI's I
+      overloaded operator = and detected changes of values and upon change executed a list of callbacks. Most of those callbacks were attached by constructor code.
+      There was even a touch of referential integrity involved, some data was correlated to other data and creation and deletion of related objects was automated via a
+      single line of code mentioning the relationship (create or delete a primary object and dependent objects were created or deleted without additional coding).<br>
+      That facility (persistence class with cheap reflection) was so handy we started using it for event-driven logic that didn't involve stored data or GUI generation.
+      <br>
+    </p>
+    <ol>
+    </ol>
+  </body>
+</html>

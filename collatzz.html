@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta  content="text/html; charset=UTF-8"  http-equiv="content-type">
+    <title>collatzz</title>
+    <meta  content="Andy Heilveil"  name="author">
+  </head>
+  <body>
+    <p>Collatz via z-transform</p>
+    <p>Alternate definition of the Collatz series is:</p>
+    <p><math><!--c_[n+1] -= 3*c_n + 1--><mstyle  displaystyle="true"  fontfamily=""
+           mathcolor=""  mathsize=""><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>≡</mo><mn>3</mn><mo>⋅</mo><msub><mi>c</mi><mi>n</mi></msub><mo>+</mo><mn>1</mn></mstyle></math></p>
+    <p>prove that for all (finite)&nbsp;<math><!--c_0--><mstyle  displaystyle="true"
+           fontfamily=""  mathcolor=""  mathsize=""><msub><mi>c</mi><mn>0</mn></msub></mstyle></math>
+      there exists some k such that&nbsp;<math><!--c_k--><mstyle  displaystyle="true"
+           fontfamily=""  mathcolor=""  mathsize=""><msub><mi>c</mi><mi>k</mi></msub></mstyle></math>
+      is an exact power of 2.</p>
+    <hr>Using z-transforms<br>
+    <table  border="0">
+      <tbody>
+        <tr>
+          <td>2:</td>
+          <td><math><!--C(z)--><mstyle  displaystyle="true"  fontfamily=""  mathcolor=""
+                 mathsize=""><mi>C</mi><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow></mstyle></math></td>
+          <td>=</td>
+          <td><math><mstyle  displaystyle="true"  fontfamily=""  mathcolor=""  mathsize=""><mrow><munderover><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>0</mn></mrow><mo>∞</mo></munderover></mrow><msub><mi>c</mi><mi>n</mi></msub><msup><mi>z</mi><mrow><mo>-</mo><mi>n</mi></mrow></msup></mstyle></math></td>
+          <td>definition of Z-transform</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>3:</td>
+          <td><math><mstyle  displaystyle="true"  fontfamily=""  mathcolor=""  mathsize=""><msub><mi>C</mi><mn>1</mn></msub><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow></mstyle></math></td>
+          <td>=</td>
+          <td><math><!--sum_[n=0]^\infty c_[n+1] z^-n --><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><mrow><munderover><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>0</mn></mrow><mo>∞</mo></munderover></mrow><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><msup><mi>z</mi><mrow><mo>-</mo><mi>n</mi></mrow></msup></mstyle></math></td>
+          <td>time shifted Z-transform</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>=</td>
+          <td><math><!--sum_[m=1]^\infty c_[m] z^-(m-1) --><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><mrow><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>1</mn></mrow><mo>∞</mo></munderover></mrow><msub><mi>c</mi><mrow><mi>m</mi></mrow></msub><msup><mi>z</mi><mrow><mo>-</mo><mrow><mo>(</mo><mi>m</mi><mo>-</mo><mn>1</mn><mo>)</mo></mrow></mrow></msup></mstyle></math></td>
+          <td>m=n+1, n=m-1</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>=</td>
+          <td><math><!--z^1 * sum_[m=1]^\infty c_[m] z^-m--><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><msup><mi>z</mi><mn>1</mn></msup><mo>⋅</mo><mrow><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>1</mn></mrow><mo>∞</mo></munderover></mrow><msub><mi>c</mi><mrow><mi>m</mi></mrow></msub><msup><mi>z</mi><mrow><mo>-</mo><mi>m</mi></mrow></msup></mstyle></math></td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>=</td>
+          <td><math><!--z^1 * [sum_[m=0]^\infty c_[m] z^-m - c_0z^-0]--><mstyle
+                 displaystyle="true"  fontfamily=""  mathcolor=""  mathsize=""><msup><mi>z</mi><mn>1</mn></msup><mo>⋅</mo><mrow><mo>[</mo><mrow><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>0</mn></mrow><mo>∞</mo></munderover></mrow><msub><mi>c</mi><mrow><mi>m</mi></mrow></msub><msup><mi>z</mi><mrow><mo>-</mo><mi>m</mi></mrow></msup><mo>-</mo><msub><mi>c</mi><mn>0</mn></msub><msup><mi>z</mi><mrow><mo>-</mo><mn>0</mn></mrow></msup><mo>]</mo></mrow></mstyle></math></td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>=</td>
+          <td><math><!--z C(z) - c_0z--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><mi>z</mi><mi>C</mi><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow><mo>-</mo><msub><mi>c</mi><mn>0</mn></msub><mi>z</mi></mstyle></math></td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><math><!--C_2(z)--><mstyle  displaystyle="true"  fontfamily=""  mathcolor=""
+                 mathsize=""><msub><mi>C</mi><mn>2</mn></msub><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow></mstyle></math></td>
+          <td>=</td>
+          <td><math><!--z^2*C(z) - c_0 z^2 - c_1 z^1--><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><msup><mi>z</mi><mn>2</mn></msup><mo>⋅</mo><mi>C</mi><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow><mo>-</mo><msub><mi>c</mi><mn>0</mn></msub><msup><mi>z</mi><mn>2</mn></msup><mo>-</mo><msub><mi>c</mi><mn>1</mn></msub><msup><mi>z</mi><mn>1</mn></msup></mstyle></math></td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>4:</td>
+          <td><math><!--c_[n+2]--><mstyle  displaystyle="true"  fontfamily=""  mathcolor=""
+                 mathsize=""><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>2</mn></mrow></msub></mstyle></math></td>
+          <td>=</td>
+          <td><math><!--3*c_[n+1] + 1--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><mn>3</mn><mo>⋅</mo><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mn>1</mn></mstyle></math></td>
+          <td>definition time shifted</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><math><!--c_[n+2]-c_[n+1]--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>2</mn></mrow></msub><mo>-</mo><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub></mstyle></math></td>
+          <td>=</td>
+          <td><math><!--3*c_[n+1] + 1 - [3*c_n+1]--><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><mn>3</mn><mo>⋅</mo><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mn>1</mn><mo>-</mo><mrow><mo>[</mo><mn>3</mn><mo>⋅</mo><msub><mi>c</mi><mi>n</mi></msub><mo>+</mo><mn>1</mn><mo>]</mo></mrow></mstyle></math></td>
+          <td>difference</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>=</td>
+          <td><math><!--3*c_[n+1] - 3*c_n--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><mn>3</mn><mo>⋅</mo><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>-</mo><mn>3</mn><mo>⋅</mo><msub><mi>c</mi><mi>n</mi></msub></mstyle></math></td>
+          <td>so constant goes away</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><math><!--c_[n+2]--><mstyle  displaystyle="true"  fontfamily=""  mathcolor=""
+                 mathsize=""><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>2</mn></mrow></msub></mstyle></math></td>
+          <td>=</td>
+          <td><math><!--4*c_[n+1] - 3*c_n--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><mn>4</mn><mo>⋅</mo><msub><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>-</mo><mn>3</mn><mo>⋅</mo><msub><mi>c</mi><mi>n</mi></msub></mstyle></math></td>
+          <td>simplify</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>5:</td>
+          <td><math><mstyle  displaystyle="true"  fontfamily=""  mathcolor=""  mathsize=""><msub><mi>C</mi><mn>2</mn></msub><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow></mstyle></math></td>
+          <td>=</td>
+          <td><math><!--4*C_1(z)-3*C(z)--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><mn>4</mn><mo>⋅</mo><msub><mi>C</mi><mn>1</mn></msub><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow><mo>-</mo><mn>3</mn><mo>⋅</mo><mi>C</mi><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow></mstyle></math></td>
+          <td>Z-transform of equation 4</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><math><mstyle  displaystyle="true"  fontfamily=""  mathcolor=""  mathsize=""><msup><mi>z</mi><mn>2</mn></msup><mo>⋅</mo><mi>C</mi><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow><mo>-</mo><msub><mi>c</mi><mn>0</mn></msub><msup><mi>z</mi><mn>2</mn></msup><mo>-</mo><msub><mi>c</mi><mn>1</mn></msub><msup><mi>z</mi><mn>1</mn></msup></mstyle></math></td>
+          <td>=</td>
+          <td><math><!--4* ( z C(z) - c_0z)-3*C(z)--><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><mn>4</mn><mo>⋅</mo><mrow><mo>(</mo><mi>z</mi><mi>C</mi><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow><mo>-</mo><msub><mi>c</mi><mn>0</mn></msub><mi>z</mi><mo>)</mo></mrow><mo>-</mo><mn>3</mn><mo>⋅</mo><mi>C</mi><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow></mstyle></math></td>
+          <td>insert C2 and C1 equivalents</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><math><!--(z^2-4z+3) * C(z)--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><mrow><mo>(</mo><msup><mi>z</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>z</mi><mo>+</mo><mn>3</mn><mo>)</mo></mrow><mo>⋅</mo><mi>C</mi><mrow><mo>(</mo><mi>z</mi><mo>)</mo></mrow></mstyle></math></td>
+          <td>=</td>
+          <td><math><!--c_0z^2+(c_1-4c_0)z--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><msub><mi>c</mi><mn>0</mn></msub><msup><mi>z</mi><mn>2</mn></msup><mo>+</mo><mrow><mo>(</mo><msub><mi>c</mi><mn>1</mn></msub><mo>-</mo><mn>4</mn><msub><mi>c</mi><mn>0</mn></msub><mo>)</mo></mrow><mi>z</mi></mstyle></math></td>
+          <td>collect C(z) terms on left, z terms on right</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>C(z)</td>
+          <td>=</td>
+          <td><math><!--[z(c_0z+(c_1-4c_0))] / (z^2-4z+3)--><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><mfrac><mrow><mi>z</mi><mrow><mo>(</mo><msub><mi>c</mi><mn>0</mn></msub><mi>z</mi><mo>+</mo><mrow><mo>(</mo><msub><mi>c</mi><mn>1</mn></msub><mo>-</mo><mn>4</mn><msub><mi>c</mi><mn>0</mn></msub><mo>)</mo></mrow><mo>)</mo></mrow></mrow><mrow><msup><mi>z</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>z</mi><mo>+</mo><mn>3</mn></mrow></mfrac></mstyle></math></td>
+          <td>isolate C(z)</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>=</td>
+          <td><math><!--[z(c_0z+(1-c_0))] / (z^2-4z+3)--><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><mfrac><mrow><mi>z</mi><mrow><mo>(</mo><msub><mi>c</mi><mn>0</mn></msub><mi>z</mi><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mo>-</mo><msub><mi>c</mi><mn>0</mn></msub><mo>)</mo></mrow><mo>)</mo></mrow></mrow><mrow><msup><mi>z</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>z</mi><mo>+</mo><mn>3</mn></mrow></mfrac></mstyle></math></td>
+          <td>apply&nbsp;<math><!--c_1=3*c_0+1--><mstyle  displaystyle="true"  fontfamily=""
+                 mathcolor=""  mathsize=""><msub><mi>c</mi><mn>1</mn></msub><mo>=</mo><mn>3</mn><mo>⋅</mo><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><mn>1</mn></mstyle></math></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>=</td>
+          <td><math><!--[z(c_0z+(1-c_0))] / [(z-1)(z-3)]--><mstyle  displaystyle="true"
+                 fontfamily=""  mathcolor=""  mathsize=""><mfrac><mrow><mi>z</mi><mrow><mo>(</mo><msub><mi>c</mi><mn>0</mn></msub><mi>z</mi><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mo>-</mo><msub><mi>c</mi><mn>0</mn></msub><mo>)</mo></mrow><mo>)</mo></mrow></mrow><mrow><mrow><mo>(</mo><mi>z</mi><mo>-</mo><mn>1</mn><mo>)</mo></mrow><mrow><mo>(</mo><mi>z</mi><mo>-</mo><mn>3</mn><mo>)</mo></mrow></mrow></mfrac></mstyle></math></td>
+          <td>factor denominator</td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    &nbsp;<br>
+    <br>
+    <br>
+    <p><br>
+    </p>
+  </body>
+</html>

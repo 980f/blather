@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta  content="text/html; charset=UTF-8"  http-equiv="content-type">
+    <title>kotlin-notes</title>
+  </head>
+  <body>
+    <p>Kotlin features</p>
+    <ol>
+      <li>runs on jvm, including current Android</li>
+      <li>less syntax, e.g. semicolons are mostly optional</li>
+      <li>'if' and 'switch' have values, fancier than just a ternary and
+        replaces ternary.</li>
+      <li>blocks have the value of the last statement in the block.</li>
+      <li>null checking is very compact</li>
+      <li>functions are first class objects, callbacks are easy to write.</li>
+      <li>can add methods to a class outside of the class. Useful for packaging
+        local usage patterns for a system library, with method syntax.</li>
+      <li>'delegation' is almost multiple inheritance, you have to manually
+        instantiate the other true objects but it is easy to access them
+        transparently (i.e. without having to explicitly mention the
+        implementing object for each method invocation)</li>
+      <li>nicer enum than java, C-like values, java-like string utilities</li>
+      <li>instead of C++ operator= and operator &amp; overloads you get setters
+        and getters very much like C#.&nbsp;</li>
+      <li>operators can be overloaded, but assignment is not an operator.</li>
+      <li>Generics are more compile time (C++ templates) than java style
+        (compiler generated casts on shared code), mostly stricter type checking
+        by default.</li>
+      <li>really nice 'auto', after a type check the variable is considered to
+        be of the type just (successfully) checked for.</li>
+      <li>function taking a function argument doesn't need parens, making for
+        some interesting syntax for document models. </li>
+      <li>nice casting syntax, supports c++ dynamic_cast as well as static_cast.</li>
+      <li>switch statement is more capable (e.g. has a value) but syntactically
+        way different than most main stream languages. Actually it is pretty
+        much like Visual Basic's. Especially useful is that the cases can be
+        runtime computed expressions, in essence the switch is exactly an
+        if-else if.</li>
+      <li>Arrays of native types are actually such, versus being an array of
+        boxed native types which the syntax implies.</li>
+      <li>can be compiled into javascript, in which case there are additional
+        language features. That means you can share code between client and
+        server with the client being javascript in a browser but the server
+        being jvm.</li>
+    </ol>
+    <p>weirdnesses:</p>
+    <ol>
+      <li>const'ness is less visible albeit easier to declare ('val' instead of
+        'var', nasty for Japanese programmers).</li>
+      <li>constructor syntax has many variations. The coolest one is what looks
+        like an argument declaration list, with optional initializers.</li>
+      <li>'sealed' class, appears to be where all instances of the class are
+        defined at compile time. They are still mutable but you can't destroy
+        them nor create instances of your own at runtime.</li>
+      <li>switch statement syntax requires that the 'default' clause trail all
+        others. Implementation is promised to be the same as if-else-if on the
+        case statements so the trade-off is sorta ok. </li>
+    </ol>
+    <p>other thoughts:</p>
+    <ol>
+      <li>supported by the best java IDE and as such one can switch handily
+        between it and java. Also supported by the second best java IDE
+        (eclipse).</li>
+      <li>supported by the Android runtime.</li>
+      <li>much more compact and expressive than java (much nicer functional
+        programming), but still java 'under the hood', but not as twisted
+        syntactically as C++, nor as sloppy as Python.</li>
+    </ol>
+  </body>
+</html>

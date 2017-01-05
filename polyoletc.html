@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>polyoletc</title>
+  </head>
+  <body>
+    <h2>Field portable pass/fail analyzer</h2>
+    <p>The utility of this analyzer is to confirm that a tank has the expected
+      product in it. It does not provide a chemical answer. It recognizes the
+      presence of impurities of a similar product, and some random impurities
+      (they must have unexpected absorbance bands).</p>
+    <p>"Operator Interface" refers to the user interface that is restricted to
+      performing measurements and annotating results.</p>
+    <p>A stable solid reference sample is part of the kit, to allow verification
+      of the analyzer itself. <br>
+      <br>
+      The analyzer supports a barcode reader for some user data entry.</p>
+    <h3>Operator Interface</h3>
+    <p>The operator interface allows the operator to:<br>
+    </p>
+    <ul>
+      <li>identify sample/task</li>
+      <ul>
+        <li>scan or enter work order number and item</li>
+        <li>scan or enter tank identifier</li>
+      </ul>
+      <li>invoke measurement.</li>
+      <li>troubleshoot cellular and wifi connections</li>
+    </ul>
+    <br>
+    Calibration data and analytical configurations are remotely maintained, i.e.
+    not through the primary user interface. <br>
+    Bluetooth/WiFi/USB is used for acquisition and maintenance of calibration
+    and other configuration data.<br>
+    <h3>Analytical Features</h3>
+    For each measurement invocation an illumination is selected and a spectrum
+    acquired. The spectrum is compared to reference spectra stored in the
+    instrument. The operator is presented with an OK/BAD indication and perhaps
+    a degree of confidence. <br>
+    The spectra used for the match and the threshold for matching are part of
+    the analytical configuration.<br>
+    The matching process includes options for normalization, must-be-present
+    lines (non-zero minimum intensity), and must-not-be-present lines (maximum
+    set to essentially zero). Additionally a scan is made for lines that are not
+    present in the reference spectra and BAD is signaled according to some as
+    yet undefined rules.<br>
+    <h3> Work Order</h3>
+    The <span style="font-family: monospace;">Work Order</span> feature
+    supports remote entry of product+tank information. The operator selects a
+    work order and an item within it which results in an analytical
+    configuration being selected and a prompt to the user of which tank to
+    sample. If a peripheral for scanning tank identifiers is present then the
+    analyzer will prompt for the tank to be scanned and will confirm that it is
+    the one in the work order. The analyzer can be configured for one item per
+    work order which simply removes item related prompting and reporting.
+    Conversely one could scan a tank and a filler hose and the instrument would
+    query whether there is a work order item compatible with them and have the
+    operator confirm the item selected. <span></span><br>
+    <h3><span>Tamper-resistant data collection</span></h3>
+    <h3> </h3>
+    <p>Measurements are recorded internally, encrypted before being handed over
+      to any third party file management (i.e. the data is encrypted before
+      being handed to a potentially encrypted file system or database system.
+      The goal of this encryption is to make it uneconomical to falsify data,
+      but is not strong enough to preserve trade secrets. Logged measurements
+      can only be erased/deleted via the calibration user interface.</p>
+    Each device is shipped with multiple public keys. There is one key each for
+    measurement encryption, calibration and configuration encryption,
+    communications proof-of-identity (ssl certificate). The private keys are
+    delivered on separate media, which includes the installer for the remote
+    maintenance program (such as via a USB drive, with backup at the official
+    service department).<br>
+    <br>
+    <h3>Remote Maintenance</h3>
+    Calibration and configuration is maintained via a bluetooth, wifi, or USB
+    connection. The instrument appears as both a file server and a COM port. <br>
+    The COM port is used for operating the instrument remotely, such as for
+    taking reference spectra. The file server interface is used for reference
+    spectra, analytical configurations, work orders, localization, and other
+    such bulk data. This allows the owner to archive combinations as they see
+    fit, and to use standard disk backup utilities to backup the instrument.<br>
+    Field measurements are stored in an internal database. When space is
+    exhausted older records are deleted. The remote maintenance interface can
+    erase database contents via quantity, time, or date. <br>
+    <br>
+    <hr>
+    <h3>Collation of bar code reader support:</h3>
+    <ol>
+      <li>enter tank id</li>
+      <li>enter supply id</li>
+      <li>enter operator id</li>
+    </ol>
+    <p>User interface localization:<br>
+      The majority of the text of the user interface is in configuration files.
+      There is a service option to temporarily override using the file, so that
+      service personnel can use the language of the factory when servicing the
+      instrument.</p>
+    <ol>
+    </ol>
+    <h3> </h3>
+    <hr>
+    <h3>Use case:</h3>
+    Railway tank filling<br>
+    The railway car and the tank it is being filled from need to be matched. A
+    sample is drawn from the car (which presumably is nearly empty) and a
+    spectrum acquired which is compared with a stored spectrum. The operator is
+    given a GO/NO-GO indication, and the analytical result (intensity at key
+    lines data) is sent to the data collection. The associated spectrum is
+    retained in the instrument until ?<br>
+    <br>
+    <h3> Internal details:</h3>
+    There is a microcontroller in charge of all of the hardware components. It
+    controls illumination and collection of the spectra. It also contains the
+    encryption keys, so that the interface computer can be field replaced and
+    then remotely configured. If practical the configuration etc. storage will
+    also be on the microcontroller, but not the field data.<br>
+    The user interface is also the communications controller. It is a low-end
+    cell phone, with automatic launching of the analyzer interface program. It
+    communicates to the microcontroller via bluetooth.<br>
+    <br>
+    Spectrum compression<br>
+    Spectra are stored and communicated in both raw and in a lossy format. The
+    lossy format is SVG, in many cases the customer will have tools that allow
+    viewing of such spectra. The raw format is normally only used internal to
+    the instrument. It is available remotely for evaluation of the instrument
+    itself.<br>
+    <br>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+    <html>
+      <head>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type">
+        <title>Kotlin Notes</title>
+        <meta content="Andy Heilveil" name="author">
+        <meta content="Notes on use of Kotlin" name="description">
+        <meta content="Kotlin" name="keywords">
+        <meta content="BlueGriffon wysiwyg editor" name="generator">
+      </head>
+      <body>
+        <h1>Kotlin tricks and techniques</h1>
+        My experience so far is that Kotlin's 'null pointer' robustness is anything but. I get NPE's on code that isn't visible to my application, so whose fault is
+        that? Deep inside automatically generated init{}blocks something unspecified was not init by Kotlin internals. -&gt; apparently this is specific to some gui
+        classes, and the kotlin automation isn't quite right on its nullity declarations. <br>
+        In fact, it seems to be a debugger problem half the time, it creates a buggered up dex file with a failed partial update then gets bent out of shape.
+        <hr> object?.member access makes the member access conditional upon the non-nullity of the object.<br>
+        object?:other is the object if not null else the other.<br>
+        <hr> ChangeListener<br>
+        <br>
+        Delegates.observable implements a single listener. If we implement the equivalent of sigc signals then we should be able to insert one of those in the single
+        listener slot.<br>
+        <br>
+        <ul>
+          <li>import kotlin.properties.Delegates</li>
+          <li>class User {</li>
+          <ul>
+            <li>var name: String by Delegates.observable("&lt;no name&gt;") {</li>
+            <ul>
+              <li>prop, old, new -&gt;</li>
+              <li>println("$old -&gt; $new")</li>
+            </ul>
+            <li>}</li>
+          </ul>
+          <li>}</li>
+          <li>fun main(args: Array&lt;String&gt;) {</li>
+          <ul>
+            <li>val user = User()</li>
+            <li>user.name = "first"</li>
+            <li>user.name = "second"</li>
+          </ul>
+          <li>}</li>
+        </ul>
+        <p>But in actuality we need access to the listener list to add items to it, and wish those items to deeply look for references and make sure they are weak. So
+          we need top-level typing to get that access and can add all the other hoopla of Stored pretty much like for C++.</p>
+        <ul>
+        </ul>
+        <hr>
+        <h4>class member as click listener: </h4>
+        <pre>fun makeButton(legend: String, clicker: ()-&gt;Unit): Button {
+  val button = add(Button::class.java) //instantiates a member of the given class
+  button.text = legend
+        
+  button.setOnClickListener(object : View.OnClickListener {
+     //java under the hood needs an interface so we wrap our functional in one.
+    override fun onClick(view: View) {
+       clicker()
+    }
+  })
+        
+  return button
+}</pre>
+        <hr> Tedious method for getting data from a 'popup' editor<br>
+        <br>
+        You cannot create an activity with actual objects, only values stored on an Intent. To make that not horrible we need an object that has Intent:callback pairs
+        so that closing of the popup activity can be dynamically associated with behavior vs having a manually built dispatch table. A launched activity is given the
+        Intent, in our example of a NumberEditor that would be description and present value of the number, plus perhaps any range constraints. <br>
+        <br>
+        Results are sent back from the popup via an overload member of the activity. The base activity class needs to hand out and dispatch on a unique id of its own
+        scope. Entities which launch something need to register a callback so that the result gets sent via a function call.<br>
+        A number editor launch button is passed a function which is a lambda to set the associated field, <br>
+        <br>
+        <hr>Holy anal intercourse, EditText is a nasty beast<br>
+        I asked for number input, gave it a number that was an integer value but declared to be float.<br>
+        It presented the float image until the edit field was touched to bring up the on-screen keyboard (because asking for it to be already up gets ignored)<br>
+        At that point in time it removed the dp from where it was in the string, leaving the trailing 0 from Int.toFloat().toString().<br>
+        <br>
+        Deleting that trailing 0 deleted it in the display, but not in the infernal (sp: internal?) memory of the widget. There is no 'clear entry' (because selectAll
+        while indicated visually did not result in all being erased when the first digit was entered).<br>
+        The returned value (through the indirect setResult stuff) has an additional zero that isn't shown on the display.<br>
+        <br>
+        I've now added to my original TYPE_CLASS_NUMBER the flags + TYPE_NUMBER_FLAG_DECIMAL + TYPE_NUMBER_FLAG_SIGNED, let's see if that fixes the nonsense...<br>
+        <hr>
+        <h4>Example of object factory:</h4>
+        <pre>fun &lt;T&gt; initializeClassWithArgs(clazz: Class&lt;out T&gt;, vararg args: Pair&lt;Any, Class&lt;*&gt;&gt;): T {
+  val (argList, argTypes) = args.unzip()
+  try {
+    val constructor = clazz.getConstructor(*argTypes.toTypedArray())
+    return constructor.newInstance(*argList.toTypedArray())
+  } catch (e: NoSuchMethodException) {<br>    throw RuntimeException("Can't initialize class ${clazz.name}, no&lt;init&gt;(${argTypes.joinToString()})", e)
+  }
+}</pre>
+</body></html>

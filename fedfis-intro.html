@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta  content="text/html; charset=UTF-8"  http-equiv="content-type">
+    <title>fedfis-intro</title>
+    <meta  content="Andy Heilveil"  name="author">
+  </head>
+  <body>
+    <p>Fedfis<br>
+      <br>
+      Dear Dave,<br>
+      <br>
+      I had an interesting discussion with my son Dan about the state of
+      software development at Fedfis. I have spent many years as a solo software
+      developer and am quite familiar with the difficulties that entails.</p>
+    <p>What I can offer Fedfis in the near term is the evaluation of the
+      condition of its software resources. I would be able to evaluate the
+      source code management (can you reproduce your programs?) and its
+      maintainability (is it written clearly?, are all the pieces and tools
+      archived?), and give an estimate of the quality of the programming as well
+      (how much baling wire vs clean design).<br>
+      <br>
+      If the program is reasonably well written I could then document the
+      functioning of each piece. <br>
+      <br>
+      My educational background includes a BA in Physics, many years in seismic
+      data acquisition and processing, more years in computer graphics hardware
+      and algorithms, and then decades in chemical analytical instrumentation,
+      the latter which&nbsp; involved writing data analysis programs
+      (regressions/data fitting and statistics).<br>
+      <br>
+      I decided to give myself a sabbatical in 2012. I've still worked a few
+      hundred hours a year for the company that I left but they seem to have
+      finally hired enough guys to not need me much anymore. I am not
+      particularly keen on working a standard 50 hour engineering week, but
+      would like to have an income again, to make for a more enjoyable
+      lifestyle.<br>
+    </p>
+    <hr>
+    <h3>Experience</h3>
+    <p> I expect that my most directly related experience is in credit card
+      acceptance companies. The more extensive job had me doing all the terminal
+      related work (card swipe and cash register integration) but more relevant
+      to Fedfis is I did the testing and restructuring for maintainability on
+      the database and bank interface software. The other engineer would write
+      somewhat monolithic code which would get an interface to a bank
+      functional, I would factor it so that much of it could be reused when
+      interfacing to the next banking system. I also would add in the detection
+      of edge cases after which the other engineer would then write the code to
+      deal with them. I learned much by playing second fiddle.<br>
+      <br>
+      In the realm of analytical instrumentation I did laboratory data
+      management programming. The implementation for the data storage was an SQL
+      database, but I refused to write SQL code to access it. Instead I modeled
+      the data in a language appropriate for that task (java) and then wrote
+      what is called an ORM (object-relationship-mapping) to automatically
+      generate SQL from the java model. This avoided most of the vulnerabilities
+      that SQL based programming has with respect to users entering strange
+      values. It also meant that all of the business logic was in one program in
+      one language whereas people who write clients in one language that
+      interface to a server written in another language which interfaces with a
+      database program written in SQL have to repeat certain logic (such as
+      input validation) in all 3 places. The same idea coded in 3 different
+      languages sometimes results in incoherent behavior.<br>
+      <br>
+      While I dislike SQL for many reasons I did do quite a bit of it on an
+      Oracle 9 system. The optimizer was doing an abysmal job of some queries
+      and I was tasked with making them run 100's of times faster.</p>
+    <hr>
+    <ol>
+    </ol>
+    <h3><sup>Things to research for Fedfis</sup></h3>
+    <ol>
+      <li>revision management system/SCM<br>
+        What system is used to track the source code and supporting files? This
+        is a critical part of being able to maintain software. One must be able
+        to trace a running program to the human created files that it was built
+        from in case one has to make an urgent fix to a running program, without
+        the risk of also deploying untested and perhaps incomplete new items.
+        The free ones are all more than adequate to the task, often preferable
+        to the paid for ones, the latter of which are fading into obscurity. For
+        a small staff the free ones are far beyond adequate, they are better as
+        one doesn't have to deal with layers of management meant to deal with
+        layers of managers. Paying to have it hosted somewhere is usually
+        worthwhile, as little as $25/month gets you well managed backups. The
+        distributed ones (git, mercurial, bazaar) are the most robust, the
+        master/slave ones (svn) are easier to use.</li>
+      <li>Issue management system (bug tracker et al.)<br>
+        An issue management system usually integrates with the revision
+        management system, recording the reasons for the changes traced by that
+        as well as managing change requests. Time tracking is often a part of
+        such systems, useful for estimating delivery times for projects. Redmine
+        and Trac are free (a few hours setup, very low maintenance after that).</li>
+      <li>DBMS tooling<br>
+        The structure of a database (schema) must be revision tracked if it
+        isn't created by code. It is common but actually bad form to manage
+        database changes via SQL statements issued manually. If the schema isn't
+        created via an ORM (object relationship mapper) then one should maintain
+        an SQL script that generates the database structure from scratch.<br>
+        The database engine used is best selected according to how well and
+        quickly bugs are managed and fixed. Unless you need extremely high
+        performance the 'free' ones (Postgres, Mysql) are often better than the
+        paid for ones (Oracle). If performance is not significant then some of
+        the embedded java databases are very convenient (H2).<br>
+        Cloning for development and hot backups for rapid recovery from server
+        issues are also key features to consider. Postgres is usually the best
+        all-around system.</li>
+      <li>server implementation<br>
+        A cloud server is best unless you have extreme security needs. A good
+        cloud service will likely maintain security better than a distracted
+        engineer on staff. A good cloud service will have better uptime than
+        owning your own hardware. If you do own your own hardware then having it
+        in a data center (co-location facility) is better than having it in a
+        closet in your house. Data centers do vary quite a bit in the degree of
+        physical security of your server.</li>
+      <li>software structure</li>
+      <ol>
+        <li>web framework for report generation (the simple ones are too simple,
+          the fancy ones too fancy). Rolling your own is not unreasonable if all
+          it is doing is serving reports (e.g. Jetty based).</li>
+        <li>analytics, generating the data used for the reports.<br>
+          Hopefully those two domains are well separated, so that much of the
+          web framework can be done by someone with only web programming skills
+          leaving the person with the essential Intellectual Property knowledge
+          free to work on creating value.<br>
+          Note: strongly separating source code is a good idea, separating the
+          runtime implementation parts is often a mistake.</li>
+      </ol>
+    </ol>
+    <p><br>
+    </p>
+  </body>
+</html>

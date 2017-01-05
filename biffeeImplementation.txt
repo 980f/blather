@@ -1,0 +1,16 @@
+
+
+string utilties
+
+uri packer 
+	+ for space
+	&xx escaping (detect already escaped!)
+	json node input
+	
+json parser, non validating!
+	(simplified storable and treefile)
+	support '[]' 
+	
+128 bit guid management, database column usage
+	
+	
