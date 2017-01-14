@@ -1,0 +1,10 @@
+
+find . -name \.git | cut -d/ -f 2 >gitlist
+
+while read file; do
+    echo $file
+    cd $file
+    git push
+    cd ..
+done < gitlist
+
