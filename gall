@@ -1,0 +1,29 @@
+##my git submodulke limplementation
+
+##for each directory beneath here whihc has a .git subdirectory
+##build a list of cd dir/git restofargs script lines
+##execute that script.
+
+##that was expensive so let's cache that list
+
+#with subdirectories, sort ensures subs get processed before parent
+makeList(){
+  ffind -L . -name \.git | cut -d. -f1,2 | sort -r >gitlist
+}
+
+#in case the subprojects are also stored at the top of the tree.
+listTop(){
+  ffind . -name \.git | cut -d. -f1,2  >gitlist
+}
+
+
+## and invoke a command on each element of that list.
+
+
+echo "####################################################"
+while read gitdir; do
+  echo "Applying $1 to $gitdir"
+  pushd $gitdir
+  git $@ 
+  popd
+done < gitlist
