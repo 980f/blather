@@ -18,10 +18,10 @@
         <li>I did not get a desktop icon</li>
         <li>I did not get a unity launcher icon</li>
         <li>Mime type registry didn't link anything to hzp files:<br>
-          some part of the install gets fresh with the mime-types file: "Warning in file "/usr/share/applications/gnumeric.desktop": usage of MIME type
-          "zz-application/zz-winassoc-xls" is discouraged ("zz-application/zz-winassoc-xls" should be replaced with "application/vnd.ms-excel")<br>
-          Unknown media type in type 'all/all'<br>
-          Unknown media type in type 'all/allfiles'"<br>
+          some part of the install gets fresh with the mime-types file: <code>"Warning in file "/usr/share/applications/gnumeric.desktop": usage of MIME type
+            "zz-application/zz-winassoc-xls" is discouraged ("zz-application/zz-winassoc-xls" should be replaced with "application/vnd.ms-excel")<br>
+            Unknown media type in type 'all/all'<br>
+            Unknown media type in type 'all/allfiles'"</code><br>
           I'm guessing that comes from some registry system call y'all are making.</li>
       </ol>
     </ol>
@@ -38,9 +38,10 @@
       <li>When I have the cursor on a #include line it would be nice to have a quick way to go to that file, it is tedious to move to it, right click and then have to
         pick it from the list provided.</li>
       <li>ld file editor doesn't seem to know about include files. The usual menu for includes pops up but is empty.</li>
+      <li>Two crash reports in one session, both on closing the studio.</li>
       <li>BIG: Does not remember locals' view choices such as a preference for an output type for a particular variable. This is especially painful when you traverse
-        function calls and call again into a routine which then has lost all your preferences since a moment ago. View preferences can be attached to each debug item,
-        you know a name for the local variable, that data structure can have the view settings for it.</li>
+        function calls and call again into a routine which then has lost all your preferences since the last visit just a few steps ago. Qtcreator+gdb does this and it
+        really is very wearying to not have it.</li>
       <ol>
       </ol>
     </ol>
@@ -49,10 +50,12 @@
       <li>Changing 'exclude from build' does not trigger a rebuild when you ask for a build. You must explicitly rebuild.</li>
       <li>Disassembly often treats code as data. I understand this is a hard problem, what with debug line labels not clearly being code vs. data, but once the program
         counter lands on some 'data' while stepping in the debug window it would be nice to re-disassemble with a note that that point is code. Same goes for elf file
-        reader, .o file reader, errors are at same spots in each. Methinks there is a binary parsing error on recognizing certain instruction patterns.T</li>
+        reader, .o file reader, errors are at same spots in each. Methinks there is a binary parsing error on recognizing certain instruction patterns.</li>
       <li>When ctrl +shift on a character has no special function the character gets passed through as a plain shifted char instead of ignored. trying to un-comment by
         ctrl+shift+/ I got a '?' inserted into the text. The menu item works so perhaps it is the ibus that is screwing up and not passing that combo to you.</li>
-      <li>Two crash reports in one session, both on closing the studio.</li>
+      <li>if I blank the linker startup symbol the "-e<i>startup</i>" is still put into the linker command, and since the next argument is --omagic I get that "--omagic
+        is not found". The -e option is meaningless in the class of parts so it would be nice to not have to coordinate a useless name between files (I have my own
+        startup system).</li>
       <li><br>
       </li>
     </ol>
