@@ -1,0 +1,5 @@
+## recover a deleted file
+## run just this part first if you are a coward:
+## git rev-list -n 1 HEAD -- $1
+
+git checkout $(git rev-list -n 1 HEAD -- "$1")^ -- "$1"
