@@ -20,9 +20,11 @@ listTop(){
 ## and invoke a command on each element of that list.
 
 
-echo "####################################################"
+echo "################################################################################"
 while read gitdir; do
-  echo "Applying $1 to $gitdir"
+  echo "####################################################"
+  echo "## Applying $1 to $gitdir"
+  echo "####################################################"
   pushd $gitdir
   git $@ 
   popd
