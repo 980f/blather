@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>arduino-projects</title>
+    <meta content="Andy Heilveil" name="author">
+  </head>
+  <body>
+    <p>Dealing with arduino's simple project management</p>
+    <p>Arduino's build system copies source files into a build directory. It generates header files for .ino files, it preprocesses
+      the explicit c and c++ files in the directory. The project manager insists on all source being in the project directory, and
+      all source in the project directory is compiled and linked. The linker command specifies removal of unreferenced items. The
+      latter means that only the code that is used makes it into the binary, but it gets compiled and that takes time.<br>
+      The project manager does not let you add to the compiler's include search path. You have to and more elaborated paths to you
+      #include statements.</p>
+    <p>Note that adding a file to a project via the Arduino IDE copies that file to the project directory, which is undesirable if
+      that file is to be shared across projects.</p>
+    <p>On linux or any similar OS one can use file links to leave one's library source in a file tree where it makes sense to you,
+      but have it appear in the Arduino project. For each source directory I made a script like the following:<br>
+      <br>
+      ## link an ezcpp module to arduino dev<br>
+      ln -s ../../ezcpp/$1 due/$1</p>
+    <p>I then came up with a universal one:<br>
+      ## make a link to the $1 file<br>
+      ## see mkImports for a utility to manage them<br>
+      ln -sf $1 $local<br>
+      echo &gt;&gt;.gitignore $(basename $1)<br>
+      <br>
+      You pass it the pathname relative to the arduino project directory.<br>
+      <br>
+      If your SCCS doesn't deal well with file links then you can use the following script to generate a file that will regenerate
+      the links you made, and you can save that script file in your sccs.<br>
+    </p>
+    <hr><code>## make a script that will rebuild links to external files<br>
+      # this is needed as arduino insists on incorporating 100% of the .h and .cpp files it finds in each project directory.<br>
+      # the 'add file' feature of the IDE *copies* the file into the current directory<br>
+      # there is also no easy way to have a per-project list of include paths and lib paths. With difficulty one can set that up for
+      all projects via editing a properties file in a hard to find location.<br>
+      find . -type l -exec readlink {} \+ &gt;externals.list<br>
+      rm -f importer<br>
+      while read extname; do <br>
+      &nbsp; echo &gt;&gt;importer ln -sf $extname <br>
+      &nbsp; #this gets done too many places, will do this manually at need: echo &gt;&gt;.gitignore $(basename $extname) <br>
+      done &lt;externals.list<br>
+      <br>
+      ## occasionally do the following:<br>
+      # find . -type l -exec echo &gt;&gt;.gitignore {} \;<br>
+      #<br>
+      # to ignore links:<br>
+      #<br>
+      # find -type l&nbsp; -exec&nbsp; basename {} \; &gt;&gt;.gitignore <br>
+      # sort .gitignore &gt;sort.tmp<br>
+      # uniq &lt;sort.tmp &gt;.gitignore </code><br>
+    <hr><br>
+    <p><br>
+    </p>
+  </body>
+</html>

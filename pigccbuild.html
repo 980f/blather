@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+    <html>
+      <head>
+        <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+        <title>pigccbuild</title>
+        <meta content="Andy Heilveil" name="author">
+      </head>
+      <body>
+        <p>building latest gcc for raspberry pi</p>
+        <hr>
+        <p><br>
+          sudo apt-get install gawk bison flex gperf cvs texinfo automake \<br>
+          &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          libtool ncurses-dev g++ subversion python-dev \<br>
+          &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          libexpat1-dev cmake<br>
+          [sudo] password for andyh: <br>
+          Reading package lists... Done<br>
+          Building dependency tree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+          Reading state information... Done<br>
+          Note, selecting 'libncurses5-dev' instead of 'ncurses-dev'<br>
+          automake is already the newest version (1:1.15-4ubuntu1).<br>
+          automake set to manually installed.<br>
+          g++ is already the newest version (4:5.3.1-1ubuntu1).<br>
+          libncurses5-dev is already the newest version (6.0+20160213-1ubuntu1).<br>
+          libncurses5-dev set to manually installed.<br>
+          cmake is already the newest version (3.5.1-1ubuntu3).<br>
+          libexpat1-dev is already the newest version (2.1.0-7ubuntu0.16.04.2).<br>
+          libexpat1-dev set to manually installed.<br>
+          The following packages were automatically installed and are no longer required:<br>
+          &nbsp; libtumbler-1-0 linux-headers-4.4.0-53 linux-headers-4.4.0-53-generic linux-headers-4.4.0-57
+          linux-headers-4.4.0-57-generic<br>
+          &nbsp; linux-image-4.4.0-53-generic linux-image-4.4.0-57-generic linux-image-extra-4.4.0-53-generic
+          linux-image-extra-4.4.0-57-generic<br>
+          &nbsp; tumbler-common<br>
+          Use 'sudo apt autoremove' to remove them.<br>
+          The following additional packages will be installed:<br>
+          &nbsp; libapr1 libaprutil1 libbison-dev libfl-dev libltdl-dev libpython-dev libpython2.7-dev libserf-1-1 libsvn1<br>
+          &nbsp; libtext-unidecode-perl libxml-libxml-perl libxml-namespacesupport-perl libxml-sax-base-perl libxml-sax-expat-perl<br>
+          &nbsp; libxml-sax-perl python2.7-dev tex-common<br>
+          Suggested packages:<br>
+          &nbsp; bison-doc mksh rcs gawk-doc libtool-doc gcj-jdk db5.3-util subversion-tools texlive-base texlive-latex-base<br>
+          &nbsp; texlive-generic-recommended texinfo-doc-nonfree<br>
+          The following NEW packages will be installed:<br>
+          &nbsp; bison cvs flex gawk gperf libapr1 libaprutil1 libbison-dev libfl-dev libltdl-dev libpython-dev libpython2.7-dev
+          libserf-1-1<br>
+          &nbsp; libsvn1 libtext-unidecode-perl libtool libxml-libxml-perl libxml-namespacesupport-perl libxml-sax-base-perl<br>
+          &nbsp; libxml-sax-expat-perl libxml-sax-perl python-dev python2.7-dev subversion tex-common texinfo<br>
+          0 upgraded, 26 newly installed, 0 to remove and 52 not upgraded.<br>
+          Need to get 35.7 MB of archives.<br>
+          After this operation, 68.5 MB of additional disk space will be used.<br>
+          Do you want to continue? [Y/n] <br>
+          Get:1 http://mirror.rackspace.com/ubuntu xenial/main amd64 libfl-dev amd64 2.6.0-11 [12.5 kB]<br>
+          Get:2 http://mirror.rackspace.com/ubuntu xenial/main amd64 flex amd64 2.6.0-11 [290 kB]<br>
+          Get:3 http://mirror.rackspace.com/ubuntu xenial/main amd64 gawk amd64 1:4.1.3+dfsg-0.1 [398 kB]<br>
+          Get:4 http://mirror.rackspace.com/ubuntu xenial/main amd64 libapr1 amd64 1.5.2-3 [86.0 kB]<br>
+          Get:5 http://mirror.rackspace.com/ubuntu xenial/main amd64 libaprutil1 amd64 1.5.4-1build1 [77.1 kB]<br>
+          Get:6 http://mirror.rackspace.com/ubuntu xenial/main amd64 libserf-1-1 amd64 1.3.8-1 [45.5 kB]<br>
+          Get:7 http://mirror.rackspace.com/ubuntu xenial/main amd64 libbison-dev amd64 2:3.0.4.dfsg-1 [338 kB]<br>
+          Get:8 http://mirror.rackspace.com/ubuntu xenial/main amd64 bison amd64 2:3.0.4.dfsg-1 [259 kB]<br>
+          Get:9 http://mirror.rackspace.com/ubuntu xenial/main amd64 cvs amd64 2:1.12.13+real-15 [2,332 kB]<br>
+          Get:10 http://mirror.rackspace.com/ubuntu xenial/universe amd64 gperf amd64 3.0.4-2 [102 kB]<br>
+          Get:11 http://mirror.rackspace.com/ubuntu xenial/main amd64 libltdl-dev amd64 2.4.6-0.1 [162 kB]<br>
+          Get:12 http://mirror.rackspace.com/ubuntu xenial-updates/main amd64 libpython2.7-dev amd64 2.7.12-1ubuntu0~16.04.1 [27.8
+          MB]<br>
+          Get:13 http://mirror.rackspace.com/ubuntu xenial/main amd64 libpython-dev amd64 2.7.11-1 [7,728
+          B]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:14 http://mirror.rackspace.com/ubuntu xenial/main amd64 libsvn1 amd64 1.9.3-2ubuntu1 [1,168
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:15 http://mirror.rackspace.com/ubuntu xenial/universe amd64 libtext-unidecode-perl all 1.27-1 [103
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:16 http://mirror.rackspace.com/ubuntu xenial/main amd64 libtool all 2.4.6-0.1 [193
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:17 http://mirror.rackspace.com/ubuntu xenial/main amd64 libxml-namespacesupport-perl all 1.11-1 [13.2
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>
+          Get:18 http://mirror.rackspace.com/ubuntu xenial/main amd64 libxml-sax-base-perl all 1.07-1 [21.5
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:19 http://mirror.rackspace.com/ubuntu xenial/main amd64 libxml-sax-perl all 0.99+dfsg-2ubuntu1 [64.6
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>
+          Get:20 http://mirror.rackspace.com/ubuntu xenial/main amd64 libxml-libxml-perl amd64 2.0123+dfsg-1build1 [316
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+          Get:21 http://mirror.rackspace.com/ubuntu xenial/main amd64 libxml-sax-expat-perl all 0.40-2 [11.5
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:22 http://mirror.rackspace.com/ubuntu xenial-updates/main amd64 python2.7-dev amd64 2.7.12-1ubuntu0~16.04.1 [276
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+          Get:23 http://mirror.rackspace.com/ubuntu xenial/main amd64 python-dev amd64 2.7.11-1 [1,160
+          B]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:24 http://mirror.rackspace.com/ubuntu xenial/main amd64 subversion amd64 1.9.3-2ubuntu1 [308
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:25 http://mirror.rackspace.com/ubuntu xenial/main amd64 tex-common all 6.04 [545
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Get:26 http://mirror.rackspace.com/ubuntu xenial/universe amd64 texinfo amd64 6.1.0.dfsg.1-5 [744
+          kB]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>Fetched 35.7 MB in 16s (2,214
+          kB/s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <br>N: Ignoring file '20auto-upgrades.ucf-dist' in directory '/etc/apt/apt.conf.d/' as it has an invalid filename
+          extension<br>
+          Selecting previously unselected package libfl-dev:amd64.<br>
+          (Reading database ... 365116 files and directories currently installed.)<br>
+          Preparing to unpack .../libfl-dev_2.6.0-11_amd64.deb ...<br>
+          Unpacking libfl-dev:amd64 (2.6.0-11) ...<br>
+          Selecting previously unselected package flex.<br>
+          Preparing to unpack .../flex_2.6.0-11_amd64.deb ...<br>
+          Unpacking flex (2.6.0-11) ...<br>
+          Selecting previously unselected package gawk.<br>
+          Preparing to unpack .../gawk_1%3a4.1.3+dfsg-0.1_amd64.deb ...<br>
+          Unpacking gawk (1:4.1.3+dfsg-0.1) ...<br>
+          Selecting previously unselected package libapr1:amd64.<br>
+          Preparing to unpack .../libapr1_1.5.2-3_amd64.deb ...<br>
+          Unpacking libapr1:amd64 (1.5.2-3) ...<br>
+          Selecting previously unselected package libaprutil1:amd64.<br>
+          Preparing to unpack .../libaprutil1_1.5.4-1build1_amd64.deb ...<br>
+          Unpacking libaprutil1:amd64 (1.5.4-1build1) ...<br>
+          Selecting previously unselected package libserf-1-1:amd64.<br>
+          Preparing to unpack .../libserf-1-1_1.3.8-1_amd64.deb ...<br>
+          Unpacking libserf-1-1:amd64 (1.3.8-1) ...<br>
+          Selecting previously unselected package libbison-dev:amd64.<br>
+          Preparing to unpack .../libbison-dev_2%3a3.0.4.dfsg-1_amd64.deb ...<br>
+          Unpacking libbison-dev:amd64 (2:3.0.4.dfsg-1) ...<br>
+          Selecting previously unselected package bison.<br>
+          Preparing to unpack .../bison_2%3a3.0.4.dfsg-1_amd64.deb ...<br>
+          Unpacking bison (2:3.0.4.dfsg-1) ...<br>
+          Selecting previously unselected package cvs.<br>
+          Preparing to unpack .../cvs_2%3a1.12.13+real-15_amd64.deb ...<br>
+          Unpacking cvs (2:1.12.13+real-15) ...<br>
+          Selecting previously unselected package gperf.<br>
+          Preparing to unpack .../gperf_3.0.4-2_amd64.deb ...<br>
+          Unpacking gperf (3.0.4-2) ...<br>
+          Selecting previously unselected package libltdl-dev:amd64.<br>
+          Preparing to unpack .../libltdl-dev_2.4.6-0.1_amd64.deb ...<br>
+          Unpacking libltdl-dev:amd64 (2.4.6-0.1) ...<br>
+          Selecting previously unselected package libpython2.7-dev:amd64.<br>
+          Preparing to unpack .../libpython2.7-dev_2.7.12-1ubuntu0~16.04.1_amd64.deb ...<br>
+          Unpacking libpython2.7-dev:amd64 (2.7.12-1ubuntu0~16.04.1) ...<br>
+          Selecting previously unselected package libpython-dev:amd64.<br>
+          Preparing to unpack .../libpython-dev_2.7.11-1_amd64.deb ...<br>
+          Unpacking libpython-dev:amd64 (2.7.11-1) ...<br>
+          Selecting previously unselected package libsvn1:amd64.<br>
+          Preparing to unpack .../libsvn1_1.9.3-2ubuntu1_amd64.deb ...<br>
+          Unpacking libsvn1:amd64 (1.9.3-2ubuntu1) ...<br>
+          Selecting previously unselected package libtext-unidecode-perl.<br>
+          Preparing to unpack .../libtext-unidecode-perl_1.27-1_all.deb ...<br>
+          Unpacking libtext-unidecode-perl (1.27-1) ...<br>
+          Selecting previously unselected package libtool.<br>
+          Preparing to unpack .../libtool_2.4.6-0.1_all.deb ...<br>
+          Unpacking libtool (2.4.6-0.1) ...<br>
+          Selecting previously unselected package libxml-namespacesupport-perl.<br>
+          Preparing to unpack .../libxml-namespacesupport-perl_1.11-1_all.deb ...<br>
+          Unpacking libxml-namespacesupport-perl (1.11-1) ...<br>
+          Selecting previously unselected package libxml-sax-base-perl.<br>
+          Preparing to unpack .../libxml-sax-base-perl_1.07-1_all.deb ...<br>
+          Unpacking libxml-sax-base-perl (1.07-1) ...<br>
+          Selecting previously unselected package libxml-sax-perl.<br>
+          Preparing to unpack .../libxml-sax-perl_0.99+dfsg-2ubuntu1_all.deb ...<br>
+          Unpacking libxml-sax-perl (0.99+dfsg-2ubuntu1) ...<br>
+          Selecting previously unselected package libxml-libxml-perl.<br>
+          Preparing to unpack .../libxml-libxml-perl_2.0123+dfsg-1build1_amd64.deb ...<br>
+          Unpacking libxml-libxml-perl (2.0123+dfsg-1build1) ...<br>
+          Selecting previously unselected package libxml-sax-expat-perl.<br>
+          Preparing to unpack .../libxml-sax-expat-perl_0.40-2_all.deb ...<br>
+          Unpacking libxml-sax-expat-perl (0.40-2) ...<br>
+          Selecting previously unselected package python2.7-dev.<br>
+          Preparing to unpack .../python2.7-dev_2.7.12-1ubuntu0~16.04.1_amd64.deb ...<br>
+          Unpacking python2.7-dev (2.7.12-1ubuntu0~16.04.1) ...<br>
+          Selecting previously unselected package python-dev.<br>
+          Preparing to unpack .../python-dev_2.7.11-1_amd64.deb ...<br>
+          Unpacking python-dev (2.7.11-1) ...<br>
+          Selecting previously unselected package subversion.<br>
+          Preparing to unpack .../subversion_1.9.3-2ubuntu1_amd64.deb ...<br>
+          Unpacking subversion (1.9.3-2ubuntu1) ...<br>
+          Selecting previously unselected package tex-common.<br>
+          Preparing to unpack .../tex-common_6.04_all.deb ...<br>
+          Unpacking tex-common (6.04) ...<br>
+          Selecting previously unselected package texinfo.<br>
+          Preparing to unpack .../texinfo_6.1.0.dfsg.1-5_amd64.deb ...<br>
+          Unpacking texinfo (6.1.0.dfsg.1-5) ...<br>
+          Processing triggers for libc-bin (2.23-0ubuntu5) ...<br>
+          Processing triggers for install-info (6.1.0.dfsg.1-5) ...<br>
+          Processing triggers for doc-base (0.10.7) ...<br>
+          Processing 10 added doc-base files...<br>
+          Registering documents with scrollkeeper...<br>
+          Processing triggers for man-db (2.7.5-1) ...<br>
+          Setting up libfl-dev:amd64 (2.6.0-11) ...<br>
+          Setting up flex (2.6.0-11) ...<br>
+          Setting up gawk (1:4.1.3+dfsg-0.1) ...<br>
+          Setting up libapr1:amd64 (1.5.2-3) ...<br>
+          Setting up libaprutil1:amd64 (1.5.4-1build1) ...<br>
+          Setting up libserf-1-1:amd64 (1.3.8-1) ...<br>
+          Setting up libbison-dev:amd64 (2:3.0.4.dfsg-1) ...<br>
+          Setting up bison (2:3.0.4.dfsg-1) ...<br>
+          update-alternatives: using /usr/bin/bison.yacc to provide /usr/bin/yacc (yacc) in auto mode<br>
+          Setting up cvs (2:1.12.13+real-15) ...<br>
+          Allowing use of questionable username.<br>
+          Adding group `_cvsadmin' (GID 130) ...<br>
+          Done.<br>
+          Setting up gperf (3.0.4-2) ...<br>
+          Setting up libltdl-dev:amd64 (2.4.6-0.1) ...<br>
+          Setting up libpython2.7-dev:amd64 (2.7.12-1ubuntu0~16.04.1) ...<br>
+          Setting up libpython-dev:amd64 (2.7.11-1) ...<br>
+          Setting up libsvn1:amd64 (1.9.3-2ubuntu1) ...<br>
+          Setting up libtext-unidecode-perl (1.27-1) ...<br>
+          Setting up libtool (2.4.6-0.1) ...<br>
+          Setting up libxml-namespacesupport-perl (1.11-1) ...<br>
+          Setting up libxml-sax-base-perl (1.07-1) ...<br>
+          Setting up libxml-sax-perl (0.99+dfsg-2ubuntu1) ...<br>
+          update-perl-sax-parsers: Registering Perl SAX parser XML::SAX::PurePerl with priority 10...<br>
+          update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...<br>
+          <br>
+          Creating config file /etc/perl/XML/SAX/ParserDetails.ini with new version<br>
+          Setting up libxml-libxml-perl (2.0123+dfsg-1build1) ...<br>
+          update-perl-sax-parsers: Registering Perl SAX parser XML::LibXML::SAX::Parser with priority 50...<br>
+          update-perl-sax-parsers: Registering Perl SAX parser XML::LibXML::SAX with priority 50...<br>
+          update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...<br>
+          Replacing config file /etc/perl/XML/SAX/ParserDetails.ini with new version<br>
+          Setting up libxml-sax-expat-perl (0.40-2) ...<br>
+          update-perl-sax-parsers: Registering Perl SAX parser XML::SAX::Expat with priority 50...<br>
+          update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...<br>
+          Replacing config file /etc/perl/XML/SAX/ParserDetails.ini with new version<br>
+          Setting up python2.7-dev (2.7.12-1ubuntu0~16.04.1) ...<br>
+          Setting up python-dev (2.7.11-1) ...<br>
+          Setting up subversion (1.9.3-2ubuntu1) ...<br>
+          Setting up tex-common (6.04) ...<br>
+          update-language: texlive-base not installed and configured, doing nothing!<br>
+          Setting up texinfo (6.1.0.dfsg.1-5) ...<br>
+          Processing triggers for libc-bin (2.23-0ubuntu5) ...<br>
+          N: Ignoring file '20auto-upgrades.ucf-dist' in directory '/etc/apt/apt.conf.d/' as it has an invalid filename extension</p>
+        <hr>
+        <p>andyh@farmer:/opt/bluegriffon$ mkdir -p /d/bin/pi/build/toolchain<br>
+          andyh@farmer:/opt/bluegriffon$ cd /d/bin/pi<br>
+          andyh@farmer:/d/bin/pi$ mkdir toolchains<br>
+          andyh@farmer:/d/bin/pi$ mkdir vc<br>
+          andyh@farmer:/d/bin/pi$ mkdir projects</p>
+        <hr>
+        <p>cd build<br>
+          downloaded crosstool-ng/crosstool-ng-1.22.0.tar.bz2 via firefox from http://crosstool-ng.org/download/<br>
+          tar xjf crosstool...</p>
+        <pre><code>./configure --enable-local <br>andyh@farmer:/d/bin/pi/build/crosstool-ng$ ./configure --enable-local
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for a sed that does not truncate output... /bin/sed
+checking whether sed understands -r -i -e... yes
+checking whether ln -s works... yes
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking how to run the C preprocessor... gcc -E
+checking for ranlib... ranlib
+checking for gobjcopy... no
+checking for objcopy... objcopy
+checking for absolute path to objcopy... /usr/bin/objcopy
+checking for gobjdump... no
+checking for objdump... objdump
+checking for absolute path to objdump... /usr/bin/objdump
+checking for greadelf... no
+checking for readelf... readelf
+checking for absolute path to readelf... /usr/bin/readelf
+checking for gperf... gperf
+checking for absolute path to gperf... /usr/bin/gperf
+checking for bison... bison
+checking for flex... flex
+checking for makeinfo... makeinfo
+checking for cut... cut
+checking for stat... stat
+checking for readlink... readlink
+checking for wget... wget
+checking for tar... tar
+checking for gzip... gzip
+checking for bzip2... bzip2
+checking for help2man... no
+configure: error: missing required tool: help2man
+<br>sudo apt-get install help2man<br><br>rerun configure:<br>checking for help2man... help2man
+checking for gpatch... no
+checking for patch... patch
+checking for absolute path to patch... /usr/bin/patch
+checking for bash &gt;= 3.1... /bin/bash
+checking for GNU awk... /usr/bin/gawk
+checking for GNU make &gt;= 3.80... /usr/bin/make
+checking whether /usr/bin/make sets $(MAKE)... yes
+checking for make 3.81... no
+checking for GNU libtool &gt;= 1.5.26... no
+configure: error: could not find GNU libtool &gt;= 1.5.26
+<br>Reading state information... Done
+libtool is already the newest version (2.4.6-0.1).
+<br>so the configure test is defective, or a 1.x series is required.<br>Let's try ignoring that error <br>... <br><br>&amp;&amp; make <br></code><br><code><code>... no-go, no makefile was generated.<br>!libtool install wasn't enough, needed to install libtool-bin<br>so ./configure gets us:<br>andyh@farmer:/d/bin/pi/build/crosstool-ng$ ./configure --enable-local
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for a sed that does not truncate output... /bin/sed
+checking whether sed understands -r -i -e... yes
+checking whether ln -s works... yes
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking how to run the C preprocessor... gcc -E
+checking for ranlib... ranlib
+checking for gobjcopy... no
+checking for objcopy... objcopy
+checking for absolute path to objcopy... /usr/bin/objcopy
+checking for gobjdump... no
+checking for objdump... objdump
+checking for absolute path to objdump... /usr/bin/objdump
+checking for greadelf... no
+checking for readelf... readelf
+checking for absolute path to readelf... /usr/bin/readelf
+checking for gperf... gperf
+checking for absolute path to gperf... /usr/bin/gperf
+checking for bison... bison
+checking for flex... flex
+checking for makeinfo... makeinfo
+checking for cut... cut
+checking for stat... stat
+checking for readlink... readlink
+checking for wget... wget
+checking for tar... tar
+checking for gzip... gzip
+checking for bzip2... bzip2
+checking for help2man... help2man
+checking for gpatch... no
+checking for patch... patch
+checking for absolute path to patch... /usr/bin/patch
+checking for bash &gt;= 3.1... /bin/bash
+checking for GNU awk... /usr/bin/gawk
+checking for GNU make &gt;= 3.80... /usr/bin/make
+checking whether /usr/bin/make sets $(MAKE)... yes
+checking for make 3.81... no
+checking for GNU libtool &gt;= 1.5.26... /usr/bin/libtool
+checking for GNU libtoolize &gt;= 1.5.26... /usr/bin/libtoolize
+checking for GNU automake &gt;= 1.10... /usr/bin/automake
+checking for xz... xz
+checking for cvs... cvs
+checking for svn... svn
+checking for inline... inline
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for stdlib.h... (cached) yes
+checking for GNU libc compatible malloc... yes
+checking for stdlib.h... (cached) yes
+checking for GNU libc compatible realloc... yes
+checking for size_t... yes
+checking for working alloca.h... yes
+checking for alloca... yes
+checking libintl.h usability... yes
+checking libintl.h presence... yes
+checking for libintl.h... yes
+checking whether gettext is declared... yes
+checking for library containing bindtextdomain... none required
+checking ncurses/ncurses.h usability... no
+checking ncurses/ncurses.h presence... no
+checking for ncurses/ncurses.h... no
+checking ncurses/curses.h usability... no
+checking ncurses/curses.h presence... no
+checking for ncurses/curses.h... no
+checking ncursesw/curses.h usability... no
+checking ncursesw/curses.h presence... no
+checking for ncursesw/curses.h... no
+checking ncurses.h usability... yes
+checking ncurses.h presence... yes
+checking for ncurses.h... yes
+checking for library containing initscr... -lncurses
+checking for library containing tgetent... none required
+configure: overiding all of --prefix and the likes, because --enable-local was set
+configure: creating ./config.status
+config.status: creating Makefile
+<br></code></code></pre><hr><span style="font-family: monospace;"><span style="font-family: serif;">make:<br>andyh@farmer:/d/bin/pi/build/crosstool-ng$ make<br>&nbsp; SED&nbsp;&nbsp;&nbsp; 'ct-ng'<br>&nbsp; SED&nbsp;&nbsp;&nbsp; 'scripts/crosstool-NG.sh'<br>&nbsp; SED&nbsp;&nbsp;&nbsp; 'scripts/saveSample.sh'<br>&nbsp; SED&nbsp;&nbsp;&nbsp; 'scripts/showTuple.sh'<br>&nbsp; GEN&nbsp;&nbsp;&nbsp; 'config/configure.in'<br>&nbsp; GEN&nbsp;&nbsp;&nbsp; 'paths.mk'<br>&nbsp; GEN&nbsp;&nbsp;&nbsp; 'paths.sh'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'nconf.gui.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'nconf.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'lxdialog/yesno.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'lxdialog/util.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'lxdialog/textbox.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'lxdialog/menubox.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'lxdialog/inputbox.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'lxdialog/checklist.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'mconf.dep'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'conf.dep'<br>&nbsp; BISON&nbsp; 'zconf.tab.c'<br>&nbsp; GPERF&nbsp; 'zconf.hash.c'<br>&nbsp; LEX&nbsp;&nbsp;&nbsp; 'zconf.lex.c'<br>&nbsp; DEP&nbsp;&nbsp;&nbsp; 'zconf.tab.dep'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'zconf.tab.o'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'conf.o'<br>&nbsp; LD&nbsp;&nbsp;&nbsp;&nbsp; 'conf'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'lxdialog/checklist.o'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'lxdialog/inputbox.o'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'lxdialog/menubox.o'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'lxdialog/textbox.o'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'lxdialog/util.o'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'lxdialog/yesno.o'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'mconf.o'<br>&nbsp; LD&nbsp;&nbsp;&nbsp;&nbsp; 'mconf'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'nconf.o'<br>&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; 'nconf.gui.o'<br>&nbsp; LD&nbsp;&nbsp;&nbsp;&nbsp; 'nconf'<br>&nbsp; SED&nbsp;&nbsp;&nbsp; 'docs/ct-ng.1'<br>&nbsp; GZIP&nbsp;&nbsp; 'docs/ct-ng.1.gz'<br></span></span><hr><br>make install:<br>andyh@farmer:/d/bin/pi/build/crosstool-ng$ make install<br>&nbsp; GEN&nbsp;&nbsp;&nbsp; 'config/configure.in'<br>&nbsp; GEN&nbsp;&nbsp;&nbsp; 'paths.mk'<br>&nbsp; GEN&nbsp;&nbsp;&nbsp; 'paths.sh'<br><hr><br>add build/crosstool-ng to path, temporarily<br><pre><code>export PATH=`pwd`:$PATH<br>cd build/toolchain<br>ct-ng menuconfig<br><br></code></pre><ul><li>Navigate to <strong>Paths and misc options</strong>.</li><li>Enable <strong>Try features marked as EXPERIMENTAL</strong>.</li><li>Set <strong>Prefix directory</strong> to <code>&lt;explicit path to&gt;/toolchains/${CT_TARGET}</code>.</li><li>Enable <strong>Use a mirror</strong>.</li><li>Set <strong>Number of parallel jobs</strong> to twice the number of HW threads (eg for a 4-core CPU with HyperThreading, use 16).</li></ul><h4>Setup Target Options</h4>
+
+<ul><li>Navigate to <strong>Target options</strong>.</li><li>Set <strong>Target Architecture</strong> to <strong>arm</strong>.</li><li>Leave <strong>Endianness</strong> as <strong>Little</strong> and <strong>Bitness</strong> as <strong>32-bit</strong>.&lt;&lt;64 for me</li><li>Set <strong>append ‘hf’ to the tuple (EXPERIMENTAL)</strong>. &lt;&lt;couldn't find a place to do this</li></ul><h4>Setup Operating System Options</h4>
+
+<ul><li>Navigate to <strong>Operating System</strong>.</li><li>Set <strong>Target OS</strong> to <strong>Linux</strong>. &lt;&lt;= couldn't set kernel to 4.4, 4.3 was highest numbered</li></ul><h4>Setup Binary Utility Options</h4>
+
+<ul><li>Navigate to <strong>Binary utilities</strong>.</li><li>Set <strong>Binutils</strong> to <strong>2.22</strong>. &lt;&lt;= left at 2.25.1</li></ul><p>
+
+</p><h4>Setup Compiler Options</h4>
+
+<ul><li>Navigate to <strong>C compiler</strong>. </li><li>Enable <strong>Show Linaro versions</strong>. (note gcc 5.2 highest although 5.4 released)</li><li>Enable <strong>C++ support</strong>.</li></ul><h4>Setup Debug Options</h4>
+
+<ul><li>Navigate to <strong>Debug facilities</strong>.</li><li>Enable <strong>gdb</strong>, then press [Enter] to configure additional GDB settings.
+
+<ul><li>Enable <strong>Build a static cross gdb</strong>.</li><li>Set <strong>Cross-gdb extra config</strong> to <code>--with-expat</code>.</li></ul></li><li>Enable <strong>ltrace</strong>.</li><li>Enable <strong>strace</strong>.</li></ul><p>Over an hour later: <br>&nbsp;Installing ltrace<br>[ERROR]&nbsp;&nbsp;&nbsp; make[4]: *** [all-recursive] Error 1<br>[ERROR]&nbsp;&nbsp;&nbsp; make[3]: *** [all-recursive] Error 1<br>[ERROR]&nbsp;&nbsp;&nbsp; make[2]: *** [all-recursive] Error 1<br>[ERROR]&nbsp;&nbsp;&nbsp; make[1]: *** [all] Error 2<br>[ERROR]&nbsp;&nbsp; <br>[ERROR]&nbsp; &gt;&gt;<br>[ERROR]&nbsp; &gt;&gt;&nbsp; Build failed in step 'Installing ltrace'<br>[ERROR]&nbsp; &gt;&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; called in step '(top-level)'<br>[ERROR]&nbsp; &gt;&gt;<br>[ERROR]&nbsp; &gt;&gt;&nbsp; Error happened in: CT_DoExecLog[scripts/functions@257]<br>[ERROR]&nbsp; &gt;&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; called from: do_debug_ltrace_build[scripts/build/debug/400-ltrace.sh@55]<br>[ERROR]&nbsp; &gt;&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; called from: do_debug[scripts/build/debug.sh@35]<br>[ERROR]&nbsp; &gt;&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; called from: main[scripts/crosstool-NG.sh@646]<br>[ERROR]&nbsp; &gt;&gt;<br>[ERROR]&nbsp; &gt;&gt;&nbsp; For more info on this error, look at the file: 'build.log'<br>[ERROR]&nbsp; &gt;&gt;&nbsp; There is a list of known issues, some with workarounds, in:<br>[ERROR]&nbsp; &gt;&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/d/bin/pi/build/crosstool-ng/docs/B - Known issues.txt'<br>[ERROR]&nbsp;&nbsp; <br>[ERROR]&nbsp; (elapsed: 66:56.37)<br>[66:56] / /d/bin/pi/build/crosstool-ng/ct-ng:152: recipe for target 'build' failed</p><p></p>
+
+<hr>&nbsp;Building ltrace<br>[DEBUG]&nbsp;&nbsp;&nbsp; ==&gt; Executing: '/usr/bin/make' <br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; make[1]: Entering directory '/d/bin/pi/build/toolchain/.build/aarch64-unknown-linux-gnueabi/build/build-ltrace'<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; /usr/bin/make&nbsp; all-recursive<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; make[2]: Entering directory '/d/bin/pi/build/toolchain/.build/aarch64-unknown-linux-gnueabi/build/build-ltrace'<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; Making all in sysdeps<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; make[3]: Entering directory '/d/bin/pi/build/toolchain/.build/aarch64-unknown-linux-gnueabi/build/build-ltrace/sysdeps'<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; Making all in linux-gnu<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; make[4]: Entering directory '/d/bin/pi/build/toolchain/.build/aarch64-unknown-linux-gnueabi/build/build-ltrace/sysdeps/linux-gnu'<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; Making all in aarch64<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; /bin/bash: line 17: cd: aarch64: No such file or directory<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; Makefile:382: recipe for target 'all-recursive' failed<br>[ERROR]&nbsp;&nbsp;&nbsp; make[4]: *** [all-recursive] Error 1<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; make[4]: Leaving directory '/d/bin/pi/build/toolchain/.build/aarch64-unknown-linux-gnueabi/build/build-ltrace/sysdeps/linux-gnu'<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; Makefile:299: recipe for target 'all-recursive' failed<br>[ERROR]&nbsp;&nbsp;&nbsp; make[3]: *** [all-recursive] Error 1<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; make[3]: Leaving directory '/d/bin/pi/build/toolchain/.build/aarch64-unknown-linux-gnueabi/build/build-ltrace/sysdeps'<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; Makefile:741: recipe for target 'all-recursive' failed<br>[ERROR]&nbsp;&nbsp;&nbsp; make[2]: *** [all-recursive] Error 1<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; make[2]: Leaving directory '/d/bin/pi/build/toolchain/.build/aarch64-unknown-linux-gnueabi/build/build-ltrace'<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; Makefile:447: recipe for target 'all' failed<br>[ERROR]&nbsp;&nbsp;&nbsp; make[1]: *** [all] Error 2<br>[ALL&nbsp; ]&nbsp;&nbsp;&nbsp; make[1]: Leaving directory '/d/bin/pi/build/toolchain/.build/aarch64-unknown-linux-gnueabi/build/build-ltrace'<br>[ERROR] &nbsp;<br><br><p></p><p></p><pre></pre><span
+style="font-family: monospace;"><span style="font-family: serif;"></span></span><pre><code><code><br><br></code>&amp;&amp; make install<br><br><br><br>..add to path<br><br></code></pre><p><br></p>
+</body></html>
