@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title>marinemt</title>
+    <meta content="Andy Heilveil" name="author">
+  </head>
+  <body>
+    <p>MT marine data acquisition system</p>
+    <p>Requirements:</p>
+    <ol>
+      <li>battery operated, 12 hours run time</li>
+      <li> sealed against moisture (affects heat dissipation)</li>
+      <li>2 to 5 channels EM data, 2kHz typical, 5kHz desired, 18 bits(4 bytes@4/8kHz = 16/32k bytes/second ~1GB/shift)</li>
+      <li>many channels for depth measurement, 10 Hz data (perhaps 50/60Hz sampling?) 12 bits</li>
+      <ol>
+        <li>water temperature</li>
+        <li>water pressure</li>
+        <li>"bubble level" info, 3-axis gyro (raw data rate ~100Hz * 6 bytes)</li>
+      </ol>
+    </ol>
+    <br>
+    <p><br>
+      Suggested architecture:</p>
+    <ol>
+      <li>MCU (micro controller) at detector (e.g. SAMD21 series)</li>
+      <li>SDcard for data logging at mcu, as a backup. Raw disk storage, no file system required.</li>
+      <li>Linux capable SBC (single board computer), Raspberry Pi or similar.</li>
+      <li>USB "pen/thumb" drive on SBC for primary data logging. Use journalling filesystem for higher reliability.</li>
+      <li>The SBC is above water and connects to the GPS receiver system.</li>
+      <li>The SBC may have a wifi connection or other communications with the boat, if only flashing lights to say "service
+        required".</li>
+      <li>The SBC connects to the MCU via fiber-optic or RS-485 serial port, perhaps just one way MCU to SBC (250kbaud MCU out, a
+        dribble in the reverse direction).</li>
+      <li>With each data acquisition the MCU stores a timestamped/sequenced number record in its local SDcard, and sends the same
+        content on to the SBC.</li>
+      <li>The SDcard non-filesystem storage exists as a backup to the SBC, presumable both will not fail at the same time. </li>
+    </ol>
+    <p>Attitudes</p>
+    <ol>
+      <li>MCU SDcard storage is not generally seen as reliable, and is definitely not sophisticated with respect to robustness. Fire
+        codes or other ECC can be used for this data. Each record has identifying information so no file system is required.</li>
+      <li>The SBC is running linux so that it can read such SDcard info without much grief.</li>
+      <li>The SBC can do data validation on the fly, checking for whether the data acquisition process seems sane. It also records
+        GPS-MCU record# correlation information.</li>
+      <li>The SBC can save the data in multiple separate drives for redundancy.</li>
+      <li>The SBC restart-on-failure time equates to ~150k records, which the MCU SDcard can retain. </li>
+      <li>No SBC running anything worthy of being called an OS will have the real time performance needed for the M-T signal
+        processing, nor do many of them have the I/O for simple collection of sensor data. The minimal 'dumb' circuitry needed to
+        provide such I/O is not cheaper nor smaller than an MCU with enough pins. The possible exception to the "OS's jitter too
+        much" is uCLinux and its peers, which however entail greater development burdens than mating an easily-real-time MCU with a
+        well supported OS for connection to the rest of the world.</li>
+    </ol>
+    <p>Implementation details</p>
+    <ol>
+      <li>The MCU should be acquiring data via DMA for lowest power, or an ISR doing not much more than buffer insertions.</li>
+      <li>The data should be assembled into chunks of a size that admits of the appropriate ECC for the storage and transmission
+        media.</li>
+      <li>if the MCU and SBC</li>
+    </ol>
+    <ol>
+    </ol>
+  </body>
+</html>
