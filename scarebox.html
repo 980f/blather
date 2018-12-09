@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>scarebox</title>
+    <meta name="author" content="Andy Heilveil">
+  </head>
+  <body>
+    <p>ScareSockets</p>
+    <p>Special effects controllers</p>
+    <hr> In this document numbers on items is for ease of discussion, don't pay
+    much attention to their values. For instance in the programming definition
+    section they do not reflect strict ordering of operations.<br>
+    <hr>
+    <p><br>
+      Booboxes are expensive and most people can't program them other than
+      through their buttons (the cheaper ones).</p>
+    <p>2 minutes maximum of animation (my design is limited by number of steps,
+      not time, low end 127)<br>
+    </p>
+    <hr>
+    <p><br>
+      We would like to have an easy to program system for the majority of FX
+      designers, emulating the Boobox interface as closely as convenient. Since
+      arduino is programmed in C++ we can easily use the same code on lowend
+      controllers as for RPi0W based ones.</p>
+    <p>The Arduino would have a fixed program, an RPi0W would have that plus
+      other programs running or an extended capability version (gotta love C++
+      conditional compilation :).<br>
+      <br>
+      Internally there is a table for each available trigger.<br>
+      Each line of the table (from now on called a <strong>step</strong>) has a
+      duration (in .01 seconds or some other readily achievable granularity) and
+      settings for each relay. <br>
+      Each digitial output can be set to one of:</p>
+    <ol>
+      <li>On</li>
+      <li>Off</li>
+      <li>No change</li>
+      <li>Flicker (random, prefer SSR over relay)</li>
+      <li>Ramp (pwm with relaxing period, prefer SSR over relay)</li>
+      <li>Others as we think of them.</li>
+    </ol>
+    <p>We may be able to support multiple tables, one for each input. We may
+      program conflict resolution per relay as:</p>
+    <ol>
+      <li>On wins (OR, greatest)</li>
+      <li>Off wins (AND, least)</li>
+    </ol>
+    <p>In addition each relay has a polarity option, "on" might actually be
+      "off", IE we want to be able to switch from NO to NC without actually
+      changing the wires.</p>
+    <p>Programming interfaces</p>
+    <ol>
+      <li>Boobox button mode<br>
+        A button interface is used to record on/off times for the channels. If
+        you don't like the program you start from scratch to make any changes.</li>
+      <li>Terminal Boobox<br>
+        A terminal is connected via USB or UART (depends on arduino model) and
+        the equivalent of the button functionality is done via keyboard
+        characters. This and button mode can exist at the same time.</li>
+      <li>Conversation over terminal, prompted with single char selections for
+        each prompt.<br>
+        ESC gets you up one level prompt<br>
+        <ol>
+          <li>Show table, Edit step, Insert step, Delete step,Save program, Load
+            program.</li>
+          <ol>
+            <li>Show: prints table nicely aligned, back to prompt level 1</li>
+            <li>Save: prints table formatted for reading back in via Load.</li>
+            <li>Load: expects stream of step definition lines.</li>
+            <li>Edit:</li>
+            <ol>
+              <li>asked for which step, empty answer is "add new one at end"
+                0..9 then A0..A9, B0..B9 which covers more steps than we have
+                storage for.</li>
+              <li>prompted for each relay setting</li>
+              <li>prompted for duration</li>
+              <li>prompted for whether "reset" is allowed.</li>
+            </ol>
+            <li>Insert:</li>
+            <ol>
+              <li>prompts for number to insert at, if '3' then existing steps
+                from 3rd step to end are moved to one greater, and you enter the
+                Edit cycle for step 3.</li>
+            </ol>
+            <li>Delete:</li>
+            <ol>
+              <li>prompts for number to delete<br>
+                Note: deleted steps are stored in the config space and we will
+                figure out how to ask to get one back.</li>
+            </ol>
+          </ol>
+        </ol>
+      </li>
+    </ol>
+    <p>If we wish to have state machines then we will have tables enable and
+      disable each other.</p>
+    <hr><br>
+    Boobox programming algorithm.<br>
+    <br>
+    Long press on PGM button resets program pointer to first step and puts
+    device in program mode (reflected by some LED).<br>
+    On release of the long press the relay buttons are recorded as the idle
+    level of the outputs.<br>
+    Short press on PGM starts duration measurement for step 1. The state of the
+    relay buttons as PGM is pressed is the values for step 1.<br>
+    As each relay's button changes state the program pointer moves to the next
+    step and restarts duration measurement.<br>
+    Short press on PGM ends recording and enters run state.<br>
+    <br>
+    In run mode:<br>
+    <ol>
+      <li> each relay button inverts state of relay, IE if program is running
+        due to a trigger then the relay button complements the present output
+        state.</li>
+      <li>a quick press of PGM triggers the program run.</li>
+    </ol>
+    <p>Boobox programming via terminal program:</p>
+    <ol>
+      <li>Q is like a long PGM press: clears old program and sets pointer to
+        step 1. YUIO and HJKL are used to set idle state of outputs. You can
+        fiddle with them until you are happy, the results are recorded when A is
+        received.</li>
+      <li>A is like a short PGM press, starts measuring duration and records
+        present state of relays.</li>
+      <li>YUIO are relay on </li>
+      <li>HJKL are relay off</li>
+      <li>Z ends the program.</li>
+    </ol>
+    When any of YUIOHJKL are pressed a new step is recorded. If the duration of
+    a step is less than some value we shall argue over then the step is merged
+    with the following one. This is to extend the range of the step memory and
+    we may defer such optimization until the table is full but the program not
+    completed.<br>
+    <hr><br>
+    Program Maintenance<br>
+    One of the primary desires is to be able to archive and restore programs,
+    such as for rapid replacement of a broken unit. Via a terminal one can
+    capture a program and play it into another box.&nbsp; <br>
+    Programs are emitted and received as human readable text. A line is output
+    for each step, in tab separated format with a header. This allows spread
+    sheet programs to be used for convenience. Lines preceded with a '#' are
+    ignored on upload, perhaps retained and regurgitated for archiving
+    convenience. We might even recognize a line with nothing on it but a number
+    and increment that number before writing back out if there has been any
+    change.<br>
+    <br>
+    The Leonardo, the main target of this project, only has 1k bytes of EEPROM
+    storage.<br>
+    For easy programming each step needs a byte per relay and 2 bytes for a
+    nicely ranged duration (&gt;10 minutes at .01 s). A program has a known
+    number of steps, which could be held in a program description. Special
+    duration values can be used to indicate things like "end of program" so that
+    we don't have to keep a record of number of steps. We would use high values
+    for these indicators, it may be very useful to use small values for "break
+    before make" timings.<br>
+    At a generous 8 bytes per step (2<sup>3</sup>) 1024 bytes (2<sup>10</sup>)
+    leaves us with 128 available steps (2<sup>7</sup>).<br>
+    <hr>Modularity<br>
+    <br>
+    Having controlled output boxes separate from the controllers adds wiring
+    risk (slight) for a gain of being able to change our mind about which
+    controller to use with each box. We can have 2 channel and 4 channel boxes
+    each with a power tail and a 9-pin D or RJ-11 8 pin jack for the logic. <br>
+    <br>
+    Each controller is in a standard blue box with a toggle switch which gates
+    the power to the control and to an outlet which is what the relay box can
+    plug into if it is nearby. It would have a connector matching the power
+    boxes.<br>
+    <br>
+    This division also handily allows for non A/C loads. We really should use
+    12VDC instead of 120VAC when ever possible. <br>
+    <br>
+    <br>
+    <br>
+    <hr>Expansion:<br>
+    <br>
+    We occasionally may wish to link more than one box to get more active
+    controls in a single program. With terminal programming we can program each
+    group independently with the trigger signal shared. For precise timing
+    coordination we can splice the durations from one table into the duration.<br>
+    <hr><br>
+    Low power/cost Arduino (Leonardo) vs Higher power Arduino vs RPi0W<br>
+    <br>
+    The Leonardo class controller can run on battery power. It is ~$3.<br>
+    stm32 "blue pill" is same cost as Leonardo and has some audio capability but
+    no sd card connector. For short clips its internal program space can hold
+    the data, perhaps 32k bytes ogg encoded.<br>
+    The higher power Arduinos add audio out capability and can also probably run
+    on battery power. Adafruit M0 logger includes sdcard holder: $20+shipping.<br>
+    RPi0W will eat through batteries compared to the others, but is $15 and has
+    far more capability.<br>
+    <br>
+    An RPi0W makes the most sense when battery power is not required, and space
+    isn't critical (the most common case). It can be programmed over WiFi and so
+    no cable is needed and programs can be loaded from a central location. it
+    has as much I/O as other systems and while not as swift at reaction it is
+    sub millisecond which is fast enough for any human interface. Only a few
+    robotics situations require the precision that the cheapest controllers
+    provide.<br>
+    The RPi0W <br>
+    <hr>Sound<br>
+    For the RPi0W any sound format is usable. Capacity is effectively unlimited
+    given the size of the SD card.<br>
+    For the low end opus format is the best. Good sound can be achieved at
+    64kbaud. <br>
+    2<sup>16</sup> bits per second with 4Mbits = 64 seconds for most circuit
+    python systems. So let us not bother with considering sound for the low end
+    systems.<br>
+    &nbsp;<br>
+    <hr><br>
+    But what about costs?<br>
+    <br>
+    RPi0W: $15 bare, $32 with case and P/S. and HDMI adapators and pins.<br>
+    Leonardo:$4 china $7 US.<br>
+    sdcard holder: $3&nbsp; (3 for $9) $1.50 china?<br>
+    BluePill: $2.0 china, $5 US<br>
+    NodeMCU: $2.85 china, $5 US.<br>
+    <br>
+    Relay boards: ~5/dual<br>
+    Omron G3MB-202P SSR: Only 2A (240V) $1@ bulk purchase, $3-$6 each US qty
+    1.&nbsp; That's a 240W limit, but can twinkle.&nbsp; $1.50 on board, 1,2,4,8
+    per board.<br>
+    we can get higher power triacs at a similar price, but have to mount them
+    with perhaps a heat sink.<br>
+    <br>
+    <br>
+    <br>
+    micro USB P/S:&nbsp; $5 US ebay, $3.50 china. Has enough power for relay
+    board as well.<br>
+    &nbsp; $1.50 for dual output, needs cables. $2.50 for cable with switch
+    (useful if wart and board are hard to get to, but we won't make them hard to
+    get to)<br>
+    &nbsp; Found $1.35 with cable AND extra outputs (ordered 3).<br>
+    A/C cord: $4 spade lug.&nbsp; (I have a dozen appliance cords I can donate).<br>
+    <br>
+    NFC reader $7 ebay china&nbsp; 50c tags.<br>
+    <br>
+    adafruit complete MP3 audio system:$25+$7, or $9 from china as arduino
+    footprint.<br>
+    adafruit I2S to 8Ohm $7.<br>
+    adafruit audio to&nbsp; I2S $6.<br>
+    MP3 autoplayers (need to see if they are triggerable): $2 china.<br>
+    <br>
+    <br>
+    <hr>RPi0W install<br>
+    <ol>
+      <li>Stetch Lite via Etcher on 8GB card.</li>
+      <li>Booted it and gave it time to expand the partition</li>
+      <li>back to host system and create (first <code>cd</code> to device<code>/boot</code>)</li>
+      <ol>
+        <li><code>/boot/ssh</code> via <code>touch ssh</code></li>
+        <li><span style="font-family: monospace;">/boot/wpa_supplicant.conf</span>
+          via <span style="font-family: monospace;">sudo nano
+            wpa_supplicant.conf</span> and editing it to my local wifi login.</li>
+      </ol>
+      <li>via raspi-config</li>
+      <ol>
+        <li>change password of pi to protect against malware</li>
+        <li>set hostname to 0W-980F, choose something else after the dash.</li>
+        <li>chose boot to gui but abandoned it rather than load a window manager</li>
+        <li>enabled VNC server which brings in most of what boot to gui would
+          have such as </li>
+        <ol>
+          <li>cups (printer support!)</li>
+          <li>libsane for CD audio</li>
+          <li>imagemagik photo manipulator</li>
+        </ol>
+      </ol>
+      <li><code>sudo apt install mc</code>&nbsp; (text based file manager)<br>
+        <em></em></li>
+      <li><em>next:</em> confirm curl is present</li>
+      <li><em>next:</em> nfs mount /media for&nbsp; easier remote download of
+        audio and video files.</li>
+      <li><br>
+      </li>
+    </ol>
+    <hr>Miniduino and other ESP8266 boards<br>
+    ...<br>
+    <hr>Physical connectivity<br>
+    <br>
+    RJ-45 cables can be purchased in various lengths and have 4 twisted pairs
+    which is quite useful when Tesla coils are operating nearby, or other sparky
+    things.<br>
+    <p> <br>
+      One pinout would be +5V:Gnd, one trigger in, 2 controls out. I think that
+      would handle a large set of our use cases. One could also format that as
+      +5V:Gnd, and any mix of 6 digital signals, such as 2 in 4 out.<br>
+      <br>
+      It might make more sense to have separate input and output connectors. The
+      input connector would support an external programming panel via uart
+      connections.<br>
+      <br>
+      The programming panel is one of our controllers with buttons and status
+      lights which uses its uart to talk to the uart port of the effect
+      controller. IE by plugging in a dumb panel to one control box we can use
+      it to program others. </p>
+    <p>2-channel boo box takes 3 switches and needs 3 LED's. </p>
+    <p><br>
+    </p>
+  </body>
+</html>

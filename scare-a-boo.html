@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>scare-a-boo</title>
+    <meta name="author" content="Andy Heilveil">
+  </head>
+  <body>
+    <h2>Scare-a-boo questionairre</h2>
+    <p><br>
+      To determine what we should brew up to replace the peek-a-boo over-priced
+      controllers we need some usage statistics. The questions below should be
+      answered in the context of the whole haunt.</p>
+    <h3>Outputs</h3>
+    To flicker a light requires use of an SSR (solid state relay) instead of a
+    mechanical relay. Reasonably priced SSR's have a current limit of 2 Amps.
+    Similarly priced mechanical relays can handle 10 A. Relays are noisier (they
+    clack) but more robust to bad things. SSR's can cycle fast. The price
+    difference from China is less than $1 each output.<br>
+    <p><br>
+    </p>
+    <p>So: </p>
+    <ol>
+      <li>how many of our effects flicker?</li>
+      <li>how many of our effects are dimmable by a modern dimmer switch (which
+        uses an SSR)?</li>
+      <li>how many of our effects are more than 240 Watts, or highly inductive
+        (think rail gun)?</li>
+      <li>Strobes can be triggered with DC, I modified a pair in the past so
+        that we could get single pulses from them. How many such strobes would
+        we use in the haunt?</li>
+    </ol>
+    <br>
+    <h3>How many outlets per controller</h3>
+    <p>The microcontrollers that are handy can handle many more inputs and
+      outputs than we usually need in a room, or so Andy thinks.</p>
+    <ol>
+      <li>how many items do operate based on a set of signals?<br>
+        Outlets come in pairs but don't let that influence your answers.</li>
+    </ol>
+    <h3>Motors</h3>
+    <p>Two kinds at hand: DC motors, and stepper motors.<br>
+      Most control boards of interest can drive either one stepper or 2 DC's. <br>
+      Stepper motors can be driven to a particular place, DC motors only at a
+      controlled speed.<br>
+      Crude position is achieved for the DC by having sensors on the load, such
+      as end of travel switches to keep from breaking the load.<br>
+      Steppers usually have a sensor that fires for just one step per
+      revolution. You would use steppers for mechanical eyeballs tracking
+      someone, DC motors for spinning something continuously like a mirror
+      moving a laser beam around. <br>
+      <br>
+      Most likely a motor won't fall under our basic program model, unless they
+      are just on/off operated.</p>
+    <h3>Audio</h3>
+    <p>There are a few modes of audio output.</p>
+    <ol>
+      <li>Ambience, presently done by uncontrolled MP3 players. It would be nice
+        to be able to mute that at times.</li>
+      <li>Crashes or crunches, IE short duration sounds</li>
+      <li>Triggered speech or sound.</li>
+    </ol>
+    <p>The differences are in what type of storage we would use. Some of the
+      microcontrollers have enough room for many seconds of sound on chip. For a
+      few dollars we get boards that will play a file from an SDcard on demand,
+      but we haven't yet figured out what the latency will be. Such boards would
+      be triggered as if they were another A/C outlet. </p>
+    <h3>Remote monitoring and control</h3>
+    <p>Wifi uarts are $3 each. <br>
+      Microcontrollers with Wifi builtin are about $7.<br>
+      We can have wifi enabled controllers for a few dollars more than not, and
+      for the same price as adding a module later to just those needing the
+      extra connectivity.<br>
+      <br>
+      If we use wifi for everything we get rid of cables. We also gain the
+      ability to track progress of groups through the house by when effects
+      fire, and we can install a replacement controller and download the effects
+      program remotely.<br>
+      <br>
+      I would still have local connectivity, in case of wifi shadows, and
+      operations would almost always be local so that wifi interference
+      (somebody fooling with a phone) wouldn't effect most effects.</p>
+    <p><br>
+    </p>
+    <hr>Andy's thoughts<br>
+    <br>
+    Separating control from loads allows us greater flexibility in fabrication.
+    We can build relay controlled outlet boxes, SSR controlled outlet boxes and
+    mix those with different classes of controller.<br>
+    <br>
+    The controllers would differ in having audio output or not, and
+    cascadability or not. <br>
+    <br>
+    Often the control is pico-boo simple, a fixed pattern triggered by a single
+    input. Given how many inputs can be handled by most controllers I would get
+    us in the habit of having "inhibit" signals separate from triggers to
+    simplify trigger wiring but still be able to do things like have the guide
+    press an inhibit while walking past a break-beam, or press a separate enable
+    when ready for the break-beam to be live. In the haunt just past it would
+    have been nice to have a switch in the hallway to enable the lurching dummy,
+    allowing us to let it fire midway through the group, and not have to step
+    over the trigger.<br>
+    Such inhibits could be timed: Press a button and for the next xx seconds the
+    effect won't fire, handy for a tech running through the house as well as
+    guides with weary legs.<br>
+    <p>Connectors become an issue when we go modular. The prime candidates are
+      9-pin D (old style serial ports) and RJ-45 (ethernet). Both of these have
+      scads of connection styles available. RJ-45 cables can be purchased in
+      various lengths and have 4 twisted pairs which is quite useful when Tesla
+      coils are operating nearby, or other sparky things.<br>
+      <br>
+      One pinout would be +5V:Gnd, one trigger in, 2 controls out. I think that
+      would handle a large set of our use cases. One could also format that as
+      +5V:Gnd, and any mix of 6 digital signals, such as 2 in 4 out.</p>
+    <p>There is a desire to have push button programmability of each controller,
+      pico-boo style. All Arduino compatible controllers will have a uart
+      through which we could access fancier abilities than can be done with a
+      few buttons. We can program one of our controllers to be a programmer and
+      give it switches etc. to do pico-boo class programming fed into the uart.
+    </p>
+  </body>
+</html>
