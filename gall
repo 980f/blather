@@ -8,23 +8,21 @@
 
 #with subdirectories, sort ensures subs get processed before parent
 makeList(){
-  find -L . -name \.git | cut -d. -f1,2 | sort -r >gitlist
+  ffind -L . -name \.git | cut -d. -f1,2 | sort -r >gitlist
 }
 
 #in case the subprojects are also stored at the top of the tree.
 listTop(){
-  find . -name \.git | cut -d. -f1,2  >gitlist
+  ffind . -name \.git | cut -d. -f1,2  >gitlist
 }
 
 
 ## and invoke a command on each element of that list.
 
 
-echo "################################################################################"
+echo "####################################################"
 while read gitdir; do
-  echo "####################################################"
-  echo "## Applying $1 to $gitdir"
-  echo "####################################################"
+  echo "Applying $1 to $gitdir"
   pushd $gitdir
   git $@ 
   popd
