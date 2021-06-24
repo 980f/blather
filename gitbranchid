@@ -1,0 +1,3 @@
+
+## intended for post-checkout hook
+git branch | cut -d\  -f2 >branch.txt

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>art-storage</title>
   </head>
   <body>
@@ -43,12 +43,16 @@
     <h3>Overview of Usage</h3>
     <p>Each field that is to be non-volatile is of a class derived from Stored,
       for instance use StoredLabel for a piece of text, or StoredBoolean for a
-      true/false value. Such fields must be contained in a class derived from
-      Stored, with a constructor that takes a Storable &amp;. In the constructor
-      of that containing class one has a ConnectChild(membername) for each
-      Stored<em>Something</em> field. <br>
+      true/false value. <br>
+      Such fields must be contained in a class derived from Stored, with a
+      constructor that takes a Storable &amp;. <br>
+      In the constructor of that containing class one has a
+      ConnectChild(membername) initializer for each Stored<em>Something</em>
+      field. <br>
+      <br>
       That collection of fields is now with no further syntax stored to/from
       disk and editable via a GUI. <br>
+      <br>
       Class TreeFile connects the root of a Stored<em>Something</em> to a file.
       Features exist to make it possible to automatically save on changes, but
       that is not built into any of the classes directly.</p>
@@ -67,44 +71,48 @@
     </ol>
     <p>No exceptions are thrown by any of the code. <br>
       <br>
-      A feature implemented for GUI support allows spread-sheet like behavior:
-      one can register for change notifications so that a code that changes the
-      value does not need to know anything about a place that must immediately
-      react to such a change.</p>
+      A feature initially implemented for GUI support allows spread-sheet like
+      behavior: one can register for change notifications so that a code that
+      changes the value does not need to know anything about a place that must
+      immediately react to such a change. This has become the major means of
+      controlling behavior, api calls are done via assigning to a watched
+      variable rather than traditional function calls. Code outside of the
+      compilation scope can attach itself to a Stored thing, allowing decoupling
+      of source modules.</p>
     <hr>
     <h3>Overview of implementation</h3>
-    <p>Class Storable contains the actual data storage. It is union-like in that
-      the data has a type which is number, text, or collection. It is not an
-      actual "C" union which is to say the ram for holding the different types
-      of values is not shared. Besides the programming safety of this it allows
-      for a node to have simultaneous numerical and text representations which
-      is well suited for holding enum values. A collection (internally called a
-      wad) is a dynamic array of nodes, forming a tree structure. The members of
-      a collection have an ordinal which is efficiently accessed. This ordinal
-      is handy for when the program access wishes to view the collection as an
-      array.</p>
+    Class Storable contains the actual data storage. It is union-like in that
+    the data has a type which is number, text, or collection. It is not an
+    actual "C" union which is to say the ram for holding the different types of
+    values is not shared. Besides the programming safety of this it allows for a
+    node to have simultaneous numerical and text representations which is well
+    suited for holding enum values. A collection (internally called a wad) is a
+    dynamic array of nodes, forming a tree structure. The members of a
+    collection have an ordinal which is efficiently accessed. This ordinal is
+    handy for when the program access wishes to view the collection as an array.<br>
     <p>Class Storable has change detection and notification. The change
       detection maintains a 'dirty' bit, which can be read and cleared
-      programmatically. The notification system is based on the sigc library,
-      version 2.0. Via sigc one can arrange to have set of functions called when
-      the value of a node changes, and/or when a member of a collection type
-      node is changed. The point of a separate notification system for children
-      of a collection is that it applies to children which do not exist at the
-      time that the registration for the notification is made, handy for arrays.</p>
+      programmatically. <br>
+      The notification system is based on the sigc library, version 2.0. Via
+      sigc one can arrange to have set of functions called when the value of a
+      node changes, and/or when a member of a collection type node is changed. <br>
+      The point of a separate notification system for children of a collection
+      is that it applies to children which do not exist at the time that the
+      registration for the notification is made, handy for dynamically allocated
+      arrays.</p>
     <p>Members of class Storable are rarely constructed as normal program
       variables. Any such instances are 'root' nodes of data trees. Most such
       root nodes are associated with disk files, a few exist without associated
       files in order to use the gui-for-Storable utilities to build screens for
       volatile data.</p>
-    <p><br>
-      Classes derived from Stored are views into the Storable nodes. The Stored
-      base class itself is not directly useful but has handy features for
-      building derived classes.</p>
+    Classes derived from Stored are views into the Storable nodes. The Stored
+    base class itself is not directly useful but has handy features for building
+    derived classes.
     <p>StoredNumeric&lt;scalar&gt; template class manages a node which
       represents a number. StoredNumeric&lt;scalar&gt; syntactically is used as
-      if it were a native datum of type 'scalar'. Occasionally the compiler
-      can't resolve an ambiguity due to function overloading and the .native()
-      member must be explicitly invoked.</p>
+      if it were a native datum of type 'scalar'. <br>
+      Occasionally the compiler can't resolve an ambiguity due to function
+      overloading and the .native() member must be explicitly invoked.</p>
     <p>StoredLabel manages a text node. The underlying storage in Storable uses
       a class derived from std::string that supports unicode, and as such is a
       resizable array of unicode chars. While in many situations the compiler
@@ -114,169 +122,182 @@
     <p>StoredGroup&lt;StoredDerivative&gt; is the template for arrays. In
       addition to collating change notifications on the value of extant members
       it has 3 notification lists for notifications related to changing the
-      number of elements in the nominal array. The three notifications lists
-      are: just-on-add, just-before-remove, and on add-or-remove. The
-      just-on-add list is processed before the add-or-remove, allowing for some
-      degree of prioritizing amongst callbacks. The just-on-remove similarly
-      provides two priorities on removal call backs. When trying to operate via
-      a single list of add-or-remove (with a boolean argument to tell which) it
-      was hard to manage fully creating subordinate objects on an add before
-      trying to present the newly created object in the gui. There were similar
-      race conditions with removal. StoredGroup&lt;&gt; has many convenient
-      iterators.</p>
-    <p>StoredGroup's can be subordinate to other StoredGroups such that a change
-      to the quantity of members in the 'indexing' group automatically creates
-      or removes a related member in the 'indexed' group. Such connections are
-      made via code in constructors of the objects containing such related
-      arrays, so that we stay within the syntactic bounds of JSON and XML and
-      avoid strict ordering of loads. The add and remove notifiers are the main
-      mechanism for implementing this relationship. This also simplified manual
-      editing of configuration files, wherein alternative schemes involving
-      naming the members with some text from the indexing group objects was hard
-      to generalize. We have data structures with nominal 2-D arrays of values
-      that are allocated 1:1 with a user entered list of other entities. The
-      alternative of programmatically propagating adds and removes would require
-      that the dependencies be listed in many places, in the business logic and
-      each gui displaying such entities. By having the "connect them once" the
-      gui table renderers don't explicitly know the relationships between such
-      groups.</p>
+      number of elements in the nominal array. <br>
+      The three notifications lists are: just-on-add, just-before-remove, and on
+      add-or-remove. <br>
+      The just-on-add list is processed before the add-or-remove, allowing for
+      some degree of prioritizing amongst callbacks. The just-on-remove
+      similarly provides two priorities on removal call backs. <br>
+      <em>History: when trying to operate via a single list of add-or-remove
+        (with a boolean argument to tell which) it was hard to manage fully
+        creating subordinate objects on an add before trying to present the
+        newly created object in the gui. There were similar race conditions with
+        removal. <br>
+      </em></p>
+    <p>StoredGroup&lt;&gt; has many convenient iterators and "foreach" methods.</p>
+    <p>StoredGroup's can be linked to other StoredGroups such that a change to
+      the quantity of members in the 'indexing' group automatically creates or
+      removes a related member in the 'indexed' group. <br>
+      Such connections are made via code in constructors of the objects
+      containing such related arrays, so that we stay within the syntactic
+      bounds of JSON and XML and avoid strict ordering of loads. <br>
+      The add and remove notifiers are the main mechanism for implementing this
+      relationship. <br>
+      <em>History: this also simplified manual editing of configuration files,
+        wherein alternative schemes involving naming the members with some text
+        from the indexing group objects was hard to generalize. We have data
+        structures with nominal 2-D arrays of values that are allocated 1:1 with
+        a user entered list of other entities. The alternative of
+        programmatically propagating adds and removes would require that the
+        dependencies be listed in many places, in the business logic and each
+        gui displaying such entities. By having the "connect them once" in
+        constructors the gui table renderers don't explicitly know the
+        relationships between such groups.</em></p>
+    <em> </em>
     <p>In the guts of an application non-volatile data is represented by a class
       derived from Stored. Private constructors in Stored guarantee that the
-      compiler won't create unintended duplicates of your data objects. The
-      non-volatile members of your class are each some class derived from
+      compiler won't create unintended duplicates of your data objects. <br>
+      The non-volatile members of your class are each some class derived from
       Stored. Your constructor implementation must explicitly invoke a
       constructor for each such item for which the macro ConnectChild is
-      extremely useful. ConnectChild is a variadic macro supporting additional
-      constructor args for those Stored classes which have such. The most common
-      such constructor argument is a default value to assign to the variable if
-      a backing Storable must be created. The latter means that one may delete
-      the file behind a non-volatile structure and the program will create a
+      extremely useful. <br>
+      ConnectChild is a variadic macro supporting additional constructor args
+      for those Stored classes which have such. <br>
+      The most common such constructor argument is a default value to assign to
+      the variable if a backing Storable must be created. This arrange allows
+      one to delete the file behind a non-volatile structure and easily create a
       non-trivially initialized one.</p>
     <p>StoredEnum is the most peculiar Stored class in that it maintains both a
-      numerical and a textual representation of a value. The Storable node has a
-      pointer to an Enumerizer component which relates text to number. When a
-      Storable node with a non-null Enumerizer is set to a numerical value the
-      text is updated, when set to text that text is checked against the list
-      and the numerical value is set to the value from the list or a canonical
-      'invalid'.</p>
-    <p>ConnectChild connects a Stored something with a Storable of the same
-      name. This results in a data reflection mechanism that is used for the
-      actual disk storage and for easy GUI creation. The change notification
-      feature of Storable causes a related GUI element to be updated on any
-      change to the value of the Stored something. One creates a StoredGui
-      control element with a reference to a Stored entity and no further code is
-      needed to have that value presented, edited, and eventually saved to disk.</p>
+      numerical and a textual representation of a value. <br>
+      The Storable node has a pointer to an Enumerizer component which relates
+      text to number. <br>
+      When a Storable node with a non-null Enumerizer is set to a numerical
+      value the text is updated, when set to text that text is checked against
+      the list and the numerical value is set to the index of that value from
+      the list or a canonical 'invalid'.</p>
+    <p>ConnectChild macro connects a Stored something with a Storable of the
+      same name. This results in a data reflection mechanism that is used for
+      the actual disk storage and for easy GUI creation. <br>
+      The change notification feature of Storable can be connected to a related
+      GUI element, updating in both directions on any change to the value of the
+      Stored something. One creates a StoredGui control element with a reference
+      to a Stored entity and no further code is needed to have that value
+      presented, edited, and eventually saved to disk.</p>
     <p>TreeFile deals with actually moving data to and from disk. Storable
       itself yields up names and values to TreeFile. So while Storable can
       retain all the content of some JSON data, it isn't tied to that format.</p>
     <h3>Deeper Details</h3>
     <p>The StoredNumeric&lt;<em>Scalar</em>&gt; class has sigc::slot generators
-      for such actions as deferred setting of a value "sets the node to 2 when
-      the slot I'm returning is called", propagation to non-Stored stuff "when
-      your value changes set this plain old variable to the new value", send a
-      value on change "add a change notification functional that calls the
-      function I am providing now with the value you acquire whenever".&nbsp;</p>
+      for such actions as:</p>
+    <ul>
+      <li> deferred setting of a value: "set this node to 2 when the slot I'm
+        returning is called", </li>
+      <li>propagation to non-Stored stuff: "when your value changes set this
+        plain old variable to the new value", </li>
+      <li>send a value on change: "add a change notification functional that
+        calls the function I am providing now with the value you acquire
+        whenever".&nbsp;</li>
+    </ul>
     <p>The Stored base class has 'after parse' and 'before print' hooks so that
       one can make major transformations of representation to and from storage.
+      <br>
       The prime use is for storing data that is declared and operated on as
       simple structs not needing change notifications et al, just needing to be
-      stored with the data designed for use via Storable/Stored. Another
-      significant use was converting a large but sparse array of integers into a
-      compact text notation. The sparse array was maintained in business logic
-      as a plain old C array, but run to storage compressed into a single ascii
-      string.</p>
+      stored with the data designed for use via Storable/Stored. <br>
+      Another significant has been converting a large but sparse array of
+      integers into a compact text notation. The sparse array was maintained in
+      business logic as a plain old C array, but run to storage compressed into
+      a single ascii string.</p>
     <p>The name member of a Storable is implemented with a very simple string
-      class which doesn't allow for editing of its content. The class (TextKey)
-      wraps a const char * and carefully administers strdup() and free() to not
-      leak data, and to not keep references to the strings from the parsing
-      process.</p>
+      class which doesn't allow for editing of its content. <br>
+      This class (TextKey) wraps a const char * and carefully administers
+      strdup() and free() to not leak data, and to not keep references to the
+      strings from the parsing process.</p>
     <p>Storable instances have a pointer to the containing Storable (null for
       root nodes) which allows one to discover the context for problems that
-      occur, such as trying to set a numerical node to a string value. This also
-      makes version upgrades easy to code, where a field gets moved to a deeper
-      struct one can easily go looking for a value from its former location.</p>
-    <h3>GUI considerations</h3>
-    <p>Gui's for configuration data are a mix of labeled cells and tables. For
-      each type of data editing interaction there is a single field editor GUI
-      class, and a table column assistant. A StoredBoolean
-      (StoredNumeric&lt;bool&gt;) has a gui element which is a toggle button, a
-      StoredEnum gui element is a button which presents a list to pick from. The
-      others bring up screens with keyboards and data display windows. Each such
-      element is passed a reference to a Stored<em>Something</em>.</p>
+      occur, such as trying to set a numerical node to a string value. <br>
+      This also makes version upgrades easy to code, where a field gets moved to
+      a deeper struct one can easily go looking for a value from its former
+      location.<br>
+      <br>
+      You can find a child member of a node by a path expression. In the
+      'desktop' version of this mechanism the path is a pipe separated list of
+      names. In the 'safely' version of this mechanism '.' and '..' are allowed
+      (and a slash rather than a pipe is used) which allows you to construct
+      relative paths to siblings and parents versus the former version of the
+      lib which can only find children.</p>
+    <p>Storable instances have an index that is maintained automatically as
+      sibling nodes are created or destroyed. This is usually only relevant to
+      the nodes that back StoredGroup instances, but are present on all nodes.</p>
+    <p><br>
+    </p>
+    <h3>GUI considerations (gtk vintage)</h3>
+    <p>Gui's for configuration data are a mix of labeled cells and tables. <br>
+      For each type of data editing interaction there is a single field editor
+      GUI class, and a table column assistant. <br>
+      A StoredBoolean (StoredNumeric&lt;bool&gt;) has a gui element which is a
+      toggle button, a StoredEnum gui element is a button which presents a list
+      to pick from. <br>
+      The others bring up screens with keyboards and data display windows. Each
+      such element is passed a reference to a Stored<em>Something</em>.</p>
     <p>The tables are a nightmare of a different order. The underlying GTK
-      widget is a tree editor and took a long time to tame. Now one makes a
-      table by providing a line of code per column, in which declaration one
-      provides a text path into the Storable tree behind one's Stored object
-      that backs the field you wish to edit. One provides the table with a
-      StoredGroup whose members represent the rows of the table. Once that is
-      done (with only one line of code for each aforementioned action) any
-      changes to fields or the quantity of Group members is automatically
-      reflected in the table.</p>
+      widget is a tree editor and took a long time to tame. <br>
+      Now one makes a table by providing a line of code per column, in which
+      declaration one provides a text path into the Storable tree behind one's
+      Stored object that backs the field you wish to edit. <br>
+      One provides the table with a StoredGroup whose members represent the rows
+      of the table. Once that is done (with only one line of code for each
+      aforementioned action) any changes to fields or the quantity of Group
+      members is automatically reflected in the table.</p>
     <h3>Major attitudes</h3>
     <p>The parser is the most reworked section of the code. The first pass had a
-      tendency to merrily spiral out of control on small syntax errors. A fancy
-      version that was geared toward being guided by the Stored entities was too
-      slow to deploy (minutes vs seconds), and was contrary to separating the
-      transport mechanism from the program logic. One loses the ability to
-      complain about incorrectly formatted files, but in fact most "incorrect
-      formatting" is due to being an older (or later) version and we wish to be
-      graceful about accommodating up and down grades. The file printer and
-      parser adds a field in the top level collection with the revision number
-      of the code, which can be used to invoke some transformations. Mostly
-      however, upgrades are done via code in a Stored class constructor that
-      checks for default initialized content (there are state flags for that)
-      and can reference other fields to transform old values into new. Nodes of
-      a collection node have a pointer to their parent and thus one can walk up,
-      down, and around the Storable tree to find legacy values. Out of 11 major
-      releases of the major application built with code only a very few fields
-      haven't survived an upgrade, few enough to list in release notes.</p>
+      tendency to merrily spiral out of control on small syntax errors. <br>
+      A fancy version that was geared toward being guided by the Stored entities
+      was too slow to deploy (minutes vs seconds), and was contrary to
+      separating the transport mechanism from the program logic. <br>
+      One loses the ability to complain about incorrectly formatted files, but
+      in fact most "incorrect formatting" is due to being an older (or later)
+      version and we wish to be graceful about accommodating up and down grades.
+      <br>
+      <br>
+      The file printer and parser adds a field in the top level collection with
+      the revision number of the code, which can be used to invoke some
+      transformations. <br>
+      Mostly, however, upgrades are done via code in each Stored class
+      constructor that checks for default initialized content (there are state
+      flags for that) and can reference other fields to transform old values
+      into new. <br>
+      Nodes of a collection node have a pointer to their parent and thus one can
+      walk up, down, and around the Storable tree to find legacy values. <br>
+      Out of 11 major releases of the major application built with code only a
+      very few fields haven't survived an upgrade, few enough to list in release
+      notes for manual migration.</p>
     <h3>Cheap Tricks</h3>
     <p>The Storable class uses separate data members for each type of node,
-      where one might have used a union. That has allowed for slipping some
-      debug information into the tree, such as a text value on a collection
-      node. TreeFile does this to store the resolved absolute path name of its
-      file, purely for snooping on with a debugger.</p>
+      where one might have used a union. <br>
+      That has allowed for slipping some debug information into the tree, such
+      as a text value on a collection node. <br>
+      TreeFile does this to store the resolved absolute path name of its file,
+      purely for snooping on with a debugger.</p>
     <h3>Future Plans</h3>
     <p>Finish preliminary work on sorting the children of large collections for
-      binary searching. As the only large collection is the localization string
-      set present experiments are done externally to the Storable class,&nbsp;
-      maintaining a sorted index. That isn't ready for deployment as it is hard
-      to prove that we don't have a use after free. As I write this I have
-      figured out how to fix that!</p>
+      binary searching. As the only large collection is the localization
+      disctionary present experiments are done externally to the Storable class,
+      maintaining a sorted index. <br>
+      That wasn't deployed as we could not determine that we had a performance
+      issue that needed such a fix.</p>
     <p>Make TreeFile internally allocate the root node (presently one creates
       one and passes it to TreeFile), and create those from a static member node
-      so that one can programmatically traverse a list of files for "save all" functionality.
-      </p>
+      so that one can programmatically traverse a list of files for "save all"
+      functionality. </p>
+    <p>The 'safely' version has a JSON parser that can update a tree, the
+      'desktop' vintage insists on creating a new node even if a node of the
+      same name exists.</p>
     <h3>Credits</h3>
     <p>The design for the storage parts are by Andy H.<br>
       David B. did the hard parts of the table editor and most editor gui
       controls, with Andy H compacting the syntax for legibility and to
       encourage uniform use.</p>
-    <hr>StorageSorter:<br>
-    <br>
-    struct NodeRef {<br>
-    &nbsp;&nbsp;&nbsp; const char *key;//pointer to the name element of a node<br>
-    &nbsp;&nbsp;&nbsp; int nodeIndex; //the index of that node<br>
-    &nbsp;&nbsp;&nbsp; static int compare(NodeRef &amp;left,NodeRef&amp;right){<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; return strcmp(left.key,right.key);<br>
-    &nbsp;&nbsp;&nbsp; }<br>
-    }<br>
-    <br>
-    Storable &amp;dictionary;<br>
-    <br>
-    Chain&lt;NodeRef&gt; index;<br>
-    ChainSorter&lt;NodeRef&gt; sorter(index, NodeRef::compare);<br>
-    <br>
-    const char * lookup(const char *key){<br>
-    &nbsp;&nbsp;&nbsp; sortIndex= sorter.find(key);<br>
-    &nbsp;&nbsp;&nbsp; if not found {<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; create node named key with value of
-    key //(always at end of dictionary)<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; insert into index at sortIndex new
-    NodeRef(node's key field, new node's ordinal);<br>
-    &nbsp;&nbsp;&nbsp; }<br>
-    }<br>
-    <p><br>
-    </p>
+    <hr><br>
   </body>
 </html>
