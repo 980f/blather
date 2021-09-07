@@ -6,114 +6,61 @@
     <meta name="author" content="Andy Heilveil">
   </head>
   <body>
-    <h2>git primer for FedFIS</h2>
-    <p>git is what we use to preserve and deploy IT resources such as server
-      programs and configuration files.</p>
+    <h2>git primer </h2>
+    <p>git is what we use to preserve and deploy shared programs and documents.</p>
     <p>git has an enormous number of features of which we need only a few.</p>
-    <p>The main feature to keep in mind is that there are always two layers of
-      storage: the local <u>repo (repository)</u> and the remote. The local one
-      is on your computer, in our use the remote is <code>bitbucket.org</code>
-      git hosting service.</p>
+    <p>The main feature to keep in mind is that there are always two layers of storage: the local <u>repo (repository)</u> and the remote. The local one is on your computer, in our use the remote is <span
+        style="font-family: monospace;">github</span><code>.com</code> git hosting service.</p>
     <h3>Files</h3>
-    <p>In each local repo there is a <code>.git</code> directory with files you
-      should never touch. <code>.git/config</code> is the most interesting one
-      as it tells you what other servers this repo is connected to. Usually it
-      will be obvious which one is the corporate master one, usually it is the
-      only one. This is useful to know as we can rename a local repo when we
-      create it, leaving you guessing as to which remote master it connects to.</p>
-    <p>In any user directory in the repo there may be a <code>.gitignore</code>
-      file which lists files for the git status and similar commands to ignore,
-      such as program trace files which are too often written into the source
-      code directories (our php code loves to do this). You may edit the <code>.gitignore</code>
-      file with any plain text editor. We do that to reduce the amount of
-      information in the git status command.</p>
+    <p>In each local repo there is a <code>.git</code> directory with files you should never touch. <code><br>
+        .git/config</code> is the most interesting one as it tells you what other servers this repo is connected to. Usually it will be obvious which one is the group's master one, usually it is the only one. This is useful to know as we can rename a local repo when we create it, leaving you guessing as to which remote master it connects to.</p>
+    <p>In any user directory in the repo there may be a <code>.gitignore</code> file which lists files for the git status and similar commands to ignore, such as program trace files which are too often written into the source code directories. <br>
+      You may edit the <code>.gitignore</code> file with any plain text editor. We do that to reduce the amount of information in the git status command.</p>
     <h3>git status</h3>
-    <p>This is something you should often run before an operation. It gives a
-      listing of changes that it has noticed, and a separate listing of changes
-      you have marked to be preserved.</p>
+    <p>This is something you should often run before an operation. It gives a listing of changes that it has noticed, and a separate listing of changes you have marked to be preserved.</p>
     <h3>git add <em>filename</em></h3>
-    <p>adds <em>filename</em> to the list of changed files that will be
-      preserved with a <code>git commit</code>. You can put more than one name
-      on the command line, and also use glob patterns (<em>somename.*</em>). It
-      is best practice to do <code>ls <em>whatever.*</em></code> before using
-      that pattern in <code>git add</code>, it can be tedious to remove any
-      unintended files. <br>
-      In addition to listing changed files to be committed this command adds new
-      files to control. <br>
-      It is best practice to add and commit new files individually so that you
-      can add a note about why it is being added to control. Of course tightly
-      coupled files such as C++ .h and .cpp files are reasonable to add
-      simultaneously.</p>
+    <p>adds <em>filename</em> to the list of changed files that will be preserved with a <code>git commit</code>. You can put more than one name on the command line, and also use glob patterns (<em>somename.*</em>). It is best practice to do <code>ls <em>whatever.*</em></code> before using that pattern in <code>git add</code>, it can be tedious to remove any unintended files. <br>
+      In addition to listing changed files to be committed this command adds new files to control. <br>
+      It is best practice to add and commit new files individually so that you can add a note about why it is being added to control. Of course tightly coupled files such as C++ .h and .cpp files are reasonable to add simultaneously.</p>
     <h3>git commit -m"<em>what these changes do</em>"</h3>
-    <p>preserves changes and lets you annotate them. The annotations can be
-      viewed with <code>git log</code>. A git <u>commit</u> is a set of
-      changes, this includes edits to a file but also adds and deletes of files
-      and directories.</p>
+    <p>preserves changes and lets you annotate them. The annotations can be viewed with <code>git log</code>. <br>
+      A git <u>commit</u> is a set of changes, this includes edits to a file but also adds and deletes of files and directories.</p>
     <h3>git log</h3>
-    <p>lists commits, which are sets of changes, and the note associated with
-      them. <code>git log</code> is to <code>git push</code> as <code>git
-        status</code> is to <code>git commit</code>, it tells you what the push
-      will do.</p>
+    <p>lists commits, which are sets of changes, and the note associated with them. <code>git log</code> is to <code>git push</code> as <code>git status</code> is to <code>git commit</code>, it tells you what the push will do.</p>
     <h3>git push</h3>
-    <p>sends the changes to the remote repo. This is the first half of any
-      deployment, also referred to as staging a deployment.<br>
-      NB: At present (2019nov20) there is a service named Jenkins which gets
-      notified of changes to our utility programs repo's and automatically
-      builds a runtime package for them. Deployment of just these is done via
-      maven rather than a <code>git pull</code>. See <code>workingset/update-jars.sh</code>
-      for that operation.</p>
+    <p>sends the changes to the remote repo. For configuration files this is the first half of any deployment, also referred to as staging a deployment.</p>
     <h3>git pull</h3>
-    <p>brings changes from the remote repo to the local. For many of our files
-      this constitutes deployment. <br>
-      <code>git pull</code> will kindly refuse to work if you have made local
-      changes that are not locally committed. <br>
-      If your changes are to be preserved and later reconciled with the incoming
-      ones then <code>git commit</code> your changes.<br>
-      If your changes are either not quite complete or to be discarded then <code>git
-        stash</code> them to keep them handy but prevent them from being
-      accidentally deployed. </p>
+    <p>brings changes from the remote repo to the local. For configuration files this constitutes deployment when executed on the computer using that configuration.<br>
+      <code>git pull</code> will kindly refuse to work if you have made local changes that are not locally committed. <br>
+      If your changes are to be preserved and later reconciled with the incoming ones then <code>git commit</code> your changes.<br>
+      If your changes are either not quite complete or to be discarded then <code>git stash</code> them to keep them handy but prevent them from being accidentally deployed. </p>
     <h3>git stash</h3>
-    <p>preserves your present uncommitted changes in a special local place and
-      puts your files back to what they were at the last commit. You will have
-      to read more detailed git guides to use this command other than as a way
-      to drop some changes that you might want to bring back soon.</p>
+    <p>preserves your present uncommitted changes in a special local place and puts your files back to what they were at the last commit. You will have to read more detailed git guides to use this command other than as a way to drop some changes that you might want to bring back soon.</p>
     <h3>git merge</h3>
-    <p>When a <code>git pull</code> fails the new remote changes are already on
-      your local machine. When you have committed or stashed your local changes
-      you can use <code>git merge</code> instead of issuing git pull again, to
-      save on network time. <code>git merge</code> is called by <code>git pull</code>
-      when there are no issues.</p>
-    <hr><a href="https://git-scm.com/docs/">https://git-scm.com/docs/</a> is the
-    official documentation site and quite often good enough.<br>
-    <hr>Other handy actions<br>
+    <p>When a <code>git pull</code> fails the new remote changes are already on your local machine. When you have committed or stashed your local changes you can use <code>git merge</code> instead of issuing git pull again, to save on network time. <code>git merge</code> is called by <code>git pull</code> when there are no issues.</p>
+    <hr><a href="https://git-scm.com/docs/">https://git-scm.com/docs/</a> is the official documentation site and quite often good enough.<br>
+    <hr>
+    <h2>Other handy actions</h2>
+    <h2> </h2>
     <h3>git diff </h3>
     tells you what changes have been made since the last commit.<br>
-    If you give it a filename or fileglob it will show only the changes to
-    that/those files.<br>
-    -w is a handy option that ignores whitespace. As we slosh back and forth to
-    windows and linux occasionally the line endings change. As we use different
-    editors sometimes tabs get replaced with spaces or vice versa. This will
-    show you just the substantive changes.<br>
+    If you give it a filename or fileglob it will show only the changes to that/those files.<br>
+    -w is a handy option that ignores whitespace. As we slosh back and forth to windows and linux occasionally the line endings change. As we use different editors sometimes tabs get replaced with spaces or vice versa. This will show you just the substantive changes.<br>
     <br>
-    Some of our xml files do not have line endings in them which renders this
-    operation useless.<br>
-    <br>
-    <hr>Expert Stuff<br>
-    <br>
+    <h3>Recovering a file wrongly deleted from git</h3>
+    <p>Use <code>git log -- <em>filename</em></code> to find the last commit that changed the file. Copy that commit hash into<br>
+      <code>git checkout <em>commithash</em> -- <em>filename&nbsp;</em></code> which will bring back the file. <br>
+      Do a <code>git status</code> to make sure it worked.</p>
+    <h3> </h3>
     <h3>Retroactive Branch</h3>
-    When you have committed on the wrong branch locally but not yet pushed to
-    any other repo you can retroactively branch:<br>
+    When you have committed on the wrong branch locally but not yet pushed to any other repo you can retroactively branch:<br>
     <code>git branch newbranch<br>
-    </code>(you can git checkout the new branch and do a git log to ensure your
-    recent commits are still present)<br>
+    </code>(you can git checkout the new branch and do a git log to ensure your recent commits are still present)<br>
     <code>git reset --hard origin/master</code> <code><br>
-    </code>where instead of master you would use the name of the branch that
-    wrongly modified. Your working tree is now back to before where you started
-    making changes, and all those changes are on the new branch.<br>
-    You may wish to <code>git push origin newbranch</code> if the new stuff is
-    useful.<br>
+    </code>where instead of master you would use the name of the branch that wrongly modified. Your working tree is now back to before where you started making changes, and all those changes are on the new branch.<br>
+    You may wish to <code>git push origin newbranch</code> if the new stuff is useful.<br>
     <br>
-    <hr>The above is mostly the opinions of Andy Heilveil.<br>
+    <hr>The above is mostly the opinions of Andy Heilveil, 980f on github.<br>
     <br>
     <br>
     <br>
