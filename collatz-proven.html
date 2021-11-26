@@ -342,14 +342,7 @@
     x&gt;&gt;1 is x shifted down a bit which has a value equal to x/2 dropping the remainder.<br>
     ternary operator:&nbsp; <em>test</em>? <em>value if test is true</em> : <em>value if test is false</em><br>
     <br>
-    <a id="2">2)</a> In generic assembly language the iteration is:<br>
-    <span style="font-family: monospace;"> &nbsp;&nbsp;&nbsp; loop:mov acc to register&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ;register might be ignored<br>
-      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; logical shift right the acc with carry (both in and out)<br>
-      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; if carry is zero goto loop &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ;number was even and we have divided by 2<br>
-      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; add register to acc with carry&nbsp; &nbsp; ;numb was odd, acc is now 3X+1 with msb of that in the carry bit<br>
-      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; if carry is zero goto loop&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ;half of 'are we done' check<br>
-      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; if accumulator is zero (usually there is a Z bit to check) then Collatz is proven.<br>
-      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; (else) goto loop.<br>
+    <a id="2">2)</a> <span style="font-family: monospace;"><span style="font-family: serif;">an attempt to code this in assembly language was overly simple but I do not want to renumber my footnotes.</span><br>
     </span><br>
     <a id="3">3)</a> in baseless algebra:<br>
     Lemma 1:<br>
