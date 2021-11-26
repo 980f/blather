@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>collatz proven</title>
+    <meta name="author" content="Andy Heilveil (github/980f)">
+  </head>
+  <body>
+    <h2>Collatz' conjecture</h2>
+    A sequence of numbers is defined by:<br>
+    if previous is odd next=3*previous + 1<br>
+    else (is even) next=previous/2.<br>
+    <br>
+    The conjecture is that this sequence always leads to the value 1, which leads to itself forever more.<br>
+    <br>
+    This can be expressed using the operators from the C programming language <sup>(1)</sup> as:<br>
+    if previous lsb is 1 next =1 + previous + (previous&lt;&lt;1) <br>
+    else (lsb is zero) next = previous&gt;&gt;1;<br>
+    <br>
+    or in the terseness that makes people love (or hate) C:<br>
+    sequence = (sequence&amp;1) ? (1 + sequence + sequence&lt;&lt;1)&nbsp; : sequence&gt;&gt;1<br>
+    <br>
+    <hr><br>
+    Any even number of the sequence will lead to an odd number by successively shifting away the 0 lsbs.<br>
+    <br>
+    It is convenient to define the subsequence of the Collatz Sequence formed by its odd members and prove the conjecture for that sequence first, as it is then easy to extend this proof to include those.<br>
+    <br>
+    For the rest of this proof unless noted otherwise "sequence" refers to this sequence of odd numbers and 'x' to the previous/present value of the sequence.<br>
+    <br>
+    <hr><br>
+    At any one step of the sequence a binary accumulator to hold the value needs a finite number of bits. As with most semiconductor based accumulators we have a carry bit with our accumulator. <br>
+    When we add two numbers in our accumulator we carry into the lsb from the carry bit, then place the carry out of the msb addition into it.<br>
+    <br>
+    To compute the next number we note that we can combine the x&lt;&lt;1 and +1 into "shift x up shifting in a 1 for the lsb". <br>
+    That would appear to require an accumulator 1 bit larger than that of the previous step just to hold the shifted value before any addition, but, since the lsbs of the x and the 1+x&lt;&lt;1 are both going to be 1's we don't need to maintain a physical presence of either of the lsbs. <br>
+    <br>
+    When we add our virtual lsbs which are both one we get a virtual value of 2, which has an lsb of zero which by the original definition of the algorithm we would drop later but we can just drop it now.<br>
+    We can represent the 2 of the add of our virtual lsbs via setting the carry bit of the accumulator before doing the add.<br>
+    So, instead of shifting up the number shifting in a 1 we can shift the number down and in most processors we can have that simultaneously set the carry bit.<br>
+    So far our original accumulator's size is adequate for the computation.<br>
+    <br>
+    Now perform the sum. The sum may have a carry out, but when we do the shift down for the next cycle we will shift that carry into the msb and nothing is lost.<br>
+    <br>
+    As such we have shown that any accumulator with a carry bit that has enough bits to represent the current member of the sequence is always large enough to represent all subsequent members.<br>
+    <br>
+    Proven: The sequence (of odd members of the traditionally defined Collatz sequence) is always non-increasing in number of bits required to represent it.<br>
+    <br>
+    <hr><br>
+    If anywhere in the number there are a pair of adjacent zeroes then there will not be a carry out. The shift down will leave the msb of the pair aligned with the lsb of the pair and the sum of those is 0 plus a carry in and the maximum of that is a 1 with no carry out. <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    After such a step we can discard the msb of the accumulator putting its value into the carry. <br>
+    <br>
+    That means that the number of bits required from then on is reduced. <br>
+    For that to never occur (which is necessary for Collatz to be false) there must be some number of bits such that all the sequence members with that number of bits have no two neighboring bits zero. <br>
+    <br>
+    A value that is alternating 1's and 0's will when shifted align one's with zeroe's and the sum of those without the carry in is all one's. When you add the carry in you get the accumulator is all zeroes and the carry is set. Since we drop trailing zeroes we can drop the accumulator in its entirety leaving the value 1 which is the conjectured terminator of the Collatz sequence.<br>
+    <br>
+    So to the "no two adjacent zeroes" requirement we must add "at least two adjacent ones" else Collatz is proven.<br>
+    <br>
+    If there are N&gt;2 adjacent ones in the lsbs then the shift and add prior to carry will leave N-1 adjacent ones in the lsbs with a pair of zeroes above it and that means we've left the 'never shrinking' series.<br>
+    <br>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td>example </td>
+          <td style="text-align: right; background-color: white;">1</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>shift down<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?</td>
+          <td>1</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>add without the carry<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?+1</td>
+          <td>0</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>add with the carry<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?+1<br>
+          </td>
+          <td>0<br>
+          </td>
+          <td>0<br>
+          </td>
+          <td>1<br>
+          </td>
+          <td>1<br>
+          </td>
+          <td>1<br>
+          </td>
+          <td>1<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td>just 2</td>
+          <td style="text-align: right; background-color: white;">1</td>
+          <td>0</td>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>shift down<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?</td>
+          <td>1</td>
+          <td>0</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>add without the carry<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?+1</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>add with the carry<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?+1<br>
+          </td>
+          <td>0<br>
+          </td>
+          <td>0<br>
+          </td>
+          <td>1<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    So we now add that the lsbs must be 01<br>
+    <br>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td>mandatory just 1</td>
+          <td style="text-align: right; background-color: white;">1</td>
+          <td>0</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>shift down<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?</td>
+          <td>1</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>add without the carry<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?+1</td>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>add with the carry<br>
+          </td>
+          <td style="text-align: right; background-color: white;">?+1<br>
+          </td>
+          <td>0<br>
+          </td>
+          <td>0<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    But if the lsbs are 01 then the next cycle leaves a value with 2 or more lsbs equal to zero so we can drop 2 bits from our accumulator.<br>
+    <br>
+    As such there is no bit pattern such that the next step of the odd members of the Collatz sequence will not eventually results in being able to drop 2 bits.<br>
+    <br>
+    Therefore the Sequence will in a finite number of steps reduce to only needing the carry bit and that value will always be 1.<br>
+    <br>
+    QED.<br>
+    <br>
+    <br>
+    <br>
+    <hr>Footnotes:<br>
+    1)<br>
+    x&lt;&lt;1 is x shifted up which has a value equal to 2*x.<br>
+    x&lt;&lt;1 + x = 3*x.<br>
+    x&gt;&gt;1 is x shifted down a bit which has a value equal to x/2 dropping the remainder.<br>
+    <br>
+    2) In generic assembly language the iteration is:<br>
+    &nbsp;&nbsp;&nbsp; mov acc to register<br>
+    &nbsp;&nbsp;&nbsp; logical shift right the acc with carry (both in and out)<br>
+    &nbsp;&nbsp;&nbsp; add register to acc.<br>
+    &nbsp;&nbsp;&nbsp; if carry and Z then collatz is proven for the starting (odd) accumulator value.<br>
+    <br>
+    <br>
+  </body>
+</html>
