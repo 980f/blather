@@ -16,13 +16,55 @@
     <br>
     This can be expressed using the operators from the C programming language <a
       href="1" title="C syntax"><sup>(1)</sup></a> as:<br>
-    <blockquote> <span class="declaratory">if previous lsb is 1 next =1 + previous + (previous&lt;&lt;1) <br>
+    <blockquote> <span class="declaratory">if previous lsb is 1 next = 1 + previous + (previous&lt;&lt;1) <br>
         else (lsb is zero) next = previous&gt;&gt;1;</span></blockquote>
     <br>
     or in the terseness that makes people love (or hate) C:<br>
     <blockquote> <span class="declaratory"> sequence = (sequence&amp;1) ? (1 + sequence + sequence&lt;&lt;1)&nbsp; : sequence&gt;&gt;1</span></blockquote>
     <br>
     The conjecture is that this sequence always leads to the value 1, which leads to itself forever more.<br>
+    <br>
+    <hr><br>
+    By induction:<br>
+    <br>
+    There is a number of bits N for which the conjecture has been confirmed by direct testing. C(N) is the maximum number of steps from any of the numbers in that range to get to '1', we'll call that terminating.<br>
+    <br>
+    For the range N+1 the first half of the range (msb zero) is exactly the range of N which we know all terminate.<br>
+    We then need to only consider cases for the msb==1. <br>
+    If we look at the N ms bits of those numbers, if the lsb is zero then we drop it per the algorithm and we have a number in the range of N which we know terminates.<br>
+    So, of the numbers in the range N+1 we only need look at ones whose msb and lsb are 1. <br>
+    <br>
+    If the bit above the lsb is zero (number ends in 01) then the addition of the 3 lsbs is <br>
+    ...001 +<br>
+    ...011 =&nbsp;&nbsp;&nbsp; <br>
+    ...100<br>
+    <br>
+    we will drop 2 bits from the ls, the ms never gains more than 2 bits (3X&lt;4X) so the number is still in the range N+1 and 3/4ths its prior magnitude. <br>
+    If the number were such that less than 3/4ths of it is less than half the range then the value has dropped in to range N and is a Collatz number. As such we only need consider numbers at least 2/3 of the max for the range.<br>
+    <br>
+    ...101 +<br>
+    ...011 =&nbsp;&nbsp;&nbsp; <br>
+    ...000<br>
+    we will drop 3 bits, the ms never gains more than 2 bits so the result is in range N.<br>
+    <br>
+    If the 1th bit is a 1:<br>
+    ...011 +<br>
+    ..0111 =&nbsp;&nbsp;&nbsp; <br>
+    ..c010<br>
+    <br>
+    we might gain a bit, range N+2 is entered.<br>
+    <br>
+    ...111 +<br>
+    ..1111 =&nbsp;&nbsp;&nbsp; <br>
+    ..c110<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <hr>Failed proof, dropped the carry bit in one place: <br>
     <br>
     This proof uses the concept of an N-bit binary accumulator which is a two value adder with storage register for the sum including an N+1th storage bit for the carry out of the adder.<br>
     One of the inputs of the adder is the storage of the sum or the value zero, the other input to the adder is the carry bit and N-1msb's of the sum storage, with the lsb of the sum storage going to to the carry in to the least significant bit of the adder. <br>
