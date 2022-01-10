@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title></title>
+    <meta name="author" content="Andy Heilveil (github/980f)">
+  </head>
+  <body>
+    <p><br>
+    </p>
+    <div class="tab-pane fade active in" id="tab-description">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+      <h2>ZK-4KX Adjustable power supply controller<br>
+        <br>
+        Designed for solar power system battery chargers</h2>
+      <ol>
+        <li>LCD can display input/output voltage, output current/output power/output capacity/output time; </li>
+        <li>Digital control of parameters, retained while power is off. </li>
+        <li>Protection against input polarity reversed </li>
+        <li>Protection against reversed connection to battery </li>
+        <li>Configurable to power up on or off </li>
+        <li>Multiple configurable protection mechanisms. <br>
+          When the working parameters of the module exceed the protection threshold, the output will be turned off. </li>
+        <li>Output ripple is small and PI filter is available (? available or just compatible)</li>
+        <li>Good heat sink</li>
+        <li>Soft start (with high power and load module may fail when starting)</li>
+      </ol>
+      <hr>
+      <h3>&nbsp;Specifications:</h3>
+      <table border="1">
+        <tbody>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">Input voltage:</td>
+            <td style="text-align: left; vertical-align: top; background-color: white;">5.0-30v</td>
+            <td>below 8V power is limited </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">Output voltage: </td>
+            <td style="text-align: left; vertical-align: top; background-color: white;">0.5-30v</td>
+            <td><br>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; "> Output current: </td>
+            <td style="text-align: left; vertical-align: top; background-color: white;">3A</td>
+            <td>4A with enhanced heat dissipation<br>
+              A short from output to input is not protected by this!</td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">Output power: </td>
+            <td style="text-align: left; vertical-align: top; background-color: white;">35W</td>
+            <td>50W with enhanced heat dissipation </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">Voltage display resolution:&nbsp; </td>
+            <td style="text-align: left; vertical-align: top; background-color: white;"> 0.01V </td>
+            <td><br>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">Current display resolution: </td>
+            <td style="text-align: left; vertical-align: top; background-color: white;">0.001A (1 mA) </td>
+            <td><br>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">Conversion efficiency:</td>
+            <td style="text-align: left; vertical-align: top; background-color: white;">about 88%</td>
+            <td>Module will underperform if input power is not adequate<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">Operating frequency: </td>
+            <td style="text-align: left; vertical-align: top; background-color: white;">180 kHz </td>
+            <td><br>
+            </td>
+          </tr>
+          <tr>
+            <td>Dimensions:</td>
+            <td>79mm x 43mm x 26mm</td>
+            <td>cutout 76 x 41</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <h3> Control Settings </h3>
+      <table border="1">
+        <tbody>
+          <tr>
+            <td>Name<br>
+            </td>
+            <td style="text-align: left; vertical-align: top; " rowspan="1"
+              colspan="1">Feature</td>
+            <td>range</td>
+            <td>default </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">LUP </td>
+            <td style="text-align: left; vertical-align: top; ">Input undervoltage shutdown<br>
+              (sensed at module, beware of drops in cable to load)</td>
+            <td style="text-align: left; vertical-align: top; ">4.8 - 30 V</td>
+            <td style="text-align: left; vertical-align: top; ">4.8V </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">OUP </td>
+            <td style="text-align: left; vertical-align: top; ">Output voltage limit </td>
+            <td style="text-align: left; vertical-align: top; ">0.5 - 31 V</td>
+            <td style="text-align: left; vertical-align: top; ">31V </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">OCP </td>
+            <td style="text-align: left; vertical-align: top; ">Output current limit </td>
+            <td style="text-align: left; vertical-align: top; ">0 - 4.1 A </td>
+            <td style="text-align: left; vertical-align: top; ">4.1A </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">OPP </td>
+            <td style="text-align: left; vertical-align: top; ">Output (?) power limit</td>
+            <td style="text-align: left; vertical-align: top; ">0 - 50 W </td>
+            <td style="text-align: left; vertical-align: top; ">50W </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">OTP </td>
+            <td style="text-align: left; vertical-align: top; ">Internal over temperature </td>
+            <td style="text-align: left; vertical-align: top; ">80 - 110 ℃ </td>
+            <td style="text-align: left; vertical-align: top; ">110℃ </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">OHP<br>
+            </td>
+            <td style="text-align: left; vertical-align: top; ">Idle Timeout </td>
+            <td style="text-align: left; vertical-align: top; ">0 - 100 h </td>
+            <td style="text-align: left; vertical-align: top; ">off<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">OAP </td>
+            <td style="text-align: left; vertical-align: top; ">Super capacity protection </td>
+            <td style="text-align: left; vertical-align: top; ">0 - 60 Ah </td>
+            <td style="text-align: left; vertical-align: top; ">off<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">OPEN<br>
+            </td>
+            <td style="text-align: left; vertical-align: top; ">whether output is on when the module power comes on<br>
+            </td>
+            <td style="text-align: left; vertical-align: top; ">OFF/ON<br>
+            </td>
+            <td style="text-align: left; vertical-align: top; ">ON<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: left; vertical-align: top; ">CAL<br>
+              <br>
+            </td>
+            <td style="text-align: left; vertical-align: top; ">apply calibrated voltage and current source to <em><strong>input</strong></em> terminals<br>
+              use this setting to set internal reference value.<br>
+              Long press knob to record this adjustment.</td>
+            <td style="text-align: left; vertical-align: top; ">&gt;=12V, <br>
+              &gt;=1A</td>
+            <td style="text-align: left; vertical-align: top; "><br>
+            </td>
+          </tr>
+          <tr>
+            <td><br>
+            </td>
+            <td style="text-align: left; vertical-align: top; "><br>
+            </td>
+            <td style="text-align: left; vertical-align: top; "><br>
+            </td>
+            <td style="text-align: left; vertical-align: top; "><br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr>
+      <h3>Operation</h3>
+      <h4> Switch displayed parameters&nbsp; </h4>
+      From the normal interface, press <span style="font-family: monospace;">SW</span> to switch the lower line of the display between: current A, power W, capacity Ah, and time h.<br>
+      Long press <span style="font-family: monospace;">SW</span> button to switch the upper display content between input voltage IN output voltage OUT. </div>
+    <div class="tab-pane fade active in"><br>
+      <h4>Set output voltage or current </h4>
+      From the normal state press <span style="font-family: monospace;">U/I</span> button once for voltage, again for current.<br>
+      Short clicks of the knob selects the resolution of the knob, shown by flashing the corresponding digit.<br>
+      After setting, press <span style="font-family: monospace;">U/I</span> button to return to the normal interface.<br>
+      Module will automatically return to the normal interface after 10 seconds of no user activity. <br>
+      <br>
+      <h4>Set other limits</h4>
+      From the normal state long press <span style="font-family: monospace;">U/I</span>. Pressing <span
+        style="font-family: monospace;">SW</span> will cycle through the options, see Control Settings table for the mnemonic for each feature. <br>
+      For numerical values short presses of the knob cycles through the digits, rotate knob to change value.<br>
+      For items that have an OFF option you must long press the rotary knob to toggle ON vs OFF. <br>
+      Long press <span style="font-family: monospace;">U/I</span> to return to normal state.<br>
+      <hr> </div>
+  </body>
+</html>

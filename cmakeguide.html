@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>cmakeguide</title>
+    <meta name="author" content="Andy Heilveil (github/980f)">
+  </head>
+  <body>
+    <p>cmake cheat sheet</p>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td><br>
+          </td>
+          <td>INCLUDE_DIRECTORIES</td>
+          <td>include_directories()</td>
+          <td>AFTER|BEFORE SYSTEM</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>LINK_LIBRARIES</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>
+            <pre><meta http-equiv="content-type" content="text/html; charset=utf-8"><pre><span
+class="nf">pkg_check_modules(</span><span class="nv">&lt;prefix&gt;</span><span
+class="w"></span>
+<span class="w">                  </span><span class="p">[</span><span class="no">REQUIRED</span><span
+class="p">]</span><span class="w"> </span><span class="p">[</span><span
+class="no">QUIET</span><span class="p">]</span><span class="w"></span>
+<span class="w">                  </span><span class="p">[</span><span class="no">NO_CMAKE_PATH</span><span
+class="p">]</span><span class="w"></span>
+<span class="w">                  </span><span class="p">[</span><span class="no">NO_CMAKE_ENVIRONMENT_PATH</span><span
+class="p">]</span><span class="w"></span>
+<span class="w">                  </span><span class="p">[</span><span class="no">IMPORTED_TARGET</span><span
+class="w"> </span><span class="p">[</span><span class="no">GLOBAL</span><span
+class="p">]]</span><span class="w"></span>
+<span class="w">                  </span><span class="nv">&lt;moduleSpec&gt;</span><span
+class="w"> </span><span class="p">[</span><span class="nv">&lt;moduleSpec&gt;...</span><span
+class="p">]</span><span class="nf">)</span><span class="w"></span></pre></pre>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>use a package<br>
+          </td>
+          <td>
+            <pre><meta http-equiv="content-type" content="text/html; charset=utf-8"><pre><span
+class="nf">find_package(</span><span class="nb">SomePackage</span><span
+class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span><span
+class="w"></span></pre></pre>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    Generator Expressions<br>
+    <br>
+    $&lt;operator:operands&gt;<br>
+    <br>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>JOIN</td>
+          <td>list, prefix</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>IF</td>
+          <td>condition,true_string,false_string</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>REMOVE_DUPLICATES</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+  </body>
+</html>

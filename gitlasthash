@@ -1,0 +1,1 @@
+echo 0x`git log -n1 --oneline --abbrev=8 | cut -d\  -f1`
