@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>collatzbyhistogram</title>
+    <meta name="author" content="Andy Heilveil (github/980f)">
+  </head>
+  <body>
+    <p>Collatz proof</p>
+    <p>Modified definition of the algorithm<br>
+      <br>
+      Starting with any odd number multiply by three and add 1, then discard all powers of two.<br>
+      <br>
+      In base 2 math this is:<br>
+      shift number up shifting in a 1 (2x+1)<br>
+      add original (odd) value.<br>
+      shift right until a 1 appears in the lsb.</p>
+    <p><br>
+      To prove: the series has only one cycle and that is 1-&gt;1, and all numbers eventually enter that cycle.<br>
+    </p>
+    <hr><br>
+    The binary representation of a number is a string of 1's and zeroes, starting with a 1 except for the value zero.<br>
+    <br>
+    During the iteration the length of that string increases by a tad less than 2 bits on the msend, log<sub>2</sub>(3), ~1.585, while losing at least 1 bit on the lsend, -1 or more negative integer.<br>
+    So the log<sub>2</sub>&nbsp; increases by at most .585, and in many cases decreases.<br>
+    <br>
+    If those 'many cases' more than compensate for the +.585 then the series descends eventually to 1 where instead of log<sub>2</sub>(3) the +1 finally makes itself felt giving log<sub>2</sub>(4)=2, but also two zero lsbs for -2 and the number and its number of bits remains unchanged at 1. <br>
+    <br>
+    call the +.585 MI for maximum increase.<br>
+    <p>Trying to demonstrate that the lsbs will always eventually have enough multibit losses per cycle has proven difficult.</p>
+    <hr><br>
+    The string can be viewed as a set of runs of 1's alternating with runs of zeros. I am going to call runs of 1's runs, and runs of 0's gaps to simplify this document.<br>
+    <br>
+    My proof entails a histogram of the quantities of runs by length. <br>
+    An example:<br>
+    <br>
+    <hr>I will show that the histogram will shrink until it has a single run of length 1, with no gaps.<br>
+    <br>
+    Let us observe runs of 1's bracketed by run's of zeroes of length 3 or greater. <br>
+    Such runs change unaffected by other runs before and after them.<br>
+    <br>
+    <code>&nbsp;00011111000<br>
+      +0011111000?<br>
+      =010111010??&nbsp;</code>&nbsp; (each ? is a different unknown value)<br>
+    <p>Other than the least significant run a run of length k is replaced in the histogram with a run of length k-2, two new runs of length 1, two new gaps of length 1 and the gap above is replaced by one of its length -2. The gap at the lsend changes per the run below it and does not need to be considered separately in this rule:</p>
+    <p>m,n both &gt;2:<br>
+      R(m),G(n) =&gt; R(m-2)+G(n-2)+2*R(1)+2*G(1).</p>
+    <p>The number of entries in the histogram above channels 1 and 2 does not change, only the number in channel 1.</p>
+    <p>m=2, n&gt;2</p>
+    <p><code>&nbsp;00011000<br>
+        +0011000?<br>
+        =010010??</code>&nbsp;&nbsp; (each ? is a different unknown value)</p>
+    <p>G(n),R(2) =&gt; G(n-2),R(0)+2*R(1)+1*G(2).&nbsp; R(0) is a loss from the histogram, and one G(2) is produced instead of 2 G(1).<br>
+    </p>
+    <p><br>
+    </p>
+    <hr>The run at the lsend gets the +1 each cycle and so behaves differently than the cases above.<br>
+    <br>
+    &nbsp;<code>0001111<br>
+      +001111<strong>1<br>
+      </strong>=010111<em>0</em></code><strong><br>
+      <br>
+    </strong>m&gt;-2,n&gt;2<strong><br>
+    </strong>G(n),R(m)-&gt;G(n-2),R(m-1) + R(1) + G(1) <br>
+    <br>
+    &nbsp;<code>1001111<br>
+      +101111<strong>1 <br>
+      </strong>=110111<em>0</em></code> <br>
+    m&gt;-2,n=2<br>
+    R(q),G(n),R(m)-&gt;R(q+1),G(1),R(m-1)<br>
+    <br>
+    Now we need to look at the cases of runs and gaps of length 1.<br>
+    <br>
+    R(1)-&gt;R(2) when surround by adequate gaps, <br>
+    Next cycle that G(n),R(2) become G(n-2),R(1),G(2),R(1) <br>
+    <br>
+    So, each R(&gt;2) shifts down in the histogram by either 2 steps or 1.<br>
+    G(&gt;2) shifts down by 2 steps. The only time something shifts up in the histogram is when an R1 disappears.<br>
+    <br>
+    <hr><br>
+    <br>
+    Next approach:<br>
+    <br>
+    If all numbers of N bits are proven to meet the conjecture we ask if P(n+1) = 2*C(n)+1 must be one.<br>
+    Note: all odd (n+1) bit numbers are 2 * some n bit odd number + 1<br>
+    <br>
+    3*(2*C(n)+1)+1 = 6*C(n)+4;<br>
+    We lop off the ever present factor of two and get <br>
+    3*C(n)+2;&nbsp; <br>
+    IE any odd number with n+1 bits has a Collatz successor which is 2 greater than 3* some n-bit number that is odd.<br>
+    <br>
+    C(n) is odd so 3*C(n) is odd so such a number is always odd.<br>
+    <br>
+    <hr><br>
+    <br>
+    A number ending in G(n&gt;=2),R(1) is followed by:<br>
+    <code>x001<br>
+      0011<br>
+      x100<br>
+    </code>G(n-2),R(1) and is less than its predecessor since 2 lsbs are lopped off. (n==2 gives R(x),G(0),R(1) =&gt; R(x+1))&nbsp; Its log is at most (MI-1) that of its predecessor where MI&lt;1 .<br>
+    <br>
+    To not shrink a number must end in at least R(2):<br>
+    <code>x00011<br>
+      000111<br>
+      001010<br>
+    </code>G(n-2),R(1),G(1),R(1) <br>
+    <br>
+    but the next cycle:<br>
+    G(n&gt;=2),R(1),G(1),R(1)&nbsp; goes to:<br>
+    <code>x00101<br>
+      001011<br>
+      x10000<br>
+    </code>G(n-2),R(1),G(1),R(1) with 4 bits lost&nbsp; (R(x),G(0),R(1) becomes R(x+1) and we still have lost 4 bits)<br>
+    <br>
+    so any cycle which from R(2) had an increase is followed by a cycle with n-=4 <br>
+    <br>
+    <br>
+  </body>
+</html>
