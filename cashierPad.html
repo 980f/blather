@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>cashierPad</title>
+  </head>
+  <body>
+    <h2> Cashier Pad 3.0</h2>
+    <h2> </h2>
+    <hr>
+    <h3> Commands (to device)</h3>
+    <h3> </h3>
+    <ol>
+      <li>Reset<br>
+        1 to 16 chars for display. Cancels any pending Entry command.<em></em></li>
+      <li>Display Message<br>
+        1 to 16 chars that replace first 16 of current message.</li>
+      <li>Numeric Data Entry<br>
+        2 char ascii value "1 " to "20" for minimum digits required<br>
+        2 char ascii value "1 " to "20" for maximum digits required<br>
+        0 to 32 char prompt.</li>
+      <li>Disable Keypad<br>
+        1 to 16 chars for display. Stops display toggling and ignores keypad
+        input.</li>
+      <li>Dollar Amount Entry<br>
+        See Numeric Data Entry. This differs by adding '$' and '.' to numeric
+        entry. The returned data does not have the '$' or '.'.</li>
+      <li>Secure Numeric Entry (password)<br>
+        See Numeric Data Entry. This differs by displaying '*' instead of the
+        digits input.</li>
+      <li>Display Toggle Control<br>
+        0 to 16 characters. <br>
+        If commands 2,3,5,6, or 8 are active and their prompt was &lt;=16 chars
+        then if you provide any chars with this command then this command's data
+        alternates with the prior.<br>
+        If commands 3,5,6, or 8 are active (Entry command) and their prompt was
+        &gt;16 chars then <br>
+        &nbsp; if you provide any chars with this command then this command's
+        data replaces the latter 16 of the prior. <br>
+        &nbsp; else (no text with this command) then the prior command's fist
+        line is shown and second line discarded.<br>
+        Which is a fancy way of saying that this command replaces the 2nd line
+        if any of current display and if not blank alternation occurs.</li>
+      <li>Alphanumeric Data Entry<br>
+        See Numeric Data Entry for arguments. This enables the "B"/alpha key,
+        see Entry details elsewhere in this document.</li>
+      <li>Auto Key Entry<br>
+        Next key pressed is returned as a letter via a 13 response. See keypad
+        layouts section.</li>
+      <li>Set Keyboard Mask<br>
+        4 chars the least significant 4 bits of each are enables for one column
+        of keypad. Set the MSB of 7 (e.g. or '@' with the 4 bits).<br>
+        The mask affects all keyboard input.</li>
+      <li>Select Keyboard Layout<br>
+        "0" for calculator layout, "1" for telephone layout.</li>
+    </ol>
+    <h3> Responses (from device)</h3>
+    <h3> </h3>
+    <ol>
+      <li value="11">Function Key Response<br>
+        first char is the key, manual is ambiguous as to mapping but the value
+        is "A" through "D".<br>
+        2nd char is the entry mode, '@'+numeric value of command (command 3
+        sends "C").</li>
+      <li value="13">Normal Data Response<br>
+        0 to 20 chars, 0 for Enter key as first one pressed.</li>
+    </ol>
+    <br>
+    <hr>
+    <h3> Packet Format</h3>
+    STX [2 digit code] . [parameters/data] ETX LRC<br>
+    The two digit code has a leading 0 for those less than 10.<br>
+    It is followed by a period.<br>
+    The LRC is accumulating XOR starting after the STX but including the ETX,
+    truncate to 7 bits.<br>
+    <br>
+    Wire protocol 4800E71<br>
+    DC1(^Q) and DC2(^R) are used for flow control. Use, DC two not DC three.<br>
+    At power up device sends ENQ (0x05,^E) once per second until it gets an ACK
+    (0x06,^F).<br>
+    Expect ACK or NAK(0x15) when you send a command. Use that to pace commands,
+    with a 3 second timeout.<br>
+    Send ACK or NAK in after reception of a response based on LRC check.
+    <hr>
+    <h3>Entry Details</h3>
+    The display is physically 16 characters wide, but accepts up to 32 chars and
+    then toggles between the first 16 and the rest.<br>
+    For commands requesting input the prompt disappears with first user
+    keystroke.<br>
+    <br>
+    During Entry commands functions keys not used by entry are sent immediately
+    via response 11. The entered data is sent when Enter key is pressed, via
+    response 13.<br>
+    For Alpha input the "B" key ('alpha' on 980F's unit) cycles through the set
+    of letters on the numeric key.<br>
+    If more than 1 char is requested then the "C" key ('func' on 980F's unit)
+    works as a backspace, which is locally implemented (on the Cashier Pad,
+    never sent).<br>
+    <br>
+    <hr>
+    <h3>Layouts</h3>
+    <h3> </h3>
+    <table style="width: 0" border="1">
+      <tbody>
+        <tr>
+          <td>Calculator<br>
+          </td>
+          <td>Telephone<br>
+          </td>
+          <td>Auto Key<br>
+          </td>
+          <td>mask #<br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table style="width: 0" border="1">
+              <tbody>
+                <tr>
+                  <td>A</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>9</td>
+                </tr>
+                <tr>
+                  <td>B</td>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>C</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>D</td>
+                  <td>.</td>
+                  <td>0</td>
+                  <td>Enter</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table style="width: 0" border="1">
+              <tbody>
+                <tr>
+                  <td>A</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>B</td>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>C</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>9</td>
+                </tr>
+                <tr>
+                  <td>D</td>
+                  <td>.</td>
+                  <td>0</td>
+                  <td>Enter</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table style="width: 0" border="1">
+              <tbody>
+                <tr>
+                  <td>M</td>
+                  <td>I</td>
+                  <td>E</td>
+                  <td>A</td>
+                </tr>
+                <tr>
+                  <td>N</td>
+                  <td>J</td>
+                  <td>F</td>
+                  <td>B</td>
+                </tr>
+                <tr>
+                  <td>O</td>
+                  <td>K</td>
+                  <td>G</td>
+                  <td>C</td>
+                </tr>
+                <tr>
+                  <td>P</td>
+                  <td>L</td>
+                  <td>H</td>
+                  <td>D</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>
+            <table style="width: 0" border="1">
+              <tbody>
+                <tr>
+                  <td>13 </td>
+                  <td>&nbsp; 9</td>
+                  <td>5</td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>10</td>
+                  <td>6</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>11</td>
+                  <td>7</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>16</td>
+                  <td>12</td>
+                  <td>8</td>
+                  <td>4</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    Auto Key is mask # + '@'.<br>
+    <em></em>
+    <hr>
+    <table style="width: 0%" border="1">
+      <tbody>
+        <tr>
+          <td>RJ-11</td>
+          <td>TTL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+          <td>RS-232&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td> </tr>
+        <tr>
+          <td>long</td>
+          <td>5 VDC supply to Pad</td>
+          <td>Ground</td>
+        </tr>
+        <tr>
+          <td>short</td>
+          <td>From Pad</td>
+          <td>From pad</td>
+        </tr>
+        <tr>
+          <td>long</td>
+          <td>Ground</td>
+          <td>To pad</td>
+        </tr>
+        <tr>
+          <td>short</td>
+          <td>To Pad</td>
+          <td>9..12 VDC supply to Pad</td>
+        </tr>
+      </tbody>
+    </table>
+    <em></em><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
+</html>
