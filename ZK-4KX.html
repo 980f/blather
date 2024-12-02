@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>ZK-4KX</title>
+    <meta name="author" content="Andy Heilveil (github/980f)">
+  </head>
+  <body>
+    <div class="tab-pane fade active in" id="tab-description">
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <div>
+        <h3>ZK-4KX power supply<br>
+        </h3>
+        <h3>Specifications</h3>
+      </div>
+      <div>
+        <table border="1">
+          <tbody>
+            <tr>
+              <td>Input voltage</td>
+              <td>5.0-30v</td>
+            </tr>
+            <tr>
+              <td>Output voltage<br>
+              </td>
+              <td>0.5-30v </td>
+            </tr>
+            <tr>
+              <td>Output current</td>
+              <td>3A <br>
+                4A with enhanced heat dissipation</td>
+            </tr>
+            <tr>
+              <td>Output power</td>
+              <td>35W, <br>
+                50W with enhanced heat dissipation</td>
+            </tr>
+            <tr>
+              <td>Voltage display resolution: 0.01V</td>
+              <td><br>
+              </td>
+            </tr>
+            <tr>
+              <td>Current display resolution: </td>
+              <td>0.001A</td>
+            </tr>
+            <tr>
+              <td>Conversion efficiency </td>
+              <td>88%<br>
+              </td>
+            </tr>
+            <tr>
+              <td>Operating frequency </td>
+              <td>180KHZ&nbsp; </td>
+            </tr>
+            <tr>
+              <td valign="top">Input undervoltage protection<br>
+              </td>
+              <td valign="top">4.8-30V adjustable, <br>
+                default 4.8v</td>
+            </tr>
+            <tr>
+              <td valign="top">Output overvoltage protection</td>
+              <td valign="top"> 0.5-31V adjustable, <br>
+                default 31V</td>
+            </tr>
+            <tr>
+              <td>Output overcurrent protection&nbsp; </td>
+              <td>0-4.1A adjustable, <br>
+                default 4.1A </td>
+            </tr>
+            <tr>
+              <td valign="top">Timeout protection <br>
+              </td>
+              <td valign="top">0-100h adjustable, <br>
+                off by default</td>
+            </tr>
+            <tr>
+              <td valign="top">Super capacity protection <br>
+              </td>
+              <td valign="top">0-60Ah adjustable, <br>
+                off by default</td>
+            </tr>
+            <tr>
+              <td>Over-temperature protection</td>
+              <td> 80-110℃ adjustable, <br>
+                default 110℃ </td>
+            </tr>
+            <tr>
+              <td>Overpower protection&nbsp; </td>
+              <td>0-50w adjustable, <br>
+                default 50W </td>
+            </tr>
+            <tr>
+              <td>Dimensions </td>
+              <td> 79mm x 43mm x 26mm </td>
+            </tr>
+            <tr>
+              <td valign="top">Other self protection<br>
+              </td>
+              <td valign="top">
+                <div>Soft start: yes (with high power and load module
+                  may fail when starting)</div>
+                Input anti-reverse connection;
+                <div>Output anti-reverse irrigation;</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr width="100%" size="2">
+      <h3>&nbsp;Operation</h3>
+      <div>
+        <h4>Switch display parameters</h4>
+      </div>
+      <div> in the normal state press <b><tt>SW</tt></b> to switch the
+        2nd line content between current A | power W | capacity Ah| time
+        h.<br>
+        Long press <b><tt>SW</tt></b> button to switch the 1st line
+        content between input voltage and output voltage.<br>
+        <br>
+      </div>
+      <div>
+        <h4>Setting limits</h4>
+        From the normal state press the <b><tt>U/I</tt></b> button to
+        enter settings mode. <br>
+        One digit of the value is flashing, rotate the encoder left and
+        right to adjust it.<br>
+        Short press the rotary encoder to choose which digit&nbsp; to
+        set.<br>
+        First value is voltage, press <b><tt>U/I</tt></b> button again
+        to edit constant (max) current.<br>
+        Press U/I again to return to normal state, which will happen
+        automatically after 10 seconds of inaction.</div>
+      <br>
+      <h4>Other settings</h4>
+      <div>In the normal state long press <b><tt>U/I</tt></b> to enter
+        the parameter setting state.<br>
+        Press <b><tt>SW</tt></b> to cycle through the parameters.<br>
+        Press rotary encoder for toggles (enables) rotate for threshold
+        value.<br>
+        After settings long press <b><tt>U/I</tt></b> to return to the
+        normal state.<br>
+        <br>
+        <table cellspacing="2" cellpadding="2" border="1">
+          <tbody>
+            <tr>
+              <td valign="top">"OPEN OFF" or "OPEN ON"</td>
+              <td valign="top">just toggle<br>
+              </td>
+              <td valign="top">Whether output is enabled or not when the
+                module itself powers up<br>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">LUP<br>
+              </td>
+              <td rowspan="7" colspan="1" valign="top">set level,<br>
+                toggle enable<br>
+              </td>
+              <td valign="top">under-voltage protection threshold</td>
+            </tr>
+            <tr>
+              <td valign="top">OUP <br>
+              </td>
+              <td valign="top">over-voltage protection threshold</td>
+            </tr>
+            <tr>
+              <td valign="top"> OCP <br>
+              </td>
+              <td valign="top">over-current protection threshold</td>
+            </tr>
+            <tr>
+              <td valign="top"> OPP <br>
+              </td>
+              <td valign="top">over power protection threshold</td>
+            </tr>
+            <tr>
+              <td valign="top">OAP<br>
+              </td>
+              <td valign="top">capacity protection threshold</td>
+            </tr>
+            <tr>
+              <td valign="top">OHP<br>
+              </td>
+              <td valign="top"> timeout protection threshold</td>
+            </tr>
+            <tr>
+              <td valign="top">OTP<br>
+              </td>
+              <td valign="top">over-temperature protection threshold.</td>
+            </tr>
+            <tr>
+              <td valign="top">CAL+IN+V</td>
+              <td rowspan="3" colspan="1" valign="top">set value to
+                match your external meter,<br>
+                long press the rotary encoder to save it, <br>
+                which is acknowledged by the parameter value no longer
+                flashing.</td>
+              <td valign="top">output at typical load level, think about
+                voltage drop on input cable.<br>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">CAL+OUT+V</td>
+              <td valign="top">calibration voltage should be &gt;=
+                12V&nbsp; <br>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">CAL+OUT+A</td>
+              <td valign="top">Calibration load current should be &gt;=
+                1A.<br>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+      </div>
+      <div>
+        <hr width="100%" size="2">
+        <h3>Et Cetera </h3>
+        <ol>
+          <li>Shorting between input IN and output OUT of the module is
+            bad, at a minimum the current limit function will fail. </li>
+          <li>Ensure that the power capacity of the input supply exceeds
+            the power draw of the output load! </li>
+          <li>To output at maximum capacity the input voltage should be
+            above 8V. When the input voltage is 5V, the output power is
+            limited to about 15W. The maximum module current value is
+            4A, subject to the maximum output power, e.g.&nbsp; at 17V
+            the current should not be greater than 2A. </li>
+          <li>When this module is used over 3A and 35W, you must
+            increase its own heat dissipation!!! </li>
+          <li>The module input undervoltage protection function, which
+            is defaulted to about 4.8v, will automatically disconnect
+            the output, but beware of the voltage drop on the cable, the
+            threshold is at the module end not your source and at high
+            currents will trip apparently early. <br>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <p></p>
+  </body>
+</html>
