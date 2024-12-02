@@ -1,0 +1,306 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2008.08.06.02.26.14;	author Andy;	state Exp;
+branches;
+next	;
+deltatype	text;
+permissions	666;
+commitid	c0048990bc570ca;
+kopt	kv;
+filename	antihungariannotation.html;
+
+
+desc
+@@
+
+
+1.1
+log
+@work related whining
+@
+text
+@<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+  <title>antihungariannotation</title>
+  <meta content="histrionics" name="author">
+</head>
+<body>
+<h2>Why I dislike Hungarian Notation</h2>
+<br>
+Most of the following is edited from WikiPedia,.with some emphasis
+added by Andy.<br>
+<hr style="width: 100%; height: 2px;"><br>
+"In Hungarian notation, a variable name starts with&nbsp; ... letters
+which are mnemonics for the type or purpose of that variable, followed
+by whatever the name the programmer has chosen"<br>
+There are two styles, with little similarity other than using a prefix
+and making that prefix terse.<br>
+<br>
+In Systems Hungarian notation, <b>the prefix encodes the</b> <b>actual
+data type</b> of the variable. <br>
+<br>
+Apps Hungarian notation gives a hint as to what the variable's <b>purpose</b>
+is, or what it represents.<br>
+<br>
+<hr style="width: 100%; height: 2px;">&lt;ALH&gt;<br>
+<div style="margin-left: 40px;">The style of Hungarian Notation
+used by Kleve is Systems Hungarian Notation.<br>
+<br>
+My primary objection to any form of prefixing notation is that it
+causes the IDE to list things by an implementation detail rather than
+semantic grouping. <br>
+My emphatic objection to SHN is that the type of a variable is the
+least interesting attribute of the variable.<br>
+When looking for any value to SHN that would justify the loss of the
+above utility I found only negative values.<br>
+<br>
+I do NOT object to standardized <span style="font-style: italic;">suffixes</span>:<br>
+</div>
+<div style="margin-left: 80px;">int regionCount;//a quantity<br>
+int *channelPointer;//the 'Pointer' implies the variable will be
+incremented, accessed sequentially<br>
+int channel[];//use his instead of a name with Pointer in it when
+random accesses via array indexes will be used<br>
+double channelsPerKeV; // Per is an infix implying a ratio<br>
+</div>
+<div style="margin-left: 40px;">in an alphabetical listing variables
+related to channels will be collated together regardless of whether
+they are integers or floating point, or a pointer to either of those.<br>
+</div>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <br>
+&lt;/ALH&gt;<br>
+<hr style="width: 100%; height: 2px;">
+<h3><span class="mw-headline">Advantages of Systems Hungarian</span></h3>
+<p>(Some of these apply to Systems Hungarian only.) Supporters argue
+that the benefits of Hungarian Notation include:<br>
+<span style="font-style: italic;">alh: comments like this are from me.</span><br>
+</p>
+<ol>
+  <li>The variable type can be seen from its name <br>
+    <span style="font-style: italic;">alh: this is a bad thing, not a
+good thing. The detailed type of a varible is one of the least
+interesting things about it. Having that blasted into one's awareness
+at every reference implies that the intended use isn't as important as
+how the 1's and 0's look to the cpu chip. If the prefix is not present
+then when a person is looking for a particular type they have to go
+read the variable declarations, which is where criticial usage
+information can be placed via comments that are too long to copy to
+each point of use.<br>
+    </span></li>
+  <li>Multiple variables with similar semantics can be used in a block
+of code: dwWidth, iWidth, fWidth, dWidth<br>
+    <span style="font-style: italic;">alh: but is dwWidth related to
+iWidth? better naming is 'screenWidthAsLong' and 'screenWidthAsFloat'
+which strongly suggest two different representations of the same value.
+Hungarian prefixes are too short to have clear meaning in those cases
+where the concept has merit.</span><br>
+  </li>
+  <li>Variable names can be easy to remember from knowing just their
+types.<br>
+    <span style="font-style: italic;">alh: once again, the type is the
+least useful piece of information about a variable.</span><br>
+  </li>
+  <li>It leads to more consistent variable names<br>
+    <span style="font-style: italic;">alh: hunh? it leads to grouping
+variables in listings by their most trivial attribute. A pair of
+variables that are different attributes of a single concept should be
+listed next to each other.</span><br>
+  </li>
+  <li>Deciding on a variable name can be a mechanical, and thus quick,
+process<br>
+    <span style="font-style: italic;">alh: variable names are a crucial
+piece of communication from one programmer to another, the compiler
+never requires a comment, but a variable (almost) always has to have a
+textual name. "Quick" naming rules should be limited to only the most
+temporary of variables, such as loop indexes. All other variables
+should be named thoughtfully.</span><br>
+  </li>
+  <li>Inappropriate type casting and operations using incompatible
+types can be detected easily while reading code<br>
+    <span style="font-style: italic;">alh: with appropriate rules for
+chosing variables all casts are suspicious, all should be looked at
+closely. The main exception to a cast being wrong is when modern code
+is being interfaced to legacy (unmodifiable) code, which should be done
+via wrapper classes that make the legacy nature obvious. If you find
+yourself casting frequently your are choosing the wrong type to start
+with. Any frequently used patterns which have a cast in them should be
+made into a function where the cast can be clearly justified in
+comments.</span><br>
+  </li>
+  <li>In Apps Hungarian, the variable name guards against using it in
+an
+improper operation with the same data type by making the error obvious
+as in:<br>
+heightWindow = window.getWidth()<br>
+    <span style="font-style: italic;">alh: is Window a component of a
+height or height a component of a window? objectAttribute is better for
+most speakers of western indo-europran languages, and mimics how
+structure member names appear.<br>
+    </span></li>
+  <li>When programming in a language that uses <a
+ href="http://en.wikipedia.org/wiki/Dynamic_typing" class="mw-redirect"
+ title="Dynamic typing">dynamic typing</a>
+or that is completely untyped (<a
+ href="http://en.wikipedia.org/wiki/Tcl" title="Tcl">Tcl</a> for
+example), the decorations that refer to types
+cease to be redundant. Such languages typically do not include
+declarations of types (or make them optional), so the only sources of
+what types are allowed are the names themselves, documentation such as
+comments, and by reading the code to understand what it does. In these
+languages, including an indication of the type of a variable may aid
+the programmer. As mentioned above, Hungarian Notation expanded in such
+a language (BCPL).<br>
+    <span style="font-style: italic;">alh: the only place where SHN is
+a good choice. Use of such languages is a bad idea for anything that
+needs to be reliable.</span><br>
+  </li>
+  <li>In complex programs with lots of global objects (VB/Delphi
+Forms),
+having a basic prefix notation can ease the work of finding the
+component inside of the editor. Pressing <code>btn&lt;Ctrl-Space&gt;</code>
+causes the editor to pop up a list of Button objects.<br>
+    <span style="font-style: italic;">alh: it is better to collect such
+objects in structs rather than make it easy to have large quantities
+of&nbsp; items that are grouped only by the text of their names. With
+SHN they won't be collected by their groupname (such as the name of a
+particular screen) and whether a gui object for binary input is a
+checkbox or a two-item list or a pair of radio buttons should be
+subordinated to what the boolean controls or indicates.</span><br>
+  </li>
+</ol>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h2><span class="editsection"></span><span class="mw-headline">Disadvantages
+of Systems Hungarian</span></h2>
+<ul>
+  <li>The Hungarian notation is redundant with the type checking made
+by
+the compiler. A language providing type checking will be much more
+powerful to ensure that the usage of a variable is consistent with its
+type than the human eye would be to merely check that usage is coherent
+with the name of the variable.</li>
+  <li>Some modern <a
+ href="http://en.wikipedia.org/wiki/Integrated_development_environment"
+ title="Integrated development environment">Integrated development
+environments</a>, such as <a
+ href="http://en.wikipedia.org/wiki/Visual_Studio" class="mw-redirect"
+ title="Visual Studio">Visual Studio</a> display variable types on
+demand, and automatically flag operations which use incompatible types,
+making the notation largely obsolete.</li>
+  <li>Hungarian Notation becomes confusing when it is used to represent
+several properties, as in <tt>a_crszkvc30LastNameCol</tt>: a <a
+ href="http://en.wikipedia.org/wiki/Constant_%28computer_science%29"
+ class="mw-redirect" title="Constant (computer science)">constant</a> <a
+ href="http://en.wikipedia.org/wiki/Reference_%28computer_science%29"
+ title="Reference (computer science)">reference</a> <a
+ href="http://en.wikipedia.org/wiki/Parameter_%28computer_science%29"
+ title="Parameter (computer science)">argument</a>, holding the
+contents of a <a href="http://en.wikipedia.org/wiki/Database"
+ title="Database">database</a> column <tt>LastName</tt> of type <a
+ href="http://en.wikipedia.org/wiki/Varchar" title="Varchar">varchar</a>(30)
+which is part of the table's <a
+ href="http://en.wikipedia.org/wiki/Primary_key" class="mw-redirect"
+ title="Primary key">primary key</a>.</li>
+  <li>It may lead to inconsistency when code is modified. If a
+variable's
+type is changed, either the decoration on the name of the variable will
+be inconsistent with the new type, or the variable's name must be
+changed.</li>
+  <li>It is inconsistent with code portability since the variable name
+is
+tied to the type. A particularly well known example is the standard
+WPARAM type, and the accompanying wParam <a
+ href="http://en.wikipedia.org/wiki/Formal_parameter"
+ class="mw-redirect" title="Formal parameter">formal parameter</a>
+in many Windows system function declarations. It was originally a 16
+bit type, but was changed to a 32 bit or 64 bit type in later versions
+of the operating system while retaining its original name (its true
+underlying type is UINT_PTR, that is, an unsigned integer large enough
+to hold a pointer).</li>
+  <li style="text-decoration: underline;">Most of the time, knowing the
+use of a variable implies knowing its
+type. Furthermore, <span style="font-weight: bold;">if you don't know
+what a variable is used for,
+knowing its type won't help you</span>.</li>
+</ul>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h2><span class="mw-headline">Notable opinions</span></h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Linus_Torvalds"
+ title="Linus Torvalds">Linus Torvalds</a> (against systems Hungarian):
+    <i>Encoding
+the type of a function into the name (so-called Hungarian notation) is
+brain damaged - the compiler knows the types anyway and can check
+those, and it only confuses the programmer.</i></li>
+</ul>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Steve_McConnell"
+ title="Steve McConnell">Steve McConnell</a> (for Hungarian): <i>Although
+the Hungarian naming convention <span
+ style="font-weight: bold; text-decoration: underline;">is no longer in
+widespread use</span>, the
+basic idea of standardizing on terse, precise abbreviations continues
+to have value. ... Standardized prefixes allow you to check types
+accurately when you're using </i><span
+ style="font-weight: bold; text-decoration: underline;">abstract data
+types</span><i> that your compiler
+can't necessarily check.<br>
+    </i></li>
+</ul>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Bjarne_Stroustrup"
+ title="Bjarne Stroustrup">Bjarne Stroustrup</a> (against systems
+Hungarian): <i>No
+I don't recommend "Hungarian". I regard "Hungarian" ...a technique that
+can
+be useful in untyped languages, but is completely unsuitable for a
+language that supports generic programming and object-oriented
+programming - both of which emphasize selection of operations based on
+the type an arguments (known to the language or to the run-time
+support). In this case, "building the type of an object into names"
+simply complicates and minimizes abstraction.</i></li>
+</ul>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Joel_Spolsky"
+ title="Joel Spolsky">Joel Spolsky</a> (for apps Hungarian): <i>If
+you read Simonyi&#8217;s paper closely, what he was getting at was the same
+kind of naming convention as I used in my example above where we
+decided that <code><b>us</b></code> meant &#8220;unsafe string&#8221; and <code><b>s</b></code>
+meant &#8220;safe string.&#8221; They&#8217;re both of type <code><b>string</b></code>.
+The compiler won&#8217;t help you if you assign one to the other and
+Intellisense won&#8217;t tell you bupkis. But they are semantically
+different; they need to be interpreted differently and treated
+differently and some kind of conversion function will need to be called
+if you assign one to the other or you will have a runtime bug. If
+you&#8217;re lucky. (...) There&#8217;s still a tremendous amount of value to Apps
+Hungarian, in that it increases collocation in code, which makes the
+code easier to read, write, debug, and maintain, and, most importantly,
+it makes wrong code look wrong.</i></li>
+  <li>
+    <p>The <a href="http://en.wikipedia.org/wiki/.NET_Framework"
+ title=".NET Framework">.NET Framework</a>,
+Microsoft's new software development platform, generally does not use
+Hungarian notation except in the case of interface types.The .NET
+Framework Guidelines advise programmers that Hungarian
+notation should not be used, but does not specify whether to avoid
+Systems Hungarian, Apps Hungarian, or both. In contrast, the standard
+libraries of the <a
+ href="http://en.wikipedia.org/wiki/Java_%28programming_language%29"
+ title="Java (programming language)">Java programming language</a> do
+not prefix interface types.</p>
+  </li>
+</ul>
+<hr style="width: 100%; height: 2px;"><br>
+<br>
+</body>
+</html>
+@
