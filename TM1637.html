@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>TM1637</title>
+    <meta name="author" content="Andy Heilveil (github/980f)">
+  </head>
+  <body>
+    <h3>TM1637 segmented LED driver</h3>
+    <p>Titan Micro Electronics<br>
+    </p>
+    <p>Drives 6 groups of 8 bits.</p>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td>Device Pinout<br>
+          </td>
+          <td>GND</td>
+          <td>1</td>
+          <td><br>
+          </td>
+          <td>20</td>
+          <td>K 2</td>
+          <td rowspan="2">key scan inputs<br>
+            CMOS input, ?add pull??down 10k<br>
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="8">low side driver<br>
+            <br>
+            N channel open drain<br>
+            30mA (50 max)<br>
+          </td>
+          <td>SEG 1</td>
+          <td>2</td>
+          <td><br>
+          </td>
+          <td>19</td>
+          <td>K 1</td>
+        </tr>
+        <tr>
+          <td>SEG 2</td>
+          <td>3</td>
+          <td><br>
+          </td>
+          <td>18</td>
+          <td>CLK </td>
+          <td rowspan="2">Greedy I2C, each address is actually a command<br>
+            add 10k pullups, 100pF<br>
+            100kHz best, might work up to 250 kHz<br>
+          </td>
+        </tr>
+        <tr>
+          <td>SEG 3</td>
+          <td>4</td>
+          <td><br>
+          </td>
+          <td>17</td>
+          <td>DIO </td>
+        </tr>
+        <tr>
+          <td>SEG 4</td>
+          <td>5</td>
+          <td><br>
+          </td>
+          <td>16</td>
+          <td>VDD </td>
+          <td>nominal 5V, add 100uF + 104 (0.1uF)<br>
+          </td>
+        </tr>
+        <tr>
+          <td>SEG 5</td>
+          <td>6</td>
+          <td><br>
+          </td>
+          <td>15</td>
+          <td>GRID 1</td>
+          <td rowspan="5">high side drive<br>
+            <br>
+            P channel open drain<br>
+            120 mA typ at 2V drop<br>
+            200 mA max at 3V drop<br>
+            <br>
+            only one at a time will be active<br>
+          </td>
+        </tr>
+        <tr>
+          <td>SEG 6</td>
+          <td>7</td>
+          <td><br>
+          </td>
+          <td>14</td>
+          <td>GRID 2</td>
+        </tr>
+        <tr>
+          <td>SEG 7</td>
+          <td>8</td>
+          <td><br>
+          </td>
+          <td>13</td>
+          <td>GRID 3</td>
+        </tr>
+        <tr>
+          <td>SEG 8</td>
+          <td>9</td>
+          <td><br>
+          </td>
+          <td>12</td>
+          <td>GRID 4</td>
+        </tr>
+        <tr>
+          <td>(see other GRID)<br>
+          </td>
+          <td>GRID 6</td>
+          <td>10</td>
+          <td><br>
+          </td>
+          <td>11</td>
+          <td>GRID 5</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td><br>
+          </td>
+          <td>B7</td>
+          <td>B6</td>
+          <td>B5</td>
+          <td>B4</td>
+          <td>B3</td>
+          <td>B2</td>
+          <td>B1</td>
+          <td>B0</td>
+        </tr>
+        <tr>
+          <td>set control bits<br>
+          </td>
+          <td>0</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+          <td>test mode<br>
+            best leave 0<br>
+          </td>
+          <td>fixed address <br>
+            (else auto increments)</td>
+          <td>Read keys<br>
+            (else write to display)</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>set address and data<br>
+          </td>
+          <td>1</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td colspan="3">0..5 display address for GRID 1:6<br>
+            successive bytes are data bits for SEG<br>
+            note that LSB is not R/W bit! This is where it deviates
+            greatly from true I2C<br>
+          </td>
+        </tr>
+        <tr>
+          <td>enable and <br>
+            scan duty cycle<br>
+            (intensity)<br>
+          </td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>display on</td>
+          <td colspan="3">pulse width in 16ths: <br>
+            0:1,1:2,2:4,3:10,4:11,5:12,6:13,7:14<br>
+            Time base is 450 kHz </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    Apparently the device responds to most I2C addresses using them as
+    command bits.<br>
+    This means it doesn't play nice with other I2C devices. Arduino I2C
+    scan will tell us the truth of this.<br>
+    <br>
+    The data sheet suggests that all 3 command types should be sent each
+    communication. This sounds insane, as if the translator was clueless
+    as to reasonable use of the device.<br>
+    <hr width="100%" size="2">
+    <h3>Keyboard <br>
+    </h3>
+    Key read: <br>
+    The 3 lsbs are the segment number, 8-segnumber. <br>
+    The high bit of the ls nibble is low for K1.<br>
+    The low bit of the ms nibble is low for K2.<br>
+    Response when multiple keys are active is not specified.<br>
+    <p>Key wiring:<br>
+      Connect each from SEGx to Ky.<br>
+    </p>
+    <hr>
+    <h3>4 X 7 segment from Adafruit</h3>
+    1.8V drive per fancy new meter. <br>
+    <br>
+    Display pinout, defining pin 1 as leftmost pin on side with device
+    markings.<br>
+    <br>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td>+dig 3</td>
+          <td>top</td>
+          <td>upper left</td>
+          <td>+dig 2<br>
+          </td>
+          <td>+ dig 1</td>
+          <td>upper right</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>11</td>
+          <td style="height: 19px;">10</td>
+          <td>9</td>
+          <td>8</td>
+          <td>7</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>4</td>
+          <td>5</td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>lower left</td>
+          <td>bottom</td>
+          <td>d.p.</td>
+          <td>lower right</td>
+          <td>middle </td>
+          <td>+ dig 0<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <hr>
+    <h3>Breadboard Wiring</h3>
+    <br>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <table border="1">
+              <caption> TM .. 7Seg</caption> <tbody>
+                <tr>
+                  <td>TM1637</td>
+                  <td>display</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>7</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>10</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>11</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>4</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>14</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>9</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td rowspan="1" colspan="2">power</td>
+                </tr>
+                <tr>
+                  <td>16</td>
+                  <td>5V, but try 3.3!</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>GND</td>
+                </tr>
+                <tr>
+                  <td rowspan="1" colspan="2">interface</td>
+                </tr>
+                <tr>
+                  <td>18</td>
+                  <td>SDA</td>
+                </tr>
+                <tr>
+                  <td>17</td>
+                  <td>SCL</td>
+                </tr>
+                <tr>
+                  <td rowspan="1" colspan="2">no connect</td>
+                </tr>
+                <tr>
+                  <td>20</td>
+                  <td rowspan="2" colspan="1">could use these for <br>
+                    switch sensing, up to 16</td>
+                </tr>
+                <tr>
+                  <td>19</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td rowspan="2" colspan="1">could use these for <br>
+                    "this display intentionally left blank"</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                </tr>
+                <tr>
+                  <td colspan="2"><br>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+          <td>
+            <table border="1">
+              <caption> byte map</caption> <tbody>
+                <tr>
+                  <td>digit</td>
+                  <td>hex</td>
+                </tr>
+                <tr>
+                  <td>d.p.</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>0</td>
+                  <td>5F</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>41</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>9D</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>D5</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>b</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>C</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>d</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>E</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>F</td>
+                  <td><br>
+                  </td>
+                </tr>
+                <tr>
+                  <td>H</td>
+                  <td><br>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+  </body>
+</html>
