@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>LED drive by mcu</title>
+    <meta name="author" content="Andy Heilveil (github/980f)">
+  </head>
+  <body>
+    <p>Atmel 32U4 pin power capabilities<br>
+      Used in Arduino Leonardo, Micro</p>
+    <p><br>
+    </p>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>Test Conditions<br>
+          </td>
+          <td>32U4<br>
+          </td>
+          <td>mega328P</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>DC Current per I/O Pin</td>
+          <td><br>
+          </td>
+          <td>40.0mA</td>
+          <td>40 mA</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>DC Current VCC and GND</td>
+          <td><br>
+          </td>
+          <td>200.0mA</td>
+          <td>200 mA</td>
+        </tr>
+        <tr>
+          <td>V<sub>OL</sub></td>
+          <td>Output Low Voltage</td>
+          <td>I<sub>OL</sub> = 10mA, VCC = 5V</td>
+          <td>0.7 V</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>I<sub>OL</sub> = 20mA, VCC = 5V</td>
+          <td><br>
+          </td>
+          <td>0.8 V</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>I<sub>OL</sub> = 5mA, VCC = 3V </td>
+          <td>0.5 V<br>
+          </td>
+          <td>0.5 V</td>
+        </tr>
+        <tr>
+          <td>V<sub>OH</sub> </td>
+          <td>Output High Voltage </td>
+          <td>I<sub>OH</sub> = -10mA, VCC = 5V</td>
+          <td>4.2 V</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>I<sub>OH</sub> = -20mA, VCC = 5V</td>
+          <td><br>
+          </td>
+          <td>4.1 V</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>I<sub>OH</sub> = -5mA, VCC = 3V</td>
+          <td>2.3 V</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>I<sub>CC</sub> </td>
+          <td>Power Supply Current </td>
+          <td>Active 8MHz, VCC = 5V </td>
+          <td>10 ma typ, 15 ma max</td>
+          <td>5.2/10 max</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>Active 16MHz, VCC = 5V </td>
+          <td>27 ma max</td>
+          <td>9.2/14 max</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>Leakage current to Vcc</td>
+          <td><br>
+          </td>
+          <td>&nbsp;20k typ, 50k max Ohms</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>current above Vcc or below Gnd</td>
+          <td>Vcc=5V</td>
+          <td><br>
+          </td>
+          <td>1.0 mA</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td>Vcc=Gnd</td>
+          <td><br>
+          </td>
+          <td>5.0 mA</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Groups, each have a 100mA limit:</p>
+    <table border="1">
+      <tbody>
+        <tr>
+          <td>32U4</td>
+          <td>328P</td>
+          <td>limit</td>
+        </tr>
+        <tr>
+          <td> A0-A7, G2, C4-C7 </td>
+          <td>C0-C5</td>
+          <td>IOL, IOH &lt; 100 mA</td>
+        </tr>
+        <tr>
+          <td>C0-C3, G0-G1, D0-D7</td>
+          <td>B0-B5,D5-D7,Xtal1-2</td>
+          <td>"</td>
+        </tr>
+        <tr>
+          <td>G3-G5, B0-B7, E0-E7</td>
+          <td>D0-D4</td>
+          <td>"</td>
+        </tr>
+        <tr>
+          <td>F0-F7</td>
+          <td><br>
+          </td>
+          <td>"</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>C0-C5 + D0-D4 </td>
+          <td>IOH&lt;150 mA</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td>B0-B5,D5-D7,Xtal1-2</td>
+          <td>&nbsp; "</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    In short, 5 LED's per port group.
+    <hr><br>
+    Analysis of driving multiple sets of LED's in series, each with 20mA current limited supply:<br>
+    <br>
+    When the LED strings are off the voltage at the input will depend on the leakage currents in the LED's to Vcc. <br>
+    The current limiter will be outputting the maximum voltage that it can in an attempt to get the current up to the set value. <br>
+    The LED voltage drop may be a few tenths of a volt less than the ON voltage of the LED. <br>
+    <br>
+    Until we experiment with how the LED's behave with 20k Ohm resistance to Vcc expect to need a zener to protect the mcu input from over voltage. <br>
+    <br>
+    <br>
+    <hr>Incomplete notes:<br>
+    <br>
+    For the 32U4 to get 20 mA with a known voltage we have to use pairs of pins. <br>
+    <br>
+    Arduino micro has the following IO pins at connectors:&nbsp; [<em>TBS</em>]<br>
+    <br>
+    If we have enough headroom on the current source's voltage we can use single pins, which is commonly done.<br>
+    <br>
+    If the signal triggering change of state is from an interrupt then the chip's total current limit can be higher than the steady state numbers.<br>
+    <p><br>
+      <br>
+    </p>
+  </body>
+</html>
