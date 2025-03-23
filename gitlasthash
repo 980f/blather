@@ -1,1 +1,2 @@
-echo 0x`git log -n1 --oneline --abbrev=8 | cut -d\  -f1`
+#! not using git rev-parse as it only provides the very long hash. This script originally output 8 chars, a 32 bit integer, in 2025 was bumped to 16 for a 64 bit integer.
+echo 0x`git log -n1 --oneline --abbrev=16 | cut -d\  -f1`
