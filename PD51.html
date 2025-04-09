@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>PD51 I2C motor controller</title>
+    <meta name="author" content="Andy Heilveil (github/980f)">
+  </head>
+  <body>
+    <h2>PD51 rev A </h2>
+    <p>BASEADDRESS = $60 , looks like 8 bit addressing, 60 through 6E for the 8 jumper selectable addresses.<br>
+      On reads: the number of bytes is indeterminate, controlled by host. Documented is maximum number</p>
+    <table border="1" cellspacing="2" cellpadding="2">
+      <tbody>
+        <tr>
+          <td>name</td>
+          <td>address</td>
+          <td>size</td>
+          <td>read</td>
+          <td>write</td>
+        </tr>
+        <tr>
+          <td>&nbsp;version </td>
+          <td><strong>0</strong></td>
+          <td>4/2</td>
+          <td>firmware version number<br>
+            3 letters and null</td>
+          <td>if exact version is written to device then a soft reset is executed</td>
+        </tr>
+        <tr>
+          <td>&nbsp;debug </td>
+          <td>1</td>
+          <td>1</td>
+          <td>ports A|B|C</td>
+          <td>port B</td>
+        </tr>
+        <tr>
+          <td>&nbsp;dcmotor </td>
+          <td>2</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;sparePin </td>
+          <td>3</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;spareCfg </td>
+          <td>4</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;athome </td>
+          <td>5</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;atmark </td>
+          <td>6</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;stpStep </td>
+          <td>7</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;setphase </td>
+          <td>8</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;stpenable </td>
+          <td>9</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;numPositions </td>
+          <td>10</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;stepsPer </td>
+          <td>11</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;isCircular </td>
+          <td>12</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;fullstep </td>
+          <td>13</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;wideHome </td>
+          <td>14</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;homeOffset </td>
+          <td>15</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;markTol </td>
+          <td>16</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;cruiseRate </td>
+          <td>17</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;startRate </td>
+          <td>18</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;acceleRate </td>
+          <td>19</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;tick1Cfg </td>
+          <td>20</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;posState </td>
+          <td>21</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;target </td>
+          <td>22</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;curPos </td>
+          <td>23</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;stepsTil </td>
+          <td>24</td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    ;----------------------------------------------------<br>
+    ; MODULE POSITION.ASP<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; discrete position support<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; uses pd51astp.asp for physical i/o routines<br>
+    ;&nbsp;&nbsp; call doaStep; does a step<br>
+    ;&nbsp;&nbsp; call isHome; reads with conditional complement-&gt;z<br>
+    ;&nbsp;&nbsp; call onMark; reads with conditional complement-&gt;z<br>
+    ;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if no marks then returns Z on phase zero<br>
+    ;----------------------------------------------------<br>
+    debugpos = 2<br>
+    &nbsp;&nbsp;&nbsp; .include "t1tick.asp"&nbsp;&nbsp; ;timer 1 periodic interrupts support<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; DATASEG<br>
+    posState .ds 1<br>
+    amOk&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0,posState<br>
+    amMoving&nbsp;&nbsp;&nbsp; = 1,posState<br>
+    needHoming&nbsp; = 2,posState<br>
+    needParams&nbsp; = 3,posState<br>
+    refining&nbsp;&nbsp;&nbsp; = 4,posState&nbsp; ;part of wideHome homing<br>
+    ;= 5,posState<br>
+    rampup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 6,posState<br>
+    rampdown&nbsp;&nbsp;&nbsp; = 7,posState<br>
+    <br>
+    posParmflags .ds 1<br>
+    accel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0,posParmflags&nbsp;&nbsp;&nbsp;&nbsp; ;non-zero accelerate<br>
+    wideHome&nbsp;&nbsp;&nbsp;&nbsp; = 1,posParmflags<br>
+    isCircular&nbsp;&nbsp; = 2,posParmflags<br>
+    <br>
+    ;parameter validity bits:<br>
+    rateValid&nbsp;&nbsp;&nbsp; = 3,posParmflags&nbsp;&nbsp; ;cruiseRate set<br>
+    ;= 4,posParmflags<br>
+    markTolValid = 5,posParmflags&nbsp;&nbsp; ;non-zero markTol<br>
+    numPosValid&nbsp; = 6,posParmflags;numPositions<br>
+    numPerValid&nbsp; = 7,posParmflags;stepsPer<br>
+    <br>
+    markTol .ds 1<br>
+    homeOffset .ds 1<br>
+    homeEarly = 7,homeOffset<br>
+    <br>
+    maxHomeWidth .ds 1<br>
+    homeWidth .ds 1<br>
+    <br>
+    numPositions .ds 1&nbsp; ;number of official stopping places<br>
+    stepsPer .ds 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;steps per, if half stepping then these are half steps.<br>
+    <br>
+    startRate .ds 2&nbsp; ;first step pulse width<br>
+    cruiseRate .ds 2 ;cruising step pulse width<br>
+    acceleRate .ds 2 ;change in width per step taken<br>
+    rampLen .ds 1&nbsp;&nbsp;&nbsp; ;steps in ramp<br>
+    <br>
+    stepsTil .ds 2&nbsp;&nbsp; ;steps til done with motion to target position<br>
+    <br>
+    curPos .ds 1&nbsp;&nbsp;&nbsp; ;where we started move from<br>
+    target .ds 1&nbsp;&nbsp;&nbsp; ;where we wish to be<br>
+    deltaPos .ds 1&nbsp; ;number of positions to move<br>
+    deltaSign = 7,deltaPos<br>
+    bestWay .ds 1&nbsp;&nbsp; ;for optimal direction selection<br>
+    bestSign = 7,bestWay<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; CODESEG<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; next step routine<br>
+    ;----------------------------------------------------<br>
+    tick1user:&nbsp;&nbsp; ;time for next step<br>
+    stepdone:&nbsp;&nbsp; ;last step is done, time for possible next step<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; ifbit freeRun,goto doaStep&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;diags tool, spin forever<br>
+    &nbsp;&nbsp;&nbsp; ifbit needHoming,goto homer&nbsp;&nbsp;&nbsp;&nbsp; ;doing find home procedure<br>
+    &nbsp;&nbsp;&nbsp; ;else normal move<br>
+    &nbsp;&nbsp;&nbsp; dcheck stepsTil<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,goto moveDone ;else we need another step:<br>
+    ;;&nbsp; ifbit accel, call accStep<br>
+    ;;&nbsp; look for invalid home indication<br>
+    anotherStep:<br>
+    &nbsp;&nbsp;&nbsp; ;*state change* (sometimes)<br>
+    &nbsp;&nbsp;&nbsp; setb amMoving&nbsp;&nbsp; ;<br>
+    &nbsp;&nbsp;&nbsp; call doaStep&nbsp;&nbsp;&nbsp; ;actually kick the motor<br>
+    &nbsp;&nbsp;&nbsp; ddec stepsTil<br>
+    &nbsp;return ;end of step handler<br>
+    <br>
+    moveDone:<br>
+    &nbsp;&nbsp;&nbsp; ;curPos=target<br>
+    &nbsp;&nbsp;&nbsp; load target<br>
+    &nbsp;&nbsp;&nbsp; store curPos<br>
+    &nbsp;&nbsp;&nbsp; ;*state change*<br>
+    &nbsp;&nbsp;&nbsp; setb amOk;<br>
+    &nbsp;&nbsp;&nbsp; ;join<br>
+    stopMotion:<br>
+    &nbsp;&nbsp;&nbsp; ;*state change*<br>
+    &nbsp;&nbsp;&nbsp; clrb amMoving<br>
+    &nbsp;retvia tick1Stop<br>
+    ;----------------------------------------------------<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; homing routine<br>
+    ;----------------------------------------------------<br>
+    startHoming:<br>
+    &nbsp;&nbsp;&nbsp; call tick1Stop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;stop 'isr'<br>
+    &nbsp;&nbsp;&nbsp; ;*state change*<br>
+    &nbsp;&nbsp;&nbsp; setb needHoming<br>
+    &nbsp;&nbsp;&nbsp; clrb refining&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;clear regardless of whether will be done<br>
+    &nbsp;&nbsp;&nbsp; clr curPos<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; call isHome ;sets Z if home<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,goto backoff ;then we are home<br>
+    &nbsp;&nbsp;&nbsp; clrb moveFwd&nbsp;&nbsp;&nbsp; ;else go homeward<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; ;else go for a full travel<br>
+    &nbsp;&nbsp;&nbsp; load numPositions<br>
+    &nbsp;&nbsp;&nbsp; store deltaPos<br>
+    &nbsp;&nbsp;&nbsp; call computeSteps<br>
+    &nbsp;retvia startMotion<br>
+    ;---------------------------------<br>
+    backoff:<br>
+    &nbsp;&nbsp;&nbsp; setb moveFwd<br>
+    onePos: ;move one positions worth<br>
+    &nbsp;&nbsp;&nbsp; ;set sstpetil to steps per:<br>
+    &nbsp;&nbsp;&nbsp; load stepsPer<br>
+    &nbsp;&nbsp;&nbsp; store stepsTil<br>
+    &nbsp;&nbsp;&nbsp; clr&nbsp;&nbsp; stepsTil+1<br>
+    startMotion:<br>
+    &nbsp;&nbsp;&nbsp; call loadStartrate&nbsp; ; homes at lowest speed<br>
+    &nbsp;&nbsp;&nbsp; ifnot tmr1on, call tick1Start&nbsp;&nbsp;&nbsp;&nbsp; ; (re)start timer<br>
+    &nbsp;retvia anotherStep<br>
+    ;----------------------------------------------------<br>
+    backingoff:&nbsp;&nbsp;&nbsp;&nbsp; ;looking for home to go away<br>
+    &nbsp;&nbsp;&nbsp; dcheck stepsTil<br>
+    &nbsp;&nbsp;&nbsp; ifnot z, goto anotherStep<br>
+    &nbsp;&nbsp;&nbsp; ;wait until we have moved as far as we are willing to<br>
+    &nbsp;&nbsp;&nbsp; ; before checking for "not home" state<br>
+    &nbsp;&nbsp;&nbsp; call isHome<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,goto homeFault ;if still home then we are stuck at home<br>
+    &nbsp;&nbsp;&nbsp; ;home sensor is good, need to go back in<br>
+    &nbsp;&nbsp;&nbsp; clrb moveFwd&nbsp;&nbsp;&nbsp; ;always find home going backwards.<br>
+    &nbsp;retvia onePos&nbsp;&nbsp;&nbsp; ;and try for up to one position's worth<br>
+    ;----------------------------------------------------<br>
+    homer:&nbsp; ;called after each homing step<br>
+    ;only look if looking to go on..&nbsp;&nbsp;&nbsp; call isHome<br>
+    &nbsp;&nbsp;&nbsp; ifbit refining,goto refiningHome<br>
+    &nbsp;&nbsp;&nbsp; ifbit moveFwd,goto backingoff&nbsp; ;looking for home to go off<br>
+    &nbsp;&nbsp;&nbsp; ;looking for home<br>
+    &nbsp;&nbsp;&nbsp; call isHome<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,goto homefound ;then we are home<br>
+    homeMore:&nbsp;&nbsp; ;keep on moving<br>
+    &nbsp;&nbsp;&nbsp; dcheck stepsTil<br>
+    &nbsp;&nbsp;&nbsp; ifnot z, goto anotherStep<br>
+    homeFault:&nbsp; ;gave up while homing<br>
+    &nbsp;&nbsp;&nbsp; ;*state change*<br>
+    &nbsp;&nbsp;&nbsp; clrb amOk<br>
+    &nbsp;&nbsp;&nbsp; setb needHoming<br>
+    &nbsp;retvia stopMotion<br>
+    ;----------------------------------------------------<br>
+    homeDone:&nbsp;&nbsp; ;we are done homing<br>
+    &nbsp;&nbsp;&nbsp; inc curPos ;;where we will be when these steps are complete<br>
+    &nbsp;&nbsp;&nbsp; goto computeMove<br>
+    <br>
+    ;----------------------------------------------------<br>
+    startFining:&nbsp;&nbsp;&nbsp; ;find out how wide home mark is<br>
+    &nbsp;&nbsp;&nbsp; setb refining<br>
+    &nbsp;&nbsp;&nbsp; clr homeWidth<br>
+    &nbsp;&nbsp;&nbsp; ;motion direction is always not forward at this point...<br>
+    &nbsp;&nbsp;&nbsp; dset8 stepsTil,maxHomeWidth<br>
+    &nbsp;retvia anotherStep&nbsp; ;a pretty gross timeout, could do 1/4 pos...<br>
+    <br>
+    refiningHome: ;after each refining step<br>
+    &nbsp;&nbsp;&nbsp; ifbit moveFwd,goto centeringHome<br>
+    ;sizingHome:<br>
+    &nbsp;&nbsp;&nbsp; inc homeWidth<br>
+    &nbsp;&nbsp;&nbsp; ;check if still home<br>
+    &nbsp;&nbsp;&nbsp; call isHome ;set z if home<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,retvia homeMore&nbsp;&nbsp;&nbsp; ;which timesout<br>
+    ;movetoCenter:<br>
+    &nbsp;&nbsp;&nbsp; setb moveFwd<br>
+    &nbsp;&nbsp;&nbsp; dset8 stepsTil,homeWidth<br>
+    &nbsp;&nbsp;&nbsp; ;divide by 2 via shift<br>
+    &nbsp;&nbsp;&nbsp; clrb c<br>
+    &nbsp;&nbsp;&nbsp; shr stepsTil<br>
+    &nbsp;&nbsp;&nbsp; ;round up, compensates a bit for sensor hysteresis<br>
+    &nbsp;&nbsp;&nbsp; ifbit c,inc stepsTil&nbsp;&nbsp;&nbsp; ;but don't worry about carry...<br>
+    &nbsp;retvia anotherStep<br>
+    <br>
+    centeringHome:<br>
+    &nbsp;&nbsp;&nbsp; ;just counting down til motion complete<br>
+    &nbsp;&nbsp;&nbsp; dcheck stepsTil<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,goto finallyHome<br>
+    &nbsp;retvia homeMore<br>
+    <br>
+    homefound:&nbsp; ;coarse seek completed<br>
+    &nbsp;&nbsp;&nbsp; ifbit wideHome,goto startFining<br>
+    &nbsp;&nbsp;&nbsp; dclr stepsTil&nbsp;&nbsp;&nbsp; ;motion complete<br>
+    finallyHome:<br>
+    &nbsp;&nbsp;&nbsp; call stopMotion ;since step count was a maximum, not a desired<br>
+    &nbsp;&nbsp;&nbsp; ;*state change*<br>
+    &nbsp;&nbsp;&nbsp; clrb needHoming<br>
+    &nbsp;&nbsp;&nbsp; clrb refining&nbsp;&nbsp; ;for cleanliness<br>
+    &nbsp;&nbsp;&nbsp; clr curPos<br>
+    &nbsp;&nbsp;&nbsp; ;;if home offset then start a move<br>
+    &nbsp;goto homeDone&nbsp;&nbsp; ;;home offset is NYI<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; load homeOffset<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,goto homeDone&nbsp;&nbsp; ;if no offset<br>
+    &nbsp;&nbsp;&nbsp; ;;if negative go backwards<br>
+    &nbsp;&nbsp;&nbsp; ifbit homeEarly,goto offBack&nbsp;&nbsp;&nbsp; ;negative value<br>
+    ;offFore:&nbsp;&nbsp;&nbsp; ;back away from home sensor<br>
+    &nbsp;&nbsp;&nbsp; setb moveFwd&nbsp;&nbsp;&nbsp; ;home is on position 2 side of position 1<br>
+    &nbsp;&nbsp;&nbsp; store stepsTil<br>
+    &nbsp;&nbsp;&nbsp; ;ms byte is still clear<br>
+    &nbsp;retvia startMotion<br>
+    <br>
+    offBack:&nbsp;&nbsp;&nbsp; ;go deeper onto home sensor<br>
+    &nbsp;&nbsp;&nbsp; clrb moveFwd&nbsp;&nbsp;&nbsp; ;position 1 is forward of home<br>
+    &nbsp;&nbsp;&nbsp; subfrom stepsTil; 0-(-value) = +value.<br>
+    &nbsp;&nbsp;&nbsp; ;ms byte is still clear<br>
+    &nbsp;retvia startMotion<br>
+    ;----------------------------------------------------<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ; given current position and desired compute amount<br>
+    ;&nbsp;&nbsp; to move and initiate motion.<br>
+    ;----------------------------------------------------<br>
+    computeMove: ;once we are homed see if we need to move<br>
+    &nbsp;&nbsp;&nbsp; load&nbsp;&nbsp; curPos<br>
+    &nbsp;&nbsp;&nbsp; chsadd target<br>
+    &nbsp;&nbsp;&nbsp; store deltaPos&nbsp; ;target-current<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,goto moveDone&nbsp;&nbsp; ;nochange, we do not move<br>
+    &nbsp;&nbsp;&nbsp; ;else we need to move<br>
+    &nbsp;&nbsp;&nbsp; ifbit isCircular,call bestway&nbsp;&nbsp; ;optimize direction, if allowed to<br>
+    &nbsp;&nbsp;&nbsp; setb moveFwd&nbsp;&nbsp;&nbsp; ;hopefully forward<br>
+    &nbsp;&nbsp;&nbsp; ifbit deltaSign, call reverseMove ;wrong, go backwards<br>
+    &nbsp;&nbsp;&nbsp; call computeSteps&nbsp;&nbsp;&nbsp;&nbsp; ;compute total number of steps needed<br>
+    &nbsp;retvia startMotion<br>
+    <br>
+    reverseMove:<br>
+    &nbsp;&nbsp;&nbsp; clrb moveFwd<br>
+    &nbsp;&nbsp;&nbsp; chs deltaPos<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    <br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; bestway: chooses shortest motion to get to target<br>
+    ;----------------------------------------------------<br>
+    bestway:&nbsp;&nbsp;&nbsp; ;with an eg. of an 8 position wheel<br>
+    &nbsp;&nbsp;&nbsp; load deltaPos<br>
+    &nbsp;&nbsp;&nbsp; store bestWay<br>
+    &nbsp;&nbsp;&nbsp; goto echo1<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; load numPositions<br>
+    &nbsp;&nbsp;&nbsp; ifbit deltaSign,addto bestWay<br>
+    &nbsp;&nbsp;&nbsp; ifnot deltaSign,subfrom bestWay<br>
+    &nbsp;&nbsp;&nbsp; ;bestway is now an equivalent move<br>
+    echo1:<br>
+    &nbsp;&nbsp;&nbsp; ;store computation<br>
+    &nbsp;&nbsp;&nbsp; load bestWay<br>
+    &nbsp;&nbsp;&nbsp; store markTol<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; check parameters to see if we have enough info to<br>
+    ;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; allow motion<br>
+    ;----------------------------------------------------<br>
+    checkParams:<br>
+    &nbsp;&nbsp;&nbsp; setb needParams ;pessimistic presumption<br>
+    &nbsp;&nbsp;&nbsp; ifnot rateValid,return<br>
+    ;not a critical param--&nbsp;&nbsp;&nbsp; ifnot markTolValid,return<br>
+    &nbsp;&nbsp;&nbsp; ifnot numPosValid,return<br>
+    &nbsp;&nbsp;&nbsp; ifnot numPerValid,return<br>
+    &nbsp;&nbsp;&nbsp; ;glory be! everything is copacetic for motion<br>
+    &nbsp;&nbsp;&nbsp; clrb needParams<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; calculate stepsTil = deltaPos*stepsPer<br>
+    ;----------------------------------------------------<br>
+    computeSteps: ;deltaPos is number of positions to move<br>
+    &nbsp;&nbsp;&nbsp; dclr stepsTil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;stepsPer=0<br>
+    &nbsp;&nbsp;&nbsp; check deltaPos<br>
+    &nbsp;&nbsp;&nbsp; ifbit z, return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;if(!deltaPos) return False;<br>
+    &nbsp;&nbsp;&nbsp; ifbit deltaSign,goto ErrorState<br>
+    compsteploop:&nbsp; ;multiply via repeated additions<br>
+    &nbsp;&nbsp;&nbsp; dsum8 stepsTil,stepsPer&nbsp;&nbsp;&nbsp;&nbsp; ;stepsPer+=stepsTil<br>
+    &nbsp;&nbsp;&nbsp; djnz deltaPos,compsteploop&nbsp; ;while(--deltaPos);<br>
+    &nbsp;&nbsp;&nbsp; dcheck stepsTil<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 21(x15)<br>
+    ;&nbsp;&nbsp; stepper motor state<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; .if 0&nbsp;&nbsp; ;state transition table<br>
+    EVENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FORCES THESE SETTINGS<br>
+    posState&nbsp;&nbsp;&nbsp; amOk&nbsp;&nbsp;&nbsp; amMoving&nbsp;&nbsp;&nbsp; needHoming&nbsp; needParams<br>
+    powerup&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br>
+    paramsOk&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+    goto 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+    found 0&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+    goto x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+    mark failur 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+    home failur 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+    ? do we finish nominal move ??<br>
+    <br>
+    encoded&nbsp; 3&nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; ;8 variants<br>
+    reply&nbsp;&nbsp;&nbsp; 1&nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; ;4 variants<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp; x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; ;2 variants<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; ;1 variant<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; ;1 "can't happen"<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =16, all cases covered<br>
+    &nbsp;&nbsp;&nbsp; .endif<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; .if debugpos&gt;0<br>
+    sz_posState = 2 ;force state flags<br>
+    &nbsp;&nbsp;&nbsp; .else<br>
+    sz_posState = 0 ;read only<br>
+    &nbsp;&nbsp;&nbsp; .endif<br>
+    rd_posState:&nbsp;&nbsp;&nbsp; ;priority encode 4 state bits into simpler enum.<br>
+    &nbsp;&nbsp;&nbsp; ;priority encode status from 16 cases to 4<br>
+    &nbsp;&nbsp;&nbsp; ifbit needParams,retvia putFubar<br>
+    &nbsp;&nbsp;&nbsp; ifbit amMoving,&nbsp; retvia putBusy<br>
+    &nbsp;&nbsp;&nbsp; ifbit needHoming,retvia putError<br>
+    &nbsp;&nbsp;&nbsp; ifbit amOk,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; retvia putOk<br>
+    &nbsp;retvia putFubar; shouldn't ever get here unless software is buggy<br>
+    <br>
+    wr_posState:<br>
+    &nbsp;&nbsp;&nbsp; .if debugpos&gt;0<br>
+    &nbsp;&nbsp;&nbsp; getchar posState<br>
+    &nbsp;&nbsp;&nbsp; getchar posParmflags<br>
+    &nbsp;&nbsp;&nbsp; .endif<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 12(x0C)<br>
+    ;&nbsp;&nbsp; isCircular<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbit isCircular<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 14(x0E)<br>
+    ;&nbsp;&nbsp; wide home<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbyte maxHomeWidth<br>
+    &nbsp;&nbsp;&nbsp; copynot z,wideHome<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 20(x14)<br>
+    ;&nbsp;&nbsp; timer config code<br>
+    ;----------------------------------------------------<br>
+    sz_tick1Cfg = 1<br>
+    <br>
+    rd_tick1Cfg:&nbsp;&nbsp;&nbsp; ;might not match what is written if timer is active<br>
+    &nbsp;&nbsp;&nbsp; putchar t1con<br>
+    &nbsp;&nbsp;&nbsp; putchar t1load<br>
+    &nbsp;&nbsp;&nbsp; putchar t1load+1<br>
+    &nbsp;return<br>
+    <br>
+    wr_tick1Cfg:<br>
+    &nbsp;&nbsp;&nbsp; call getch<br>
+    &nbsp;&nbsp;&nbsp; store t1mode<br>
+    &nbsp;&nbsp;&nbsp; ifbit freeRun,call startMotion<br>
+    &nbsp;&nbsp;&nbsp; ifnot freeRun,call stopMotion<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 17(x11)<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapword cruiseRate<br>
+    &nbsp;&nbsp;&nbsp; setb rateValid&nbsp; ;no rates are invalid<br>
+    &nbsp;&nbsp;&nbsp; call checkParams<br>
+    &nbsp;&nbsp;&nbsp; .if DEBUGt1<br>
+    &nbsp;&nbsp;&nbsp; call loadCruiseRate&nbsp; ;user beware if we are moving...<br>
+    &nbsp;&nbsp;&nbsp; .endif<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 18: start value<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapword startRate<br>
+    &nbsp;&nbsp;&nbsp; .if DEBUGt1<br>
+    &nbsp;&nbsp;&nbsp; call loadStartrate&nbsp; ;user beware if we are moving...<br>
+    &nbsp;&nbsp;&nbsp; .endif<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 19: accelerate<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapword acceleRate<br>
+    &nbsp;&nbsp;&nbsp; setb accel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;accel feature enabled<br>
+    &nbsp;&nbsp;&nbsp; load acceleRate<br>
+    &nbsp;&nbsp;&nbsp; or&nbsp;&nbsp; acceleRate+1<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,clrb accel&nbsp; ;NO!, set to zero is same as not set.<br>
+    &nbsp;&nbsp;&nbsp; ;;---not ready for accel yet<br>
+    &nbsp;&nbsp;&nbsp; clrb accel&nbsp; ;NO!, set to zero is same as not set.<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 16: mark input tolerance/enable<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbyte markTol<br>
+    &nbsp;&nbsp;&nbsp; setb markTolValid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,clrb markTolValid&nbsp;&nbsp; ;if zero then mark ignored<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 15: steps from home to position 1, negative allowed<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbyte homeOffset<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 10(x0A)<br>
+    ;&nbsp;&nbsp; total positions<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbyte numPositions<br>
+    &nbsp;&nbsp;&nbsp; setb numPosValid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;presume Ok<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,clrb numPosValid&nbsp;&nbsp;&nbsp; ;nope, not ok.<br>
+    &nbsp;&nbsp;&nbsp; call checkParams<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 11(x0B)<br>
+    ;&nbsp;&nbsp; steps per position (usually 0%4)<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbyte stepsPer<br>
+    &nbsp;&nbsp;&nbsp; setb numPerValid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;presume Ok<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,clrb numPerValid&nbsp;&nbsp;&nbsp; ;nope, not ok.<br>
+    &nbsp;&nbsp;&nbsp; call checkParams<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 23(x17)<br>
+    ;&nbsp;&nbsp; where we are<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbyte curPos<br>
+    &nbsp;&nbsp;&nbsp; .if debugpos<br>
+    &nbsp;&nbsp;&nbsp; putchar posState<br>
+    &nbsp;&nbsp;&nbsp; putchar posParmflags<br>
+    &nbsp;&nbsp;&nbsp; .endif<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 24(x18)<br>
+    ;&nbsp;&nbsp; step within position<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapword stepsTil<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 22(x16)<br>
+    ;&nbsp;&nbsp; target == desired position<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbyte target<br>
+    ;targeted:<br>
+    &nbsp;&nbsp;&nbsp; ifbit needParams, return&nbsp;&nbsp;&nbsp; ;don't know how to move yet.<br>
+    &nbsp;&nbsp;&nbsp; load target<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,setb needHoming ;goto 0 means rehome even if you think you are ok.<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,inc target&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;and zero is not allowed as a final resting place.<br>
+    &nbsp;&nbsp;&nbsp; ;if not homed then do it now:<br>
+    &nbsp;&nbsp;&nbsp; ifbit needHoming,retvia startHoming ;;Note: we can home even if moving, a minor convenience<br>
+    &nbsp;&nbsp;&nbsp; ifbit amMoving,retvia startHoming&nbsp; ;;we have a conflict! added @A4<br>
+    &nbsp;retvia computeMove<br>
+    ;----------------------------------------------------<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; set motor speed, via setting step interval time<br>
+    ;----------------------------------------------------<br>
+    loadStartrate:&nbsp; ;will be picked up on next timer tick (if alive)<br>
+    &nbsp;&nbsp;&nbsp; dset t1load,startRate<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,goto loadCruiseRate<br>
+    &nbsp;return<br>
+    <br>
+    firstRate:&nbsp; ;rate for first step<br>
+    &nbsp;&nbsp;&nbsp; ifbit accel,goto loadStartrate<br>
+    loadCruiseRate:<br>
+    &nbsp;&nbsp;&nbsp; dset t1load,cruiseRate<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; Error state<br>
+    ;----------------------------------------------------<br>
+    ErrorState: ;an error has occured, freeze and forget where we are<br>
+    &nbsp;&nbsp;&nbsp; call tick1Stop<br>
+    &nbsp;&nbsp;&nbsp; ;*state change*<br>
+    &nbsp;&nbsp;&nbsp; clrb amOk<br>
+    &nbsp;&nbsp;&nbsp; clrb amMoving<br>
+    &nbsp;&nbsp;&nbsp; dclr stepsTil<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; clr curPos<br>
+    &nbsp;&nbsp;&nbsp; setb needHoming<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; powerup state<br>
+    ;----------------------------------------------------<br>
+    <br>
+    posInit:<br>
+    &nbsp;&nbsp;&nbsp; call tick1init&nbsp; ;which includes stopping it<br>
+    &nbsp;&nbsp;&nbsp; clr posState&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;clear all bits<br>
+    &nbsp;&nbsp;&nbsp; clr posParmflags&nbsp;&nbsp;&nbsp; ;in anticipation of future high active use<br>
+    ;;<br>
+    &nbsp;&nbsp;&nbsp; clrb isCircular ;pessimistic,worst case motion occurs<br>
+    &nbsp;&nbsp;&nbsp; clrb wideHome&nbsp;&nbsp; ;simplest homing<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; clr homeOffset&nbsp;&nbsp; ;home is synonymous with position 1<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; clr markTol;0 tolerance means NO MARKS!<br>
+    &nbsp;&nbsp;&nbsp; clrb markTolValid<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; clr numPositions ;illegal and as such will not move<br>
+    &nbsp;&nbsp;&nbsp; clrb numPosValid<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; clr stepsPer&nbsp;&nbsp;&nbsp;&nbsp; ;illegal and as such will not move<br>
+    &nbsp;&nbsp;&nbsp; clrb numPerValid<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; dclr startRate<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; dclr acceleRate<br>
+    &nbsp;&nbsp;&nbsp; clrb accel<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; dclr cruiseRate<br>
+    &nbsp;&nbsp;&nbsp; clrb rateValid<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; ;the state is "one hot" encoded<br>
+    &nbsp;&nbsp;&nbsp; setb needParams ;we won't move until all params are ok<br>
+    &nbsp;&nbsp;&nbsp; clrb amOk<br>
+    &nbsp;&nbsp;&nbsp; clrb amMoving<br>
+    &nbsp;&nbsp;&nbsp; dclr stepsTil<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; clr curPos<br>
+    &nbsp;&nbsp;&nbsp; setb needHoming<br>
+    &nbsp;return ;<br>
+    <br>
+    ;end of file c:\300.prj\pd51a\position.asp<br>
+    ;file c:\300.prj\pd51a\pd51astp.asp<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; stepper motor data structure<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; DATASEG<br>
+    numphases = 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;must be a power of two!<br>
+    phase .ds 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;runs 0-&gt;numphases-1 for stepping, ==numphases when off<br>
+    offphase = 3,phase&nbsp; ;log base 2 of numphases!<br>
+    phaselsb = 0,phase&nbsp; ;useful in wrap handler<br>
+    <br>
+    stpCfgbits .ds 1<br>
+    fullstep = 0,stpCfgbits<br>
+    highMark = 1,stpCfgbits<br>
+    highHome = 2,stpCfgbits<br>
+    ;= 3,stpCfgbits<br>
+    ;= 4,stpCfgbits<br>
+    ;= 5,stpCfgbits<br>
+    ;= 6,stpCfgbits<br>
+    moveFwd&nbsp; = 7,stpCfgbits ;parameter for doastep<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; CODESEG<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; proc isHome sets Z if home sensor is ACTIVE<br>
+    ;----------------------------------------------------<br>
+    isHome: ;z=at home<br>
+    <br>
+    &nbsp;.if debughome<br>
+    &nbsp;&nbsp;&nbsp; call isHomeOn<br>
+    &nbsp;&nbsp;&nbsp; ifnot stphome,clrb db16<br>
+    &nbsp;&nbsp;&nbsp; ifbit stphome,setb db16<br>
+    &nbsp;&nbsp;&nbsp; ifnot z,clrb db17<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,setb db17<br>
+    &nbsp;&nbsp;&nbsp; return<br>
+    isHomeOn:<br>
+    &nbsp;.endif<br>
+    &nbsp;&nbsp;&nbsp; ;can't use xor to modify Z bit as the xor itself sets Z when done.<br>
+    &nbsp;&nbsp;&nbsp; clrb z<br>
+    &nbsp;&nbsp;&nbsp; ifbit highHome,goto ish1<br>
+    &nbsp;&nbsp;&nbsp; ifnot stphome,setb z&nbsp;&nbsp;&nbsp; ;we are home if input is low<br>
+    &nbsp;return<br>
+    <br>
+    ish1:;we are at home if input bit is high<br>
+    &nbsp;&nbsp;&nbsp; ifbit stphome,setb z<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; proc onMark sets Z if home sensor is ACTIVE<br>
+    ;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if marks are not configured then treated as ACTIVE<br>
+    ;----------------------------------------------------<br>
+    onMark:<br>
+    &nbsp;&nbsp;&nbsp; setb z&nbsp; ;<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    ; programmable polarity boolean LAP input<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 5: at home<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; logiclap athome,stphome,highHome<br>
+    &nbsp;&nbsp;&nbsp; ;write demon???<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 6: at mark<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; logiclap atmark,stpmark,highMark<br>
+    &nbsp;&nbsp;&nbsp; ;write demon???<br>
+    &nbsp;return&nbsp;&nbsp;&nbsp; <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 13: fullstep mode control<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbit fullstep<br>
+    &nbsp;&nbsp;&nbsp; ifnot z,clrb phaselsb&nbsp;&nbsp; ;ensure valid half of table<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; stepper motor logical to physical mappings<br>
+    ;----------------------------------------------------<br>
+    <br>
+    killstepper:<br>
+    &nbsp;&nbsp;&nbsp; ;this time round just do the bit<br>
+    &nbsp;&nbsp;&nbsp; clrb stpenable ;high lets it run<br>
+    &nbsp;return<br>
+    <br>
+    firstphase: ;goto a valid full force step:<br>
+    &nbsp;&nbsp;&nbsp; clr phase&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;zero is the easiest place to start<br>
+    &nbsp;&nbsp;&nbsp; call phaseout<br>
+    &nbsp;&nbsp;&nbsp; ;join<br>
+    freestepper:<br>
+    &nbsp;&nbsp;&nbsp; setb stpenable ;high lets it run<br>
+    &nbsp;return<br>
+    <br>
+    doaStep:<br>
+    &nbsp;&nbsp;&nbsp; ;if we are turned off via phase==numphases then goto phase 0<br>
+    &nbsp;&nbsp;&nbsp; ifbit offphase,goto firstphase ;clr phase,send it out, and enable<br>
+    &nbsp;&nbsp;&nbsp; ifbit moveFwd,inc phase&nbsp;&nbsp; ;forward<br>
+    &nbsp;&nbsp;&nbsp; ifnot moveFwd,dec phase&nbsp;&nbsp; ;reverse<br>
+    &nbsp;&nbsp;&nbsp; ifnot fullstep,goto phasewrap<br>
+    &nbsp;&nbsp;&nbsp; ;step again, same direction<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ifnot z,inc phase&nbsp;&nbsp; ;forward<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ifbit z,dec phase&nbsp;&nbsp; ;reverse<br>
+    phasewrap:<br>
+    &nbsp; ;presumes numphases is a power of two<br>
+    &nbsp;&nbsp;&nbsp; loadi numphases-1<br>
+    &nbsp;&nbsp;&nbsp; andto phase<br>
+    &nbsp;goto phaseout<br>
+    ; return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; stepper motor phase translation table<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; reserve 14+6&nbsp; ;leave room for debug as well<br>
+    phaseout:&nbsp;&nbsp; ;map phase code and set the real control bits<br>
+    &nbsp;load phase<br>
+    &nbsp;&nbsp;&nbsp; nop;; store porta<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; loadi &gt;*<br>
+    &nbsp;&nbsp;&nbsp; store pclath<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; load phase<br>
+    &nbsp;&nbsp;&nbsp; addto pc<br>
+    &nbsp;&nbsp;&nbsp; goto ph0<br>
+    &nbsp;&nbsp;&nbsp; goto ph1<br>
+    &nbsp;&nbsp;&nbsp; goto ph2<br>
+    &nbsp;&nbsp;&nbsp; goto ph3<br>
+    &nbsp;&nbsp;&nbsp; goto ph4<br>
+    &nbsp;&nbsp;&nbsp; goto ph5<br>
+    &nbsp;&nbsp;&nbsp; goto ph6<br>
+    &nbsp;&nbsp;&nbsp; goto ph7<br>
+    &nbsp;&nbsp;&nbsp; goto ph8<br>
+    &nbsp;&nbsp;&nbsp; goto ph8&nbsp;&nbsp;&nbsp; ;one more for luck w/fullstepper<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; checkreserve phaseout<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; ;in each phase gizmo do the breaks before the makes, i.e.<br>
+    &nbsp;&nbsp;&nbsp; ;turn off all the coils that are to be off before<br>
+    &nbsp;&nbsp;&nbsp; ;turning on all those that are to be on.<br>
+    <br>
+    ph0: ; $50 ;--<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy1<br>
+    &nbsp;return<br>
+    <br>
+    ph1: ; $40 ;-0<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phx1<br>
+    &nbsp;return<br>
+    <br>
+    ph2: ; $60 ;-+<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy0<br>
+    &nbsp;return<br>
+    <br>
+    ph3: ; $20 ;0+<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy0<br>
+    &nbsp;return<br>
+    <br>
+    ph4: ; $A0 ;++<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp; setb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy0<br>
+    &nbsp;return<br>
+    <br>
+    ph5: ; $80 ;+0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp; setb phx0<br>
+    &nbsp;return<br>
+    <br>
+    ph6: ; $90 ;+-<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp; setb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy1<br>
+    &nbsp;return<br>
+    <br>
+    ph7: ; $10 ;0-<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy1<br>
+    &nbsp;return<br>
+    <br>
+    ph8: ; $00 ;all off<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 7: step one notch, forward or back<br>
+    ;----------------------------------------------------<br>
+    sz_stpStep = 1<br>
+    <br>
+    rd_stpStep:<br>
+    &nbsp;&nbsp;&nbsp; putchar phase<br>
+    &nbsp;return<br>
+    <br>
+    wr_stpStep:<br>
+    &nbsp;&nbsp;&nbsp; call getch<br>
+    &nbsp;&nbsp;&nbsp; copybit z,moveFwd<br>
+    &nbsp;&nbsp;&nbsp; call doaStep<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 8(x08)<br>
+    ;&nbsp;&nbsp; stepper motor phase pointer, also used internally<br>
+    ;----------------------------------------------------<br>
+    sz_setphase = 1<br>
+    <br>
+    rd_setphase:<br>
+    &nbsp;&nbsp;&nbsp; loadswap portb<br>
+    &nbsp;&nbsp;&nbsp; call putch<br>
+    &nbsp;return<br>
+    <br>
+    wr_setphase:<br>
+    &nbsp;&nbsp;&nbsp; call getch<br>
+    &nbsp;&nbsp;&nbsp; ;join<br>
+    setphase: ;Wacc is new phase desired<br>
+    &nbsp;&nbsp;&nbsp; store phase<br>
+    &nbsp;&nbsp;&nbsp; subi numphases<br>
+    &nbsp;&nbsp;&nbsp; jnc phaseout<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; loadi numphases ;highest legit code<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; store phase<br>
+    &nbsp;&nbsp;&nbsp; call phaseout<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 9: stepper motor _enable<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbit stpenable<br>
+    &nbsp;&nbsp;&nbsp; ifbit stpenable,goto freestepper&nbsp; ;this time round just do the bit<br>
+    &nbsp;goto killstepper<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; stepper motor powerup init<br>
+    ;----------------------------------------------------<br>
+    stpInit:&nbsp;&nbsp;&nbsp; ;explicitly hit ALL stepper controls<br>
+    &nbsp;&nbsp;&nbsp; clrb stpenable&nbsp; ;disable<br>
+    &nbsp;&nbsp;&nbsp; loadi numphases&nbsp; ;doubly so<br>
+    &nbsp;&nbsp;&nbsp; call setphase&nbsp;&nbsp;&nbsp; ;this phase is all off<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; clrb fullstep&nbsp;&nbsp; ;half stepping<br>
+    &nbsp;&nbsp;&nbsp; clrb highHome&nbsp;&nbsp; ;low active home<br>
+    &nbsp;&nbsp;&nbsp; clrb highMark&nbsp;&nbsp; ;low active mark<br>
+    <br>
+    &nbsp;return<br>
+    <br>
+    ;end of c:\300.prj\pd51a\pd51astp.asp<br>
+    ;file c:\300.prj\pd51a\pd51astp.asp<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; stepper motor data structure<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; DATASEG<br>
+    numphases = 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;must be a power of two!<br>
+    phase .ds 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;runs 0-&gt;numphases-1 for stepping, ==numphases when off<br>
+    offphase = 3,phase&nbsp; ;log base 2 of numphases!<br>
+    phaselsb = 0,phase&nbsp; ;useful in wrap handler<br>
+    <br>
+    stpCfgbits .ds 1<br>
+    fullstep = 0,stpCfgbits<br>
+    highMark = 1,stpCfgbits<br>
+    highHome = 2,stpCfgbits<br>
+    ;= 3,stpCfgbits<br>
+    ;= 4,stpCfgbits<br>
+    ;= 5,stpCfgbits<br>
+    ;= 6,stpCfgbits<br>
+    moveFwd&nbsp; = 7,stpCfgbits ;parameter for doastep<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; CODESEG<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; proc isHome sets Z if home sensor is ACTIVE<br>
+    ;----------------------------------------------------<br>
+    isHome: ;z=at home<br>
+    <br>
+    &nbsp;.if debughome<br>
+    &nbsp;&nbsp;&nbsp; call isHomeOn<br>
+    &nbsp;&nbsp;&nbsp; ifnot stphome,clrb db16<br>
+    &nbsp;&nbsp;&nbsp; ifbit stphome,setb db16<br>
+    &nbsp;&nbsp;&nbsp; ifnot z,clrb db17<br>
+    &nbsp;&nbsp;&nbsp; ifbit z,setb db17<br>
+    &nbsp;&nbsp;&nbsp; return<br>
+    isHomeOn:<br>
+    &nbsp;.endif<br>
+    &nbsp;&nbsp;&nbsp; ;can't use xor to modify Z bit as the xor itself sets Z when done.<br>
+    &nbsp;&nbsp;&nbsp; clrb z<br>
+    &nbsp;&nbsp;&nbsp; ifbit highHome,goto ish1<br>
+    &nbsp;&nbsp;&nbsp; ifnot stphome,setb z&nbsp;&nbsp;&nbsp; ;we are home if input is low<br>
+    &nbsp;return<br>
+    <br>
+    ish1:;we are at home if input bit is high<br>
+    &nbsp;&nbsp;&nbsp; ifbit stphome,setb z<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; proc onMark sets Z if home sensor is ACTIVE<br>
+    ;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if marks are not configured then treated as ACTIVE<br>
+    ;----------------------------------------------------<br>
+    onMark:<br>
+    &nbsp;&nbsp;&nbsp; setb z&nbsp; ;<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    ; programmable polarity boolean LAP input<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 5: at home<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; logiclap athome,stphome,highHome<br>
+    &nbsp;&nbsp;&nbsp; ;write demon???<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 6: at mark<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; logiclap atmark,stpmark,highMark<br>
+    &nbsp;&nbsp;&nbsp; ;write demon???<br>
+    &nbsp;return&nbsp;&nbsp;&nbsp; <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 13: fullstep mode control<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbit fullstep<br>
+    &nbsp;&nbsp;&nbsp; ifnot z,clrb phaselsb&nbsp;&nbsp; ;ensure valid half of table<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; stepper motor logical to physical mappings<br>
+    ;----------------------------------------------------<br>
+    <br>
+    killstepper:<br>
+    &nbsp;&nbsp;&nbsp; ;this time round just do the bit<br>
+    &nbsp;&nbsp;&nbsp; clrb stpenable ;high lets it run<br>
+    &nbsp;return<br>
+    <br>
+    firstphase: ;goto a valid full force step:<br>
+    &nbsp;&nbsp;&nbsp; clr phase&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;zero is the easiest place to start<br>
+    &nbsp;&nbsp;&nbsp; call phaseout<br>
+    &nbsp;&nbsp;&nbsp; ;join<br>
+    freestepper:<br>
+    &nbsp;&nbsp;&nbsp; setb stpenable ;high lets it run<br>
+    &nbsp;return<br>
+    <br>
+    doaStep:<br>
+    &nbsp;&nbsp;&nbsp; ;if we are turned off via phase==numphases then goto phase 0<br>
+    &nbsp;&nbsp;&nbsp; ifbit offphase,goto firstphase ;clr phase,send it out, and enable<br>
+    &nbsp;&nbsp;&nbsp; ifbit moveFwd,inc phase&nbsp;&nbsp; ;forward<br>
+    &nbsp;&nbsp;&nbsp; ifnot moveFwd,dec phase&nbsp;&nbsp; ;reverse<br>
+    &nbsp;&nbsp;&nbsp; ifnot fullstep,goto phasewrap<br>
+    &nbsp;&nbsp;&nbsp; ;step again, same direction<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ifnot z,inc phase&nbsp;&nbsp; ;forward<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ifbit z,dec phase&nbsp;&nbsp; ;reverse<br>
+    phasewrap:<br>
+    &nbsp; ;presumes numphases is a power of two<br>
+    &nbsp;&nbsp;&nbsp; loadi numphases-1<br>
+    &nbsp;&nbsp;&nbsp; andto phase<br>
+    &nbsp;goto phaseout<br>
+    ; return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; stepper motor phase translation table<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; reserve 14+6&nbsp; ;leave room for debug as well<br>
+    phaseout:&nbsp;&nbsp; ;map phase code and set the real control bits<br>
+    &nbsp;load phase<br>
+    &nbsp;&nbsp;&nbsp; nop;; store porta<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; loadi &gt;*<br>
+    &nbsp;&nbsp;&nbsp; store pclath<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; load phase<br>
+    &nbsp;&nbsp;&nbsp; addto pc<br>
+    &nbsp;&nbsp;&nbsp; goto ph0<br>
+    &nbsp;&nbsp;&nbsp; goto ph1<br>
+    &nbsp;&nbsp;&nbsp; goto ph2<br>
+    &nbsp;&nbsp;&nbsp; goto ph3<br>
+    &nbsp;&nbsp;&nbsp; goto ph4<br>
+    &nbsp;&nbsp;&nbsp; goto ph5<br>
+    &nbsp;&nbsp;&nbsp; goto ph6<br>
+    &nbsp;&nbsp;&nbsp; goto ph7<br>
+    &nbsp;&nbsp;&nbsp; goto ph8<br>
+    &nbsp;&nbsp;&nbsp; goto ph8&nbsp;&nbsp;&nbsp; ;one more for luck w/fullstepper<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; checkreserve phaseout<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; ;in each phase gizmo do the breaks before the makes, i.e.<br>
+    &nbsp;&nbsp;&nbsp; ;turn off all the coils that are to be off before<br>
+    &nbsp;&nbsp;&nbsp; ;turning on all those that are to be on.<br>
+    <br>
+    ph0: ; $50 ;--<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy1<br>
+    &nbsp;return<br>
+    <br>
+    ph1: ; $40 ;-0<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phx1<br>
+    &nbsp;return<br>
+    <br>
+    ph2: ; $60 ;-+<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy0<br>
+    &nbsp;return<br>
+    <br>
+    ph3: ; $20 ;0+<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy0<br>
+    &nbsp;return<br>
+    <br>
+    ph4: ; $A0 ;++<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp; setb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy0<br>
+    &nbsp;return<br>
+    <br>
+    ph5: ; $80 ;+0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp; setb phx0<br>
+    &nbsp;return<br>
+    <br>
+    ph6: ; $90 ;+-<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp; setb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy1<br>
+    &nbsp;return<br>
+    <br>
+    ph7: ; $10 ;0-<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setb phy1<br>
+    &nbsp;return<br>
+    <br>
+    ph8: ; $00 ;all off<br>
+    &nbsp;&nbsp;&nbsp; clrb phx0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy0<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phx1<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clrb phy1<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 7: step one notch, forward or back<br>
+    ;----------------------------------------------------<br>
+    sz_stpStep = 1<br>
+    <br>
+    rd_stpStep:<br>
+    &nbsp;&nbsp;&nbsp; putchar phase<br>
+    &nbsp;return<br>
+    <br>
+    wr_stpStep:<br>
+    &nbsp;&nbsp;&nbsp; call getch<br>
+    &nbsp;&nbsp;&nbsp; copybit z,moveFwd<br>
+    &nbsp;&nbsp;&nbsp; call doaStep<br>
+    &nbsp;return<br>
+    <br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 8(x08)<br>
+    ;&nbsp;&nbsp; stepper motor phase pointer, also used internally<br>
+    ;----------------------------------------------------<br>
+    sz_setphase = 1<br>
+    <br>
+    rd_setphase:<br>
+    &nbsp;&nbsp;&nbsp; loadswap portb<br>
+    &nbsp;&nbsp;&nbsp; call putch<br>
+    &nbsp;return<br>
+    <br>
+    wr_setphase:<br>
+    &nbsp;&nbsp;&nbsp; call getch<br>
+    &nbsp;&nbsp;&nbsp; ;join<br>
+    setphase: ;Wacc is new phase desired<br>
+    &nbsp;&nbsp;&nbsp; store phase<br>
+    &nbsp;&nbsp;&nbsp; subi numphases<br>
+    &nbsp;&nbsp;&nbsp; jnc phaseout<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; loadi numphases ;highest legit code<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; store phase<br>
+    &nbsp;&nbsp;&nbsp; call phaseout<br>
+    &nbsp;return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; LAP 9: stepper motor _enable<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; lapbit stpenable<br>
+    &nbsp;&nbsp;&nbsp; ifbit stpenable,goto freestepper&nbsp; ;this time round just do the bit<br>
+    &nbsp;goto killstepper<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; stepper motor powerup init<br>
+    ;----------------------------------------------------<br>
+    stpInit:&nbsp;&nbsp;&nbsp; ;explicitly hit ALL stepper controls<br>
+    &nbsp;&nbsp;&nbsp; clrb stpenable&nbsp; ;disable<br>
+    &nbsp;&nbsp;&nbsp; loadi numphases&nbsp; ;doubly so<br>
+    &nbsp;&nbsp;&nbsp; call setphase&nbsp;&nbsp;&nbsp; ;this phase is all off<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; clrb fullstep&nbsp;&nbsp; ;half stepping<br>
+    &nbsp;&nbsp;&nbsp; clrb highHome&nbsp;&nbsp; ;low active home<br>
+    &nbsp;&nbsp;&nbsp; clrb highMark&nbsp;&nbsp; ;low active mark<br>
+    <br>
+    &nbsp;return<br>
+    <br>
+    ;end of c:\300.prj\pd51a\pd51astp.asp<br>
+    ;;pinout:<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; hardware organization of PC51 A<br>
+    ;----------------------------------------------------<br>
+    ; DC motor controls<br>
+    mtroff = 0,porta<br>
+    mtrrun = 1,porta<br>
+    mtrfwd = 2,porta<br>
+    <br>
+    ; option/address jumpers<br>
+    jmp0 = 5,porta&nbsp; ;yes, jumpers are reversed of bit order<br>
+    jmp1 = 4,porta<br>
+    jmp2 = 3,porta<br>
+    <br>
+    ;no a6 or a7 pins<br>
+    <br>
+    ainputs =&nbsp; bitmask(jmp0)|bitmask(jmp1)|bitmask(jmp2)<br>
+    ;<br>
+    ; the spare connector, we wire two PIC pins together, can cut if desired<br>
+    spareInp = 0,portb<br>
+    spareOut = 1,portb<br>
+    <br>
+    ;stepper motor sense inputs<br>
+    stphome&nbsp; = 2,portb<br>
+    stpmark&nbsp; = 3,portb<br>
+    <br>
+    ;4 phase stepper motor<br>
+    phy1 =&nbsp; 4,portb<br>
+    phy0 =&nbsp; 5,portb<br>
+    phx1 =&nbsp; 6,portb<br>
+    phx0 =&nbsp; 7,portb<br>
+    phasemask = bitmask(phx0)|bitmask(phx1)|bitmask(phy0)|bitmask(phy1)<br>
+    <br>
+    binputs =&nbsp; bitmask(stpmark)|bitmask(stphome)|bitmask(spareOut)|bitmask(spareInp)<br>
+    <br>
+    stpenable = 2,portc ;overrides phXX's, useful if pwm'ing<br>
+    <br>
+    ; debug stuff, named after physical pins<br>
+    db11 = 0,portc<br>
+    db12 = 1,portc<br>
+    ;3&amp;4 are the I2C<br>
+    db16 = 5,portc<br>
+    db17 = 6,portc<br>
+    db18 = 7,portc<br>
+    cinputs =&nbsp; %00011000&nbsp; ;program I2C as input<br>
+    <br>
+    ;;end of pins<br>
+    ;file dcmotor.asp<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; allegro 2953 (and similar) dc motor controller<br>
+    ;----------------------------------------------------<br>
+    ;user must define bitnames:<br>
+    ;&nbsp;&nbsp;&nbsp; mtrrun&nbsp;&nbsp;&nbsp;&nbsp; high allows other signals to work,low=short windings<br>
+    ;&nbsp;&nbsp;&nbsp; mtroff&nbsp;&nbsp;&nbsp;&nbsp; high free wheels motor, low drives motor in direction<br>
+    ;&nbsp;&nbsp;&nbsp; mtrfwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set by this guy.<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; PD51A LAP 2<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; DATASEG<br>
+    dcmstate .ds 1<br>
+    &nbsp;&nbsp;&nbsp; CODESEG<br>
+    ;enum mtrCommand<br>
+    mtrOff&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1<br>
+    mtrHold&nbsp;&nbsp;&nbsp;&nbsp; = 2<br>
+    mtrForward&nbsp; = 3<br>
+    mtrBackward = 4<br>
+    mtrLastCmd = 4&nbsp; ;for bounds checking<br>
+    <br>
+    sz_dcmotor = 1<br>
+    wr_dcmotor:&nbsp;&nbsp;&nbsp;&nbsp; ;set motor accordingly<br>
+    &nbsp;&nbsp;&nbsp; call getch<br>
+    &nbsp;&nbsp;&nbsp; store dcmstate<br>
+    &nbsp;&nbsp;&nbsp; ;if gonna brake do that<br>
+    &nbsp;&nbsp;&nbsp; xori mtrHold<br>
+    &nbsp;&nbsp;&nbsp; jz brakeit<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; load dcmstate<br>
+    &nbsp;&nbsp;&nbsp; xori mtrOff<br>
+    &nbsp;&nbsp;&nbsp; jz dcmOffit<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; load dcmstate<br>
+    &nbsp;&nbsp;&nbsp; xori mtrForward<br>
+    &nbsp;&nbsp;&nbsp; jz forwardit<br>
+    <br>
+    &nbsp;&nbsp;&nbsp; load dcmstate<br>
+    &nbsp;&nbsp;&nbsp; xori mtrBackward<br>
+    &nbsp;&nbsp;&nbsp; jz reverseit<br>
+    &nbsp;&nbsp;&nbsp; ;else<br>
+    ;invalidDcm:<br>
+    &nbsp;goto dcmInit&nbsp;&nbsp; ;fail on invalid command<br>
+    <br>
+    rd_dcmotor:&nbsp;&nbsp;&nbsp;&nbsp; ;interpret motor and sendback<br>
+    &nbsp;&nbsp;&nbsp; ;brake overrides others<br>
+    &nbsp;&nbsp;&nbsp; ifbit mtrrun,goto notbraked<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putchari mtrHold<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return<br>
+    notbraked:<br>
+    &nbsp;&nbsp;&nbsp; ifbit mtroff,goto notoffed<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; check dcmstate<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; jnz justoff<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putchar dcmstate<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return<br>
+    justoff:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putchari mtrOff<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return<br>
+    notoffed:<br>
+    &nbsp;&nbsp;&nbsp; ifbit mtrfwd,goto notreversed<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; putchari mtrBackward<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return<br>
+    notreversed:<br>
+    &nbsp;&nbsp;&nbsp; putchari mtrForward<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; dc motor actions<br>
+    ;----------------------------------------------------<br>
+    dcmInit:&nbsp;&nbsp;&nbsp; ;powerup or command error<br>
+    &nbsp;&nbsp;&nbsp; clr dcmstate<br>
+    &nbsp;&nbsp;&nbsp; ;join<br>
+    dcmOffit:<br>
+    &nbsp;&nbsp;&nbsp; setb mtroff<br>
+    &nbsp;&nbsp;&nbsp; setb mtrrun<br>
+    &nbsp;&nbsp;&nbsp; ;leave direction wherever it is<br>
+    &nbsp;return<br>
+    <br>
+    forwardit:<br>
+    &nbsp;&nbsp;&nbsp; setb mtrfwd<br>
+    &nbsp;&nbsp;&nbsp; clrb mtroff<br>
+    &nbsp;&nbsp;&nbsp; setb mtrrun<br>
+    &nbsp;return<br>
+    <br>
+    reverseit:<br>
+    &nbsp;&nbsp;&nbsp; clrb mtrfwd<br>
+    &nbsp;&nbsp;&nbsp; clrb mtroff<br>
+    &nbsp;&nbsp;&nbsp; setb mtrrun<br>
+    &nbsp;return<br>
+    <br>
+    brakeit:<br>
+    &nbsp;&nbsp;&nbsp; clrb mtrrun<br>
+    &nbsp;&nbsp;&nbsp; setb mtroff<br>
+    &nbsp;&nbsp;&nbsp; ;leave direction wherever it is<br>
+    &nbsp;return<br>
+    <br>
+    ;end of dcmotor.asp<br>
+    <br>
+    <br>
+    ;file c:\300.prj\pd51a\pd51aspr.asp<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; spare pin module<br>
+    ;----------------------------------------------------<br>
+    &nbsp;&nbsp;&nbsp; DATASEG<br>
+    spareCfg .ds 1<br>
+    ;;following names are true only in proper context<br>
+    spareLatcher = 0,spareCfg&nbsp;&nbsp; ;if spareOutput is false<br>
+    spareOC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0,spareCfg&nbsp;&nbsp; ;if spareOutput is true<br>
+    spareOutput&nbsp; = 1,spareCfg<br>
+    &nbsp;&nbsp;&nbsp; CODESEG<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 3 spare pin IO<br>
+    ;----------------------------------------------------<br>
+    sz_sparePin = 1 ;number of bytes of write data<br>
+    rd_sparePin:&nbsp;&nbsp;&nbsp; ;read back actual input pin<br>
+    &nbsp;&nbsp;&nbsp; ifbit spareInp,goto putch1<br>
+    &nbsp;goto putch0<br>
+    <br>
+    wr_sparePin:&nbsp;&nbsp;&nbsp; ;process data from host<br>
+    &nbsp;&nbsp;&nbsp; call getch<br>
+    &nbsp;&nbsp;&nbsp; store bits<br>
+    &nbsp;&nbsp;&nbsp; ;;do 4 way branch on cfg<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    ;----------------------------------------------------<br>
+    ;&nbsp;&nbsp; lap 4 spare pin config<br>
+    ;----------------------------------------------------<br>
+    sz_spareCfg = 1 ;number of bytes of write data<br>
+    rd_spareCfg:&nbsp;&nbsp;&nbsp; ;putchar(i) data for host<br>
+    &nbsp;return<br>
+    <br>
+    wr_spareCfg:&nbsp;&nbsp;&nbsp; ;process data from host<br>
+    &nbsp;&nbsp;&nbsp; call getch<br>
+    ld_spareCfg:<br>
+    &nbsp;&nbsp;&nbsp; andi 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;crudely force valid value<br>
+    &nbsp;&nbsp;&nbsp; store spareCfg<br>
+    &nbsp;&nbsp;&nbsp; ;;and implement changes here<br>
+    &nbsp;&nbsp;&nbsp; ;;do 4 way branch<br>
+    &nbsp;&nbsp;&nbsp; switch spareCfg,sprcfg<br>
+    &nbsp;return<br>
+    <br>
+    sprcfg:<br>
+    &nbsp;&nbsp;&nbsp; addto pc<br>
+    &nbsp;&nbsp;&nbsp; goto sprcfgInput<br>
+    &nbsp;&nbsp;&nbsp; goto sprcfgLatch<br>
+    &nbsp;&nbsp;&nbsp; goto sprcfgTotem<br>
+    &nbsp;&nbsp;&nbsp; goto sprcfgOC<br>
+    <br>
+    sprcfgInput:<br>
+    &nbsp;return<br>
+    <br>
+    sprcfgLatch:<br>
+    &nbsp;return<br>
+    <br>
+    sprcfgTotem:<br>
+    &nbsp;return<br>
+    <br>
+    sprcfgOC:<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    <br>
+    ;----------------------------------------------------<br>
+    ; Rb0.INTR handler<br>
+    ;----------------------------------------------------<br>
+    rb0Handler:<br>
+    latchSpare:<br>
+    &nbsp;&nbsp;&nbsp; ;set bit to 0<br>
+    &nbsp;&nbsp;&nbsp; ;enable as output<br>
+    &nbsp;&nbsp;&nbsp; clrb intf<br>
+    &nbsp; return<br>
+    <br>
+    ;----------------------------------------------------<br>
+    lxinit:<br>
+    &nbsp;&nbsp;&nbsp; loadi 0 ;plain input, don't have eunms yet---<br>
+    &nbsp;&nbsp;&nbsp; call ld_spareCfg<br>
+    &nbsp;return<br>
+    ;----------------------------------------------------<br>
+    ;end of c:\300.prj\pd51a\pd51aspr.asp<br>
+    <br>
+  </body>
+</html>
