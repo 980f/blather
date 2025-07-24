@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>spectrumsquish</title>
+  </head>
+  <body>
+    <h2>Spectrum squish</h2>
+    <h3>A non-lossy data compression algorithm <br>
+      first targeted at XRF spectra.</h3>
+    It is common for XRF spectra to consist of many narrow nearly gaussian peaks over a gentle hump of background. A 24 bit dynamic range for peak height is common, taking 3 bytes per channel of data. Of those 3 bytes the most significant byte is zero for large subsets of the spectra, the upper 2 bytes both zero for an also large part of the spectrum. <br>
+    When doing rapid analyses the maximum channel count is often quite a bit less than what the channel memory can accommodate, the upper byte can be entirely ignored as always being zero.<br>
+    In order to reduce transmission time (and perhaps storage space but that has become moot in the epoch of terabyte flash drives!) we wish to not bother to send most significant zero bits. <br>
+    <br>
+    The present scheme is similar to an old seismic data acquisition format used at my first employer, where the amplifier gain was stepped up during acquisition and the gain setting stored along with the digitized value of the amplifier output. This is very similar to floating point formats in computer math, the gain is the exponent, the digitized output the mantissa. We deviate from this floating point format by only showing the exponent when it changes.<br>
+    <br>
+    This encoding has the concept of&nbsp; "present field width" and the bit stream is parsed into words of that size. If the parsed word is all ones then it is not data but is followed by a new field width value. <br>
+    Data values are absolute amplitude, the 'field width' is 1:1 with "number of most significant bits that are zero in the following data".<br>
+    <br>
+    The number of bits in the field width selector may be encoded in different ways, in this write up we will use a fixed 4 bit field as the data set of interest is short count time spectra which rarely have more than 1000 counts in a channel. <br>
+    <br>
+    <hr>
+    <h3>Defining the format by the parser's algorithm</h3>
+    The initial state of the parser is "expect field width".<br>
+    When 'expecting field width' a 4bit field is pulled from the bit-stream, 0 being replaced with the raw data size, and then saved as "present field width".<br>
+    When parsing channels:<br>
+    A field of "present field width" bits is pulled from the bit-stream, if it is all ones then we enter "expect field width" state else we zero-extend it save it to the output word stream.<br>
+    <hr>
+    <h3> Encoding is where the difficulty lies</h3>
+    Changing the exponent has a cost of 'present field width' bits plus size of width code. Changing to a larger field width is necessary to not truncate data, but we then have to wonder whether we should reduce it back down or keep it to the larger number for a while.<br>
+    If we bump up one bit then every successive field that could have a smaller exponent has a wasted bit. When the number of those wasted bits equals the cost of a size change code then we would have been better off reducing the field width.<br>
+    <br>
+    <ol>
+      <li>look ahead read input field.</li>
+      <li>if greater than max allowed by present field width then</li>
+      <ol>
+        <li>translate input to output until input pointer equals one behind lookahead pointer.</li>
+        <li>compute field width that can encode the value.</li>
+        <li>emit field change</li>
+        <li>reset lookahead state tracking</li>
+      </ol>
+      <li>if less than half of present max field width (msb is zero) then </li>
+      <ol>
+        <li>increment "potential savings". </li>
+        <li>if potential savings &gt; field width + size width</li>
+        <ol>
+          <li>output change code to smaller field width</li>
+          <li>translate input to output until input pointer equals lookahead pointer.</li>
+        </ol>
+      </ol>
+      <li>if still requiring present field width then </li>
+      <ol>
+        <li>reset potential savings.</li>
+        <ol>
+        </ol>
+      </ol>
+      <li>if lookahead at end of input</li>
+      <ol>
+        <li>translate input to output until end of input.</li>
+        <li>DONE</li>
+      </ol>
+    </ol>
+    So, we need
+    <ol>
+      <li>A state variable:</li>
+      <ol>
+        <li>expect size field</li>
+        <li>expect value</li>
+        <li>(DONE)</li>
+      </ol>
+      <li>present field size variable</li>
+      <li>perhaps some representation of "max field value" of which all ones makes a simple &lt; determine&nbsp; "encodable:must shift up"</li>
+      <li>two pointers to the input stream, </li>
+      <ol>
+        <li>the lookahead and </li>
+        <li>the 'next to translate'.</li>
+      </ol>
+      <li>an output stream bit packer<br>
+      </li>
+    </ol>
+    <br>
+    <hr>
+    <h3> Stretches of all zeros</h3>
+    It is common for spectra to have long sequences of all zeroes. A naive rendering of the encoding would result in zero width fields, and that means no input for the encoder and we no longer do anything. Limiting the field width to &gt;=1 we get data fields which are either zero for zero or one which is our key value for 'new field width', which would greatly expand the encoded length of zero length runs. <br>
+    As such we use 2 as the minimum field width, which leaves us with a value in the encoding of field width to indicate some other encoding. We'll use that for 'run of zeroes, following 4 bits is the number of them'. A run of length 0 is another encoding nonsense which we can reinterpret as '&gt; 15, another run length nibble follows'. <br>
+    <br>
+    To our encoder we add:<br>
+    While doing 2 bit fields <br>
+    <ol>
+      <li>lookahead read input field</li>
+      <li>if not zero </li>
+      <ol>
+        <li>if run length &gt;enough to be worth emitting run length switch code </li>
+        <ol>
+          <li>emit run length code and content</li>
+        </ol>
+        <li>else </li>
+        <ol>
+          <li>emit run length quantity of 2 bits of zeroes (depending upon emitter facility emit a field of width 2*run length, value all zeroes)</li>
+        </ol>
+        <li>clear run length</li>
+      </ol>
+      <li>if zero increment run length.</li>
+      <li>if lookahead at end of input</li>
+      <ol>
+        <li>emit run length code and content</li>
+        <li>DONE</li>
+      </ol>
+    </ol>
+    <hr><br>
+    There are often runs of consecutive zeroes, we can use other key values to indicate that rather than a field size or data the subsequent numbers it the number of consecutive zeroes.<br>
+    <br>
+    XRF data has a variance that is proportional to the square root of the amplitude. The larger the data the larger the variation between successive datums.<br>
+  </body>
+</html>
