@@ -99,6 +99,7 @@
           <li>emit run length quantity of 2 bits of zeroes (depending upon emitter facility emit a field of width 2*run length, value all zeroes)</li>
         </ol>
         <li>clear run length</li>
+        <li>set state to "2 bit fields" and "expecting data"</li>
       </ol>
       <li>if zero increment run length.</li>
       <li>if lookahead at end of input</li>
@@ -107,9 +108,49 @@
         <li>DONE</li>
       </ol>
     </ol>
-    <hr><br>
-    There are often runs of consecutive zeroes, we can use other key values to indicate that rather than a field size or data the subsequent numbers it the number of consecutive zeroes.<br>
+    <hr>
+    <h3> Decoder</h3>
+    <ol>
+      <li>If no more input </li>
+      <ol>
+        <li>flush any pending run or lookahead range</li>
+        <li>DONE</li>
+      </ol>
+      <li>read field</li>
+      <ol>
+        <li>if expecting field width </li>
+        <ol>
+          <li>read 4 bits</li>
+          <li>if 0 then set to raw data field width</li>
+          <li>if 1 then expect run length </li>
+          <li>else set input field width and that we are expecting data</li>
+        </ol>
+        <li>if expecting data </li>
+        <ol>
+          <li>read 'field width' bits</li>
+          <li>if 'change indicator'(all ones)</li>
+          <ol>
+            <li>set 'expecting field width'</li>
+          </ol>
+          <li>else</li>
+          <ol>
+            <li>emit data</li>
+          </ol>
+        </ol>
+        <li>if expecting run length</li>
+        <ol>
+          <li>read 4 bits</li>
+          <li>if 0 then </li>
+          <ol>
+            <li>output 16 zeroes and continue to expect run length nibbles.</li>
+          </ol>
+          <li>else </li>
+          <ol>
+            <li>output given amount of zeroes</li>
+          </ol>
+        </ol>
+      </ol>
+    </ol>
     <br>
-    XRF data has a variance that is proportional to the square root of the amplitude. The larger the data the larger the variation between successive datums.<br>
   </body>
 </html>
