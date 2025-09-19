@@ -5,8 +5,8 @@
     <title>cmakeguide</title>
     <meta name="author" content="Andy Heilveil (github/980f)">
   </head>
-  <body>
-    <p>cmake cheat sheet</p>
+  <body> <br>
+    cmake cheat sheet<br>
     <table style="width: 100%" border="1">
       <tbody>
         <tr>
@@ -31,8 +31,7 @@
           <td><br>
           </td>
           <td>
-            <pre><meta http-equiv="content-type" content="text/html; charset=utf-8"><pre><span
-class="nf">pkg_check_modules(</span><span class="nv">&lt;prefix&gt;</span><span
+            <pre><pre><span class="nf">pkg_check_modules(</span><span class="nv">&lt;prefix&gt;</span><span
 class="w"></span>
 <span class="w">                  </span><span class="p">[</span><span class="no">REQUIRED</span><span
 class="p">]</span><span class="w"> </span><span class="p">[</span><span
@@ -57,8 +56,7 @@ class="p">]</span><span class="nf">)</span><span class="w"></span></pre></pre>
           <td>use a package<br>
           </td>
           <td>
-            <pre><meta http-equiv="content-type" content="text/html; charset=utf-8"><pre><span
-class="nf">find_package(</span><span class="nb">SomePackage</span><span
+            <pre><pre><span class="nf">find_package(</span><span class="nb">SomePackage</span><span
 class="w"> </span><span class="no">REQUIRED</span><span class="nf">)</span><span
 class="w"></span></pre></pre>
           </td>
@@ -139,6 +137,51 @@ class="w"></span></pre></pre>
         </tr>
       </tbody>
     </table>
+    <br>
+    <h2>Cmake </h2>
+    <ol>
+      <li>Targets:</li>
+      <ol>
+        <li>create via </li>
+        <ol>
+          <li><code>add_executable</code></li>
+          <li><code>add_library</code> (creates one but doesn't include it in anything else)</li>
+          <ol>
+            <li>name</li>
+            <li>[<code>STATIC</code>|<code>SHARED|MODULE</code>|<code>OBJECT</code>] default <code>BUILD_SHARED_LIBS</code> which defaults to <code>STATIC</code> (false)</li>
+            <li>list of sources</li>
+          </ol>
+          <li><code>add_custom_target</code></li>
+        </ol>
+        <li>properties</li>
+        <ol>
+          <li><code>LINK_FLAGS</code></li>
+        </ol>
+        <li>have list of libraries</li>
+        <ol>
+          <li><code>target_link_libraries</code></li>
+          <ol>
+            <li>known names </li>
+            <li>ones named by <code>add_library</code></li>
+            <li>order here affects order of header references in compilation commands</li>
+          </ol>
+        </ol>
+      </ol>
+      <li>libraries (created by <code>add_library</code>)</li>
+      <ol>
+        <li>specify headers via <code>target_include_directories</code>( <em>libname </em><code>PUBLIC </code>&lt;unsure what comes next&gt;)</li>
+        <li><code>OBJECT</code> instances are included in another library via <code>$&lt;TARGET_OBJECTS:</code>name<code>&gt;</code></li>
+      </ol>
+      <li>Other object types mentioned but not described:</li>
+      <ol>
+        <li>"source files"</li>
+        <li>"directories"</li>
+        <li>tests</li>
+      </ol>
+      <li>has feature similar to autoconf config.h.in-&gt;config.h file</li>
+      <li><br>
+      </li>
+    </ol>
     <br>
   </body>
 </html>

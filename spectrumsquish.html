@@ -29,7 +29,7 @@
     <h3> Encoding is where the difficulty lies</h3>
     Changing the exponent has a cost of 'present field width' bits plus size of width code. Changing to a larger field width is necessary to not truncate data, but we then have to wonder whether we should reduce it back down or keep it to the larger number for a while.<br>
     If we bump up one bit then every successive field that could have a smaller exponent has a wasted bit. When the number of those wasted bits equals the cost of a size change code then we would have been better off reducing the field width.<br>
-    <br>
+    While there is input data:<br>
     <ol>
       <li>look ahead read input field.</li>
       <li>if greater than max allowed by present field width then</li>
@@ -41,7 +41,7 @@
       </ol>
       <li>if less than half of present max field width (msb is zero) then </li>
       <ol>
-        <li>increment "potential savings". </li>
+        <li>increment "potential savings".##track smallest step down and multiply by that to get better estimate of potential savings.</li>
         <li>if potential savings &gt; field width + size width</li>
         <ol>
           <li>output change code to smaller field width</li>
@@ -62,23 +62,129 @@
     </ol>
     So, we need
     <ol>
-      <li>A state variable:</li>
+      <li>state variables:</li>
       <ol>
         <li>expect size field</li>
         <li>expect value</li>
         <li>(DONE)</li>
       </ol>
       <li>present field size variable</li>
-      <li>perhaps some representation of "max field value" of which all ones makes a simple &lt; determine&nbsp; "encodable:must shift up"</li>
+      <li>perhaps some representation of "max field value" of which all ones makes a simple &lt; determination </li>
       <li>two pointers to the input stream, </li>
       <ol>
         <li>the lookahead and </li>
-        <li>the 'next to translate'.</li>
+        <li>the last emitted.</li>
       </ol>
-      <li>an output stream bit packer<br>
-      </li>
+      <li>an output stream bit packer</li>
     </ol>
+    <hr>
+    <h3>Optimal step ups</h3>
+    Sometimes a step up will be followed shortly by another step up. If the first step was to the second value we would save the cost of the change of size at the cost of a few extra bits for each channel prior to the second change.<br>
+    That means when we need a step up we should record how far up and lookahead for a while longer to see if the step should be greater. That means we have to track costs for a while before applying the new change. <br>
+    So, we have to track for a few different step up values how many bits we would be saving before we do the step up.<br>
     <br>
+    Example:<br>
+    Starting with a long string of 10's we have a cost of 10+4 to shift. <br>
+    <table cellspacing="0" cellpadding="3" border="1">
+      <tbody>
+        <tr>
+          <td>bits required</td>
+          <td>10</td>
+          <td>10</td>
+          <td>11</td>
+          <td>11</td>
+          <td>11</td>
+          <td>12</td>
+          <td>12</td>
+          <td>12</td>
+          <td>total</td>
+        </tr>
+        <tr>
+          <td>shift ASAP<br>
+          </td>
+          <td>10<br>
+          </td>
+          <td>10<br>
+          </td>
+          <td>11+14<br>
+          </td>
+          <td>11<br>
+          </td>
+          <td>11<br>
+          </td>
+          <td>12+15<br>
+          </td>
+          <td>12<br>
+          </td>
+          <td>12<br>
+          </td>
+          <td>98</td>
+        </tr>
+        <tr>
+          <td>shift up deferred<br>
+          </td>
+          <td>10<br>
+          </td>
+          <td>10<br>
+          </td>
+          <td>12+14<br>
+          </td>
+          <td>12<br>
+          </td>
+          <td>12<br>
+          </td>
+          <td>12<br>
+          </td>
+          <td>12<br>
+          </td>
+          <td>12<br>
+          </td>
+          <td>86</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    Deferring the shift netted an improvement of 12 bits.<br>
+    So how far forward do we look before doing an upshift? If we don't see another step of 1 up then we can emit our backlog when using the values from the example lookahead count = 2nd shift cost. So for a step up of 1 the new size + 4 is as far as we need to look ahead. If we encounter another step up in that range we can reduce the threshold to newer level* lookahead count &gt; intermediate size +4. <br>
+    <br>
+    So, we look ahead for step ups and step downs. The step up pending cost is computed as (future_max-past_level)*lookahead distance and is compared against past_level+4. <br>
+    We can do this incrementally:<br>
+    <ul>
+      <li>at each actual step up </li>
+      <ul>
+        <li>set present size</li>
+        <li>set threshold=new value + shift code size (our 4)</li>
+        <li>set cost to zero.</li>
+      </ul>
+      <li>with each lookahead compare new size value to present size, do 3-way branch</li>
+      <ul>
+        <li>if same do nothing</li>
+        <li>if new is greater</li>
+        <ul>
+          <li>if already considering a step up compare to that size and if greater </li>
+          <ul>
+            <li>take difference between newest size and pending size and multiply that times lookahead count and add that to cost..</li>
+            <li>else just add the difference between it and present size to cost.</li>
+          </ul>
+          <li>compare cost to upshift threshold.</li>
+          <li>if greater (or equal) then actually step up.</li>
+        </ul>
+        <li>if new is lesser</li>
+        <ul>
+          <li>if no shiftup is pending do shift down logic</li>
+        </ul>
+      </ul>
+    </ul>
+    <p>So we need variables for:</p>
+    <ol>
+      <li>the cost, </li>
+      <li>the threshold, </li>
+      <li>the pending upshift</li>
+      <li>boolean for pending upshift, but can use 0&nbsp; sentinel value in pending upshift</li>
+      <li>&nbsp;the lookahead counter, but can take the difference between lookahead pointer and processed pointer.</li>
+    </ol>
+    <p><br>
+    </p>
     <hr>
     <h3> Stretches of all zeros</h3>
     It is common for spectra to have long sequences of all zeroes. A naive rendering of the encoding would result in zero width fields, and that means no input for the encoder and we no longer do anything. Limiting the field width to &gt;=1 we get data fields which are either zero for zero or one which is our key value for 'new field width', which would greatly expand the encoded length of zero length runs. <br>
@@ -152,5 +258,16 @@
       </ol>
     </ol>
     <br>
+    <hr>
+    <h3> Predicting compression</h3>
+    <p>&nbsp;... via using a spread sheet.</p>
+    <p>Load spectrum into a column, spreadsheets don't like wide rows.<br>
+      Beside that have a column of "ceil(log2(cell to left))", this is the required field width.<br>
+      Beside that have a column of "is&gt;1".<br>
+      Beside that have a column of "minus prior", !=0 indicates a potential change of field width</p>
+    <p>gcc with -mlzcnt provides <code>unsigned int __builtin_ia32_lzcnt_u32(unsigned int);</code></p>
+    <p></p>
+    <p><br>
+    </p>
   </body>
 </html>
