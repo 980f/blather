@@ -8,7 +8,7 @@
     <h2>Spectrum squish</h2>
     <h3>A non-lossy data compression algorithm <br>
       first targeted at XRF spectra.</h3>
-    It is common for XRF spectra to consist of many narrow nearly gaussian peaks over a gentle hump of background. A 24 bit dynamic range for peak height is common, taking 3 bytes per channel of data. Of those 3 bytes the most significant byte is zero for large subsets of the spectra, the upper 2 bytes both zero for an also large part of the spectrum. <br>
+    It is common for XRF spectra to consist of many narrow nearly Gaussian peaks over a gentle hump of background. A 24 bit dynamic range for peak height is common, taking 3 bytes per channel of data. Of those 3 bytes the most significant byte is zero for large subsets of the spectra, the upper 2 bytes both zero for an also large part of the spectrum. <br>
     When doing rapid analyses the maximum channel count is often quite a bit less than what the channel memory can accommodate, the upper byte can be entirely ignored as always being zero.<br>
     In order to reduce transmission time (and perhaps storage space but that has become moot in the epoch of terabyte flash drives!) we wish to not bother to send most significant zero bits. <br>
     <br>
