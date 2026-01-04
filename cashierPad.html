@@ -6,13 +6,13 @@
   </head>
   <body>
     <h2> Cashier Pad 3.0</h2>
-    <h2> </h2>
+    
     <hr>
     <h3> Commands (to device)</h3>
-    <h3> </h3>
+    The item numbers below are the value of the command 
     <ol>
       <li>Reset<br>
-        1 to 16 chars for display. Cancels any pending Entry command.<em></em></li>
+        1 to 16 chars for display. Cancels any pending Entry command.</li>
       <li>Display Message<br>
         1 to 16 chars that replace first 16 of current message.</li>
       <li>Numeric Data Entry<br>
@@ -35,9 +35,9 @@
         alternates with the prior.<br>
         If commands 3,5,6, or 8 are active (Entry command) and their prompt was
         &gt;16 chars then <br>
-        &nbsp; if you provide any chars with this command then this command's
+          if you provide any chars with this command then this command's
         data replaces the latter 16 of the prior. <br>
-        &nbsp; else (no text with this command) then the prior command's fist
+          else (no text with this command) then the prior command's fist
         line is shown and second line discarded.<br>
         Which is a fancy way of saying that this command replaces the 2nd line
         if any of current display and if not blank alternation occurs.</li>
@@ -68,19 +68,23 @@
     <br>
     <hr>
     <h3> Packet Format</h3>
-    STX [2 digit code] . [parameters/data] ETX LRC<br>
-    The two digit code has a leading 0 for those less than 10.<br>
+    <table  border="1">
+        <tr>
+          <td>STX</td><td> two digit code</td><td>  .</td><td> parameters/data</td><td>  ETX</td><td>  LRC</td></tr>
+          </table>
+          <br>
+    The two digit code has a leading 0 for codes less than 10.<br>
     It is followed by a period.<br>
     The LRC is accumulating XOR starting after the STX but including the ETX,
     truncate to 7 bits.<br>
     <br>
     Wire protocol 4800E71<br>
-    DC1(^Q) and DC2(^R) are used for flow control. Use, DC two not DC three.<br>
+    DC1 (^Q) and DC2 (^R) are used for flow control. Use DC <em>two</em> not DC <em>three</em>.<br>
     At power up device sends ENQ (0x05,^E) once per second until it gets an ACK
     (0x06,^F).<br>
-    Expect ACK or NAK(0x15) when you send a command. Use that to pace commands,
+    Expect ACK or NAK (0x15) when you send a command. Use that to pace commands,
     with a 3 second timeout.<br>
-    Send ACK or NAK in after reception of a response based on LRC check.
+    Send ACK or NAK after reception of a response based on LRC check.
     <hr>
     <h3>Entry Details</h3>
     The display is physically 16 characters wide, but accepts up to 32 chars and
@@ -100,7 +104,7 @@
     <hr>
     <h3>Layouts</h3>
     <h3> </h3>
-    <table style="width: 0" border="1">
+    <table  border="1">
       <tbody>
         <tr>
           <td>Calculator<br>
@@ -116,7 +120,7 @@
         </tr>
         <tr>
           <td>
-            <table style="width: 0" border="1">
+            <table  border="1">
               <tbody>
                 <tr>
                   <td>A</td>
@@ -146,7 +150,7 @@
             </table>
           </td>
           <td>
-            <table style="width: 0" border="1">
+            <table  border="1">
               <tbody>
                 <tr>
                   <td>A</td>
@@ -176,7 +180,7 @@
             </table>
           </td>
           <td>
-            <table style="width: 0" border="1">
+            <table  border="1">
               <tbody>
                 <tr>
                   <td>M</td>
@@ -206,11 +210,11 @@
             </table>
           </td>
           <td>
-            <table style="width: 0" border="1">
+            <table  border="1">
               <tbody>
                 <tr>
                   <td>13 </td>
-                  <td>&nbsp; 9</td>
+                  <td align="right">9</td>
                   <td>5</td>
                   <td>1</td>
                 </tr>
@@ -240,17 +244,15 @@
         </tr>
       </tbody>
     </table>
-    Auto Key is mask # + '@'.<br>
+    Note: the Auto Key value is the mask # + '@'.<br>
     <em></em>
     <hr>
-    <table style="width: 0%" border="1">
+    <table  border="1">
       <tbody>
         <tr>
           <td>RJ-11</td>
-          <td>TTL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </td>
-          <td>RS-232&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </td> </tr>
+          <th>TTL</th>
+          <th>RS-232</th> </tr>
         <tr>
           <td>long</td>
           <td>5 VDC supply to Pad</td>
@@ -273,12 +275,9 @@
         </tr>
       </tbody>
     </table>
-    <em></em><br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    
+    <br><hr>
+    Cryptic note on printed manual:<br>
+"DECLINED" was deemed alphanumeric and did not respond to CLEAR, <strong>must</strong> hit a key then ENTER.
   </body>
 </html>
