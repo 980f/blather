@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>LEGO_IR_Protocol-23335c01</title>
+  </head>
+  <body>
+    <h2>LEGO Old IR protocol</h2>
+    Modulation is 76kHz, twice the present day 38kHz.<br>
+    Baud is 4800.<br>
+    Two bytes are sent, each is 8O1.<br>
+    <br>
+    There is a talk of "25% duty cycle" which I gather means "don't send back to back messages, wait 10X3 bit times between messages". One suspects that was to allow the receivers to be very slow at dealing with messages. <br>
+    <br>
+    First byte MS nibble is channel, 4 for all, else 4+[1,2,3].<br>
+    First byte LS nibble is orange control (right hand buttons) is 0:no press,7:forward,8:"off", or F:reverse. I am guessing "off" is sent by pressing both buttons together.<br>
+    Second byte MS nibble is yellow control (left hand buttons).<br>
+    <br>
+    Second byte LS nibble is a check digit: 0 - (address + yellow + orange). <br>
+    Checking should yield 16 when you add the 3 other nibbles. <br>
+    <br>
+    Message rates are somewhat slow:<br>
+    Ch. 1 - 19.6 Hz<br>
+    Ch. 2 - 14.8 Hz<br>
+    Ch. 3 - 11.6 Hz<br>
+    ‘All’ - 19.6 Hz <br>
+    This appears to be to reduce collisions when multiple independent transmitters are active, a single transmitter controlling 6 motors can send at the 19.6 for all. <br>
+  </body>
+</html>
