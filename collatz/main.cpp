@@ -26,6 +26,7 @@ struct CollatzEval {
  * we don't want just the series values, we want to see how wide the ALU and storage needs to be.
  */
   struct TrackElement {
+    unsigned link; //used for optimization, tracking most recent predecessor in present investigation.
     Int value;
     //how many steps did it take to get from value to 1?
     unsigned steps;
@@ -36,16 +37,19 @@ struct CollatzEval {
     //we are sharing the structure as both final record and intermediate storage during determination of sequece length.
     bool resolved;
 
-    TrackElement(): value(0), steps(0), zeroes(0), msbs(0), resolved(false) {
+    TrackElement(): link(0), value(0), steps(0), zeroes(0), msbs(0), resolved(false) {
     }
 
+    /** prime the investigation loop terminator logic */
     void setForOne() {
+      link = 0;
       value = 1;
       steps = 1;
       zeroes = 2;
       msbs = 2;
     }
 
+    /** compute follower of @param prior */
     void step(const Int prior) {
       Int successor = prior + (1 | (prior << 1)); // 3 * prior + 1 coded as for an FPGA
       zeroes = countr_zero(successor);
@@ -67,29 +71,48 @@ struct CollatzEval {
     return oddish >> 1;
   }
 
-  void run() {
+  Int run() {
     // the zeroeth element is the "1" that terminates sequences.
     tracker[0].setForOne();
 
-    unsigned testee = 1; //an ordinal
-    while (testee < numberOfOdds) {
-      TrackElement& current(tracker[testee]);
-      if (current.resolved) {
-        ++testee;
+    for (unsigned testee = 1; testee < numberOfOdds; ++testee) {
+      TrackElement *current = &tracker[testee];
+      if (current->resolved) { //then we already evaluated it as a side effect of eval'ing some lesser number.
         continue;
       }
-      current.step(oddness(testee));
-      auto lookahead = ordinal(current.value);
-      do {
-        auto trackahead = &tracker[lookahead];
-        trackahead->step(lookahead);
-        if (trackahead->resolved) { //we got to "1"
-        } else { //must look at more steps
-          //record for back tracking
-          trackahead->steps = 1;
+      current->link = ~0; //mark end for track-back loop
+      auto scanner = testee;
+      while (scanner < numberOfOdds) { //this is an abnormal exit, array bounds check. The normal exit is a break deep in the guts of the loop.
+        current = &tracker[scanner];
+        if (current->steps == 0) { //if never evaluated
+          current->step(oddness(scanner));
         }
-      } while (!current.resolved);
+        if (current->resolved) { //we hit a known element
+          //time to back track
+          unsigned accumulator = current->steps; //we have intersected an intermediate point on some sequence, which also might be a next-to-the-end one.
+          while (current->link != ~0) { //we will not loop any times if the testee is one away from one. Those instances are of the form 10101010101, which is all 1's in base 4.
+            auto trackback = &tracker[current->link];
+            trackback->steps = ++accumulator;
+            trackback->resolved = true; //we are resolved when the end of the sequence has been reached, not just the guys 1 before the end.
+            current = trackback;
+          }
+          break; //loop normal exit is here
+        }
+        auto lookahead = ordinal(current->value);
+        if (lookahead >= numberOfOdds) {
+          printf("\nLooked too far ahead to %u starting from %u",lookahead, testee);
+          while (current->link != ~0) {
+            printf("\n\t%u (%u)",current->link,oddness(current->link));
+            current = &tracker[current->link];
+          }
+          return testee;
+        }
+        auto trackahead = &tracker[lookahead];
+        trackahead->link = scanner;
+        scanner = lookahead;
+      }
     }
+    return 0;
   }
 };
 
@@ -125,9 +148,13 @@ int main(int argc, char *argv[]) {
     }
     return 0;
   case 1:
-    printf("We will investigate at most %u numbers (%u max value)", numberOfOdds, CollatzEval::oddness(numberOfOdds - 1));
+    printf("\nWe will investigate at most %u numbers (%u max value)", numberOfOdds, CollatzEval::oddness(numberOfOdds - 1));
     CollatzEval eval;
-    eval.run();
+    auto errorAt = eval.run();
+    if (errorAt) {
+      printf("\nEnded early due to %u getting too large for the tracking array", errorAt);
+    }
+    //todo: dump the array as html
     return 0;
   }
 
