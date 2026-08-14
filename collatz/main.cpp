@@ -1,5 +1,6 @@
 #include <iostream>
 #include <bit>
+#include <bitset>
 #include <limits>
 
 /**
@@ -14,7 +15,7 @@
  *
  */
 using Int = unsigned int;
-// const unsigned wordwith = std::numeric_limits<Int>::digits;
+const unsigned wordwith = std::numeric_limits<Int>::digits;
 
 using std::countl_zero;
 using std::countr_zero;
@@ -34,10 +35,12 @@ struct CollatzEval {
     unsigned zeroes; //never more than number of bits in unsigned times number of steps.
     //the number of added bits, either 1 or 2, could use a boolean.
     unsigned msbs;
+    //
+    unsigned width;
     //we are sharing the structure as both final record and intermediate storage during determination of sequece length.
     bool resolved;
 
-    TrackElement(): link(0), value(0), steps(0), zeroes(0), msbs(0), resolved(false) {
+    TrackElement(): link(0), value(0), steps(0), zeroes(0), msbs(0), width(0), resolved(false) {
     }
 
     /** prime the investigation loop terminator logic */
@@ -47,6 +50,7 @@ struct CollatzEval {
       steps = 1;
       zeroes = 2;
       msbs = 2;
+      width = 1;
     }
 
     /** compute follower of @param prior */
@@ -56,6 +60,7 @@ struct CollatzEval {
       msbs = countl_zero(prior) - countl_zero(successor);
       //todo: check for overflow of Int type, for now we just won't get anywhere near it by limiting the range of study.
       value = successor >> zeroes;
+      width = wordwith - countl_zero(value);
       resolved = value == 1;
       ++steps;
     }
@@ -100,9 +105,9 @@ struct CollatzEval {
         }
         auto lookahead = ordinal(current->value);
         if (lookahead >= numberOfOdds) {
-          printf("\nLooked too far ahead to %u starting from %u",lookahead, testee);
+          printf("\nLooked too far ahead to %u starting from %u", lookahead, testee);
           while (current->link != ~0) {
-            printf("\n\t%u (%u)",current->link,oddness(current->link));
+            printf("\n\t%u (%u)", current->link, oddness(current->link));
             current = &tracker[current->link];
           }
           return testee;
@@ -123,7 +128,8 @@ void trace(const Int starter) {
   tracker.value = starter;
   do {
     tracker.step(tracker.value);
-    printf("\n%u\t%x\t%u\t%u\t%u", tracker.steps, tracker.value, tracker.zeroes, tracker.msbs, tracker.resolved);
+    printf("\n%u\t%x\t%u\t%u\t%u\t", tracker.steps, tracker.value, tracker.zeroes, tracker.msbs,  tracker.width);
+    std::cout << std::bitset<wordwith>(tracker.value);
   } while (!tracker.resolved);
   printf("\n\n");
 }
@@ -138,16 +144,16 @@ int main(int argc, char *argv[]) {
   default:
     printf("Command %d is not implemented", which);
     return 1;
-  case 0:
+  case 0: //trace
     //process one number
     if (argc > 2) {
-      auto query = atoi(argv[2]);
+      auto query = std::stoi(argv[2], nullptr, 0);
       trace(query);
     } else {
       return 1;
     }
     return 0;
-  case 1:
+  case 1: //all
     printf("\nWe will investigate at most %u numbers (%u max value)", numberOfOdds, CollatzEval::oddness(numberOfOdds - 1));
     CollatzEval eval;
     auto errorAt = eval.run();
