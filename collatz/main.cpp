@@ -20,7 +20,7 @@ const unsigned wordwith = std::numeric_limits<Int>::digits;
 using std::countl_zero;
 using std::countr_zero;
 
-const unsigned numberOfOdds = 1000; //to size storage and limit the range of study
+const unsigned numberOfOdds = 100'000; //to size storage and limit the range of study
 
 struct CollatzEval {
 /**
@@ -76,15 +76,16 @@ struct CollatzEval {
     return oddish >> 1;
   }
 
-  Int run() {
+  Int run(int query) {
     // the zeroeth element is the "1" that terminates sequences.
     tracker[0].setForOne();
 
-    for (unsigned testee = 1; testee < numberOfOdds; ++testee) {
+    for (unsigned testee = 1; testee < query; ++testee) {
       TrackElement *current = &tracker[testee];
       if (current->resolved) { //then we already evaluated it as a side effect of eval'ing some lesser number.
         continue;
       }
+      printf("\r%d",testee);
       current->link = ~0; //mark end for track-back loop
       auto scanner = testee;
       while (scanner < numberOfOdds) { //this is an abnormal exit, array bounds check. The normal exit is a break deep in the guts of the loop.
@@ -124,11 +125,11 @@ struct CollatzEval {
 void trace(const Int starter) {
   CollatzEval::TrackElement tracker;
   printf("\nSeries for %u", starter);
-  printf("\nsteps\tvalue\tzeroes\tmsbs\tresolved");
+  printf("\nsteps\t           value\t0's\tmsbs\td\tresolved");
   tracker.value = starter;
   do {
     tracker.step(tracker.value);
-    printf("\n%u\t%x\t%u\t%u\t%u\t", tracker.steps, tracker.value, tracker.zeroes, tracker.msbs,  tracker.width);
+    printf("\n%u\t% 20d\t%u\t%u\t%d\t%u\t", tracker.steps, tracker.value, tracker.zeroes, tracker.msbs, tracker.msbs - tracker.zeroes, tracker.width);
     std::cout << std::bitset<wordwith>(tracker.value);
   } while (!tracker.resolved);
   printf("\n\n");
@@ -155,13 +156,24 @@ int main(int argc, char *argv[]) {
     return 0;
   case 1: //all
     printf("\nWe will investigate at most %u numbers (%u max value)", numberOfOdds, CollatzEval::oddness(numberOfOdds - 1));
-    CollatzEval eval;
-    auto errorAt = eval.run();
-    if (errorAt) {
-      printf("\nEnded early due to %u getting too large for the tracking array", errorAt);
+    if (argc > 2) {
+      auto query = std::stoi(argv[2], nullptr, 0);
+      CollatzEval eval;
+      auto errorAt = eval.run(query);
+      if (errorAt) {
+        printf("\nEnded early due to %u getting too large for the tracking array", errorAt);
+      }
+      //todo: dump the array as html
+      for (unsigned testee = 1; testee < query; ++testee) {
+        CollatzEval::TrackElement *current = &eval.tracker[testee];
+        if (current->resolved) { //then we already evaluated it as a side effect of eval'ing some lesser number.
+          printf("\n\t%d\t%d", CollatzEval::oddness(testee),current->steps);
+        }
+      }
+      return 0;
+    } else {
+      return 1;
     }
-    //todo: dump the array as html
-    return 0;
   }
 
   return 0;
