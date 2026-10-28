@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>choosingIntegerSize</title>
+  </head>
+  <body>
+    <h3>On size of numeric variables in C(++) programming</h3>
+    C-like languages give you a number of different sized integers and floating point formats to choose from. <br>
+      In C integers are in most cases converted to the 'native' or 'natural' integer type before any computation is performed.<br>
+    While there are times when the task specifies what size the integer should be, for instance UTF-8 processing is going to use 8 bit integers for streams and 32 bit integers for individual characters as the UTF and unicode specifications explicitly insist upon those, often the programmer has a choice.<br>
+    The considerations for that choice are speed and memory consumed. In most cases the natural integer is going to be as fast or faster than a shorter type as the processor may require an additional instruction to extend the shorter type before performing a math operation, in order for the processor status register to properly record the results of the operation. Not only does that take extra execution time it takes extra memory for the sign/zero extend instruction. Floating point operations in many systems requires that the 32 bit format be converted to the 64 bit type before any operation is applied, and for some processors that is an additional instruction. <br>
+    So, the only time to use a shorter than natural type is when:<br>
+    <ol>
+      <li>the task requirements tell you to</li>
+      <li>the memory saved by not allocating the excess bytes is greater than the number of bytes of instruction space used to convert the short type into the native.</li>
+    </ol>
+    For the second case one counts up the number of places that the variable is accessed for read, the number of instruction bytes required for the sign/zero extend instruction, and unless the product of those counts is less than the excess bytes use the native type. For the 32 bit processors I use the most the 2nd reference pushes one over the limit and as such one should use the native type until one is shown to desperately need the shorter one.<br>
+    The big exception comes with arrays. For an array you multiply the bytes per instance by the number of instances to get the 'wasted' memory and it doesn't take a very long array for that to exceed the number-of-reads X instruction bytes to expand product. That said, arrays of length two will often fall below the threshold. <br>
+      <br>
+      The more subtle case is where a structure has a number of such short-is-enough integers, and arrays of such structures are likely to be common.<br>
+    <br>
+  </body>
+</html>
